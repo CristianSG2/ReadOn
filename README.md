@@ -10,7 +10,8 @@ Proyecto personal de portfolio, construido con un stack sencillo y mantenible.
 - **Backend**: Laravel 11 + Blade  
 - **Base de datos**: PostgreSQL (vía DDEV)  
 - **Frontend**: SCSS compilado con Vite (sin Tailwind ni Bootstrap)  
-- **Entorno**: DDEV (Docker), PHP 8.2, nginx-fpm, Node.js 20  
+- **Tooling**: Node.js 20 (para compilación de assets con Vite)  
+- **Entorno**: DDEV (Docker), PHP 8.2, nginx-fpm  
 
 ---
 
