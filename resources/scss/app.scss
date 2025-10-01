@@ -1,3 +1,104 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ===== Paleta (fácil de cambiar) ===== */
+:root {
+  --bg: #0e0f12;
+  --text: #e9eaee;
+  --muted: #9aa1ab;
+  --card: #15171c;
+  --border: #262a32;
+  --shadow: 0 8px 30px rgba(0,0,0,.35);
+
+  --primary: #d1122d;         /* rojo ReadOn */
+  --primary-600: #b10f26;
+  --primary-100: #ffe2e7;     /* para botones outline/hover suaves */
+}
+
+/* ===== Reset suave ===== */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+  line-height: 1.5;
+  color: var(--text);
+  background: radial-gradient(1200px 700px at -10% -10%, rgba(209,18,45,.10), transparent 60%) , var(--bg);
+}
+
+/* ===== Layout ===== */
+.container {
+  max-width: 980px;
+  padding: 1rem;
+  margin: 0 auto;
+}
+
+/* ===== Header ===== */
+.site-header {
+  background: color-mix(in srgb, var(--card), transparent 30%);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.nav { margin-left: auto; display: flex; align-items: center; gap: .75rem; }
+.nav a, .btn-link {
+  color: var(--text);
+  text-decoration: none;
+  padding: .25rem .5rem;
+  opacity: .85;
+}
+.nav a:hover, .btn-link:hover { opacity: 1; }
+.btn-link {
+  border: none; background: none; cursor: pointer; font: inherit;
+  color: var(--text);
+}
+
+/* ===== Card / Hero ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+.hero { margin: 2.5rem auto; text-align: center; }
+.hero h1 {
+  font-size: clamp(1.6rem, 2.5vw + 1rem, 2.6rem);
+  margin: 0 0 .5rem;
+}
+.hero h1 span { color: var(--primary); }
+.hero p { margin: 0 0 1rem; color: var(--muted); }
+
+/* ===== Botones ===== */
+.btn {
+  display: inline-block;
+  padding: .6rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform .02s ease, filter .2s ease;
+}
+.btn:hover { filter: brightness(0.98); }
+.btn:active { transform: translateY(1px); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.btn-outline:hover { background: color-mix(in srgb, var(--primary), transparent 88%); }
+.actions { display: flex; gap: .75rem; justify-content: center; }
+
+/* ===== Footer ===== */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1rem 0 2rem;
+  color: var(--muted);
+  background: transparent;
+  margin-top: 3rem;
+  font-size: .95rem;
+}
