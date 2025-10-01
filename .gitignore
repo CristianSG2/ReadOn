@@ -5,6 +5,7 @@
 /storage/*.key
 /public/hot
 /public/storage
+/public/build
 /.idea/
 /.vscode/
 /.ddev/.imported
