@@ -152,4 +152,5 @@ ddev artisan optimize:clear
 
 ## Licencia
 
-Proyecto personal. Sin licencia pública definida por ahora.
+Este proyecto se distribuye bajo la **MIT License**.  
+Consulta el archivo [LICENSE](./LICENSE) para más detalles.
