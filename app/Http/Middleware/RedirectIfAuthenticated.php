@@ -8,16 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RedirectIfAuthenticated
 {
-    /**
-     * Si el usuario ya está autenticado, redirige a /me.
-     */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (auth()->guard($guard)->check()) {
-                // Ya autenticado → mandamos al perfil
+                // Ya autenticado → manda SIEMPRE a /me
                 return to_route('me');
             }
         }

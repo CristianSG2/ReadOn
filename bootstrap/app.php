@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Alias de middlewares (Laravel 11)
+        $middleware->alias([
+            'auth'    => \App\Http\Middleware\Authenticate::class,
+            'guest'   => \App\Http\Middleware\RedirectIfAuthenticated::class, // ← ESTE es el cambio clave
+            'throttle'=> \Illuminate\Routing\Middleware\ThrottleRequests::class,
+            // (deja el resto de alias que ya tengas)
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
