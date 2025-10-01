@@ -2,10 +2,24 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 
-class RouteServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
-    /** A dónde redirigir tras autenticarse en general */
-    public const HOME = '/me';
+    public function register(): void
+    {
+        //
+    }
+
+    public function boot(): void
+    {
+        // 5 intentos por minuto por combinación email + IP
+        RateLimiter::for('login', function (Request $request) {
+            $email = (string) $request->input('email');
+            return Limit::perMinute(5)->by($email.'|'.$request->ip());
+        });
+    }
 }
