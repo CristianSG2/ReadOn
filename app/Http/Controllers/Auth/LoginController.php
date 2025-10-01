@@ -11,8 +11,7 @@ class LoginController extends Controller
     // GET /login
     public function showLoginForm()
     {
-        // Más adelante devolveremos la vista Blade
-        return response("Login form (controller) — pendiente de vista", 200);
+        return view('auth.login');
     }
 
     // POST /login
