@@ -1,6 +1,8 @@
 {
     "private": true,
     "type": "module",
+    "name": "readon",
+    "license": "MIT",
     "scripts": {
         "build": "vite build",
         "dev": "vite"
