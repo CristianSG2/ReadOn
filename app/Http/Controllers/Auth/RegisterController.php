@@ -13,8 +13,7 @@ class RegisterController extends Controller
     // GET /register
     public function showRegisterForm()
     {
-        // Más adelante devolveremos la vista Blade
-        return response("Register form (controller) — pendiente de vista", 200);
+        return view('auth.register');
     }
 
     // POST /register
