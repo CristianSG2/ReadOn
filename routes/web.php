@@ -26,9 +26,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    // De momento, /me sigue como stub hasta crear la vista
     Route::get('/me', function () {
-        $user = auth()->user();
-        return response("Perfil (stub). Usuario: ".($user?->email ?? 'sin sesión'), 200);
+        return view('me');   // ← antes respondía texto
     })->name('me');
 });
