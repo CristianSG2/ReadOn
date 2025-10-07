@@ -82,4 +82,21 @@ class ReadingLogController extends Controller
 
         return back()->with('success', 'Estado actualizado.');
     }
+
+    public function updateRating(\Illuminate\Http\Request $request, \App\Models\ReadingLog $readingLog)
+    {
+        // Solo el dueño del log puede modificarlo
+        abort_unless($readingLog->user_id === \Illuminate\Support\Facades\Auth::id(), 403);
+
+        $data = $request->validate([
+            'rating' => ['nullable', 'integer', 'between:1,10'],
+        ]);
+
+        // Si no viene rating, lo limpiamos (null)
+        $readingLog->update([
+            'rating' => $data['rating'] ?? null,
+        ]);
+
+        return back()->with('success', 'Rating actualizado.');
+    }
 }
