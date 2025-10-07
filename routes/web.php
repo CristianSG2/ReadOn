@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\ReadingLogController;
+
 
 // Home
 Route::get('/', function () {
@@ -47,4 +49,15 @@ Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show'); 
 Route::middleware('throttle:30,1')->group(function () { // 30 solicitudes por minuto y por IP SOLO para /books.
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
+});
+
+// Rutas de logs de lectura (solo para usuarios autenticados)
+Route::middleware('auth')->group(function () {
+    Route::post('/reading-logs', [ReadingLogController::class, 'store'])->name('reading-logs.store');
+    Route::get('/reading-logs',  [ReadingLogController::class, 'index'])->name('reading-logs.index'); // listado
+    Route::patch('/reading-logs/{readingLog}', [ReadingLogController::class, 'update'])
+    ->name('reading-logs.update'); // cambiar estado
+    Route::patch('/reading-logs/{readingLog}/rating', [ReadingLogController::class, 'updateRating'])
+    ->name('reading-logs.rating'); // rating
+
 });
