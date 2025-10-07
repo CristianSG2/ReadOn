@@ -52,6 +52,6 @@ Route::middleware('throttle:30,1')->group(function () { // 30 solicitudes por mi
 
 // Rutas de logs de lectura (solo para usuarios autenticados)
 Route::middleware('auth')->group(function () {
-    Route::post('/reading-logs', [ReadingLogController::class, 'store'])
-        ->name('reading-logs.store');
+    Route::post('/reading-logs', [ReadingLogController::class, 'store'])->name('reading-logs.store');
+    Route::get('/reading-logs',  [ReadingLogController::class, 'index'])->name('reading-logs.index'); // listado
 });

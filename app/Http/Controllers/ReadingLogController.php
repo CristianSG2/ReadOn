@@ -49,4 +49,15 @@ class ReadingLogController extends Controller
                 ->with('error', 'No se pudo guardar el libro. '.$e->getMessage());
         }
     }
+    
+    // Lista las lecturas guardadas del usuario autenticado
+    public function index()
+    {
+        // Ordenar por lo último guardado
+        $logs = \App\Models\ReadingLog::where('user_id', Auth::id())
+            ->latest()
+            ->paginate(12);
+
+        return view('reading-logs.index', compact('logs'));
+    }
 }
