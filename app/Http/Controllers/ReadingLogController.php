@@ -9,22 +9,38 @@ use Illuminate\Support\Str;
 
 class ReadingLogController extends Controller
 {
-    // Guarda/actualiza un log de lectura para el usuario autenticado
+    /**
+     * Listado de lecturas del usuario autenticado.
+     */
+    public function index()
+    {
+        // Ordeno por lo último guardado/actualizado
+        $logs = ReadingLog::where('user_id', Auth::id())
+            ->latest()
+            ->paginate(12);
+
+        return view('reading-logs.index', compact('logs'));
+    }
+
+    /**
+     * Guarda/actualiza un log (se llama desde la ficha del libro).
+     * Por ahora solo crea/actualiza con estado 'want' por defecto.
+     */
     public function store(Request $request)
     {
-        // Validación básica del payload que viene desde la vista de detalle
+        // Validación del payload que viene desde la vista de detalle
         $data = $request->validate([
             'volume_id'     => ['required', 'string'],
             'title'         => ['required', 'string'],
             'authors'       => ['nullable', 'string'],
-            'thumbnail_url' => ['nullable', 'string'], // no usar 'url' porque a veces vienen URLs raras con params
+            'thumbnail_url' => ['nullable', 'string'], // a veces vienen URLs raras
             'status'        => ['nullable', 'in:want,reading,read,dropped'],
         ]);
 
         $userId = Auth::id();
         $status = $data['status'] ?? 'want';
 
-        // Truncar a 255 para evitar problemas con VARCHAR
+        // Trunco a 255 para evitar problemas con VARCHAR (comentario en español, estilo “yo”)
         $payload = [
             'title'         => Str::limit($data['title'], 255, ''),
             'authors'       => Str::limit($data['authors'] ?? '', 255, ''),
@@ -33,7 +49,6 @@ class ReadingLogController extends Controller
         ];
 
         try {
-            // Si ya existe, actualizar metadata/estado; si no, lo crea.
             ReadingLog::updateOrCreate(
                 ['user_id' => $userId, 'volume_id' => $data['volume_id']],
                 $payload
@@ -43,21 +58,28 @@ class ReadingLogController extends Controller
                 ->route('books.show', $data['volume_id'])
                 ->with('success', 'Libro guardado en tus lecturas.');
         } catch (\Throwable $e) {
-            // Control básico de errores (DB, carreras, etc.)
             return redirect()
                 ->route('books.show', $data['volume_id'])
-                ->with('error', 'No se pudo guardar el libro. '.$e->getMessage());
+                ->with('error', 'No se pudo guardar el libro. ' . $e->getMessage());
         }
     }
-    
-    // Lista las lecturas guardadas del usuario autenticado
-    public function index()
-    {
-        // Ordenar por lo último guardado
-        $logs = \App\Models\ReadingLog::where('user_id', Auth::id())
-            ->latest()
-            ->paginate(12);
 
-        return view('reading-logs.index', compact('logs'));
+    /**
+     * Actualiza SOLO el estado del log (want/reading/read/dropped) desde el listado.
+     */
+    public function update(Request $request, ReadingLog $readingLog)
+    {
+        // Seguridad: solo el dueño del log puede modificarlo
+        abort_unless($readingLog->user_id === Auth::id(), 403);
+
+        $data = $request->validate([
+            'status' => ['required', 'in:want,reading,read,dropped'],
+        ]);
+
+        $readingLog->update([
+            'status' => $data['status'],
+        ]);
+
+        return back()->with('success', 'Estado actualizado.');
     }
 }

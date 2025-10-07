@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ReadingLogController;
 
+
 // Home
 Route::get('/', function () {
     return view('welcome');
@@ -54,4 +55,6 @@ Route::middleware('throttle:30,1')->group(function () { // 30 solicitudes por mi
 Route::middleware('auth')->group(function () {
     Route::post('/reading-logs', [ReadingLogController::class, 'store'])->name('reading-logs.store');
     Route::get('/reading-logs',  [ReadingLogController::class, 'index'])->name('reading-logs.index'); // listado
+    Route::patch('/reading-logs/{readingLog}', [ReadingLogController::class, 'update'])
+    ->name('reading-logs.update'); // cambiar estado
 });
