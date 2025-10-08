@@ -99,4 +99,29 @@ class ReadingLogController extends Controller
 
         return back()->with('success', 'Rating actualizado.');
     }
+    /**
+     * Actualiza SOLO la reseña (texto) del log.
+     * Si viene vacía o solo espacios, la deja en null (borra la reseña).
+     */
+    public function updateReview(\Illuminate\Http\Request $request, \App\Models\ReadingLog $readingLog)
+    {
+        // Autorización: solo el dueño del log puede modificarlo
+        abort_unless($readingLog->user_id === \Illuminate\Support\Facades\Auth::id(), 403);
+
+        // Validación: hasta 1000 caracteres.
+        $data = $request->validate([
+            'review' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        // Normalizamos: si viene vacía o solo espacios, guardamos null
+        $review = trim((string)($data['review'] ?? ''));
+
+        $readingLog->update([
+            'review' => $review !== '' ? $review : null,
+        ]);
+
+        // Mensaje acorde a la acción
+        return back()->with('success', $review !== '' ? 'Reseña actualizada.' : 'Reseña eliminada.');
+    }
+
 }

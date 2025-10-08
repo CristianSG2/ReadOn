@@ -59,5 +59,7 @@ Route::middleware('auth')->group(function () {
     ->name('reading-logs.update'); // cambiar estado
     Route::patch('/reading-logs/{readingLog}/rating', [ReadingLogController::class, 'updateRating'])
     ->name('reading-logs.rating'); // rating
+    Route::patch('/reading-logs/{readingLog}/review', [ReadingLogController::class, 'updateReview'])
+    ->name('reading-logs.review');// reseña
 
 });
