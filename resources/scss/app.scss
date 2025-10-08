@@ -261,3 +261,48 @@ h3 { font-size: 1.125rem; }
   border: none;
   padding: 0;
 }
+
+/* === Hover Delete Button on Cover === */
+.thumb-actions {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 2;
+}
+
+.card:hover .thumb-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(14, 15, 18, 0.75);
+  color: #e9eaee;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(2px);
+}
+
+.btn-icon:hover {
+  filter: brightness(1.1);
+}
+
+.btn-danger {
+  border-color: #5b1f24;
+  background: rgba(177, 15, 38, 0.85);
+}
+.btn-danger:hover {
+  background: rgba(177, 15, 38, 1);
+}

@@ -99,6 +99,7 @@ class ReadingLogController extends Controller
 
         return back()->with('success', 'Rating actualizado.');
     }
+    
     /**
      * Actualiza SOLO la reseña (texto) del log.
      * Si viene vacía o solo espacios, la deja en null (borra la reseña).
@@ -123,5 +124,29 @@ class ReadingLogController extends Controller
         // Mensaje acorde a la acción
         return back()->with('success', $review !== '' ? 'Reseña actualizada.' : 'Reseña eliminada.');
     }
+
+    /**
+     * Elimina un reading log. Solo el dueño puede hacerlo.
+     */
+    public function destroy(\Illuminate\Http\Request $request, \App\Models\ReadingLog $readingLog)
+    {
+        // Autorización: solo el dueño del log puede eliminarlo
+        abort_unless($readingLog->user_id === \Illuminate\Support\Facades\Auth::id(), 403);
+
+        try {
+            $readingLog->delete();
+
+            return redirect()
+                ->route('reading-logs.index')
+                ->with('success', 'Registro eliminado correctamente.');
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()
+                ->route('reading-logs.index')
+                ->with('error', 'No se pudo eliminar el registro. Inténtalo de nuevo.');
+        }
+    }
+
 
 }

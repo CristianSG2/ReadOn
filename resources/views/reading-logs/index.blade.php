@@ -22,28 +22,38 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($logs as $log)
                 @php
-                    // Mejora de calidad para portadas de Google Books (usa zoom alto si viene mini)
+                    // Mejora de calidad de portadas
                     $upgrade = $upgrade ?? function (?string $url, int $zoom = 4) {
                         if (!$url) return $url;
-                        if (str_contains($url, 'zoom=')) {
-                            return preg_replace('/zoom=\d+/', 'zoom='.$zoom, $url);
-                        }
-                        if (str_contains($url, 'books.google')) {
-                            return $url.(str_contains($url, '?') ? '&' : '?').'zoom='.$zoom;
-                        }
+                        if (str_contains($url, 'zoom=')) return preg_replace('/zoom=\d+/', 'zoom='.$zoom, $url);
+                        if (str_contains($url, 'books.google')) return $url.(str_contains($url, '?') ? '&' : '?').'zoom='.$zoom;
                         return $url;
                     };
                     $cover = $upgrade($log->thumbnail_url, 4);
                 @endphp
 
                 <div class="card">
-                    {{-- Portada --}}
-                    <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden">
+                    {{-- Portada con botón eliminar flotante --}}
+                    <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden relative">
                         @if($cover)
                             <img src="{{ $cover }}" alt="{{ $log->title }}">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
+
+                        {{-- Botón eliminar overlay --}}
+                        <form
+                            action="{{ route('reading-logs.destroy', $log) }}"
+                            method="POST"
+                            class="thumb-actions"
+                            onsubmit="return confirm('¿Seguro que deseas eliminar este registro? Esta acción no se puede deshacer.');"
+                        >
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-icon btn-danger" aria-label="Eliminar registro" title="Eliminar registro">
+                                &times;
+                            </button>
+                        </form>
                     </div>
 
                     {{-- Contenido --}}
@@ -76,7 +86,7 @@
                             </div>
                         </form>
 
-                        {{-- Rating (5 estrellas con medias → envia 1..10) --}}
+                        {{-- Rating --}}
                         <form method="POST" action="{{ route('reading-logs.rating', $log) }}" class="mt-3">
                             @csrf
                             @method('PATCH')
@@ -160,7 +170,7 @@
 </div>
 
 <script>
-// Rating interactivo (mantengo tu lógica)
+// Rating interactivo
 document.querySelectorAll('.stars').forEach(stars => {
   const input = stars.querySelector('input[name=rating]');
   const fill  = stars.querySelector('.stars__fill');
@@ -170,19 +180,14 @@ document.querySelectorAll('.stars').forEach(stars => {
   const set = v => {
     current = v || 0;
     input.value = current || '';
-    fill.style.setProperty('--p', (current * 10) + '%');
     fill.style.width = (current * 10) + '%';
   };
 
   hit.addEventListener('mousemove', e => {
     const v = parseInt(e.target.dataset.v || 0, 10);
-    if (v) {
-      fill.style.setProperty('--p', (v * 10) + '%');
-      fill.style.width = (v * 10) + '%';
-    }
+    if (v) fill.style.width = (v * 10) + '%';
   });
   hit.addEventListener('mouseleave', () => {
-    fill.style.setProperty('--p', (current * 10) + '%');
     fill.style.width = (current * 10) + '%';
   });
   hit.addEventListener('click', e => {
@@ -191,7 +196,7 @@ document.querySelectorAll('.stars').forEach(stars => {
   });
 });
 
-// --- Toggle de formulario de reseña ---
+// Toggle reseña
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.review-toggle');
   if (!btn) return;
