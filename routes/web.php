@@ -55,9 +55,14 @@ Route::middleware('throttle:30,1')->group(function () { // 30 solicitudes por mi
 Route::middleware('auth')->group(function () {
     Route::post('/reading-logs', [ReadingLogController::class, 'store'])->name('reading-logs.store');
     Route::get('/reading-logs',  [ReadingLogController::class, 'index'])->name('reading-logs.index'); // listado
+    
     Route::patch('/reading-logs/{readingLog}', [ReadingLogController::class, 'update'])
-    ->name('reading-logs.update'); // cambiar estado
+    ->name('reading-logs.update'); // estado
     Route::patch('/reading-logs/{readingLog}/rating', [ReadingLogController::class, 'updateRating'])
     ->name('reading-logs.rating'); // rating
+    Route::patch('/reading-logs/{readingLog}/review', [ReadingLogController::class, 'updateReview'])
+    ->name('reading-logs.review');// reseña
+    Route::delete('/reading-logs/{readingLog}', [ReadingLogController::class, 'destroy'])
+    ->name('reading-logs.destroy');// eliminar
 
 });

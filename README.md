@@ -50,9 +50,9 @@ ddev launch   # https://readon.ddev.site
 ```
 
 **Notas**  
-- Ajusta `APP_URL` a `https://readon.ddev.site` (o tu host DDEV).  
+- Ajusta `APP_URL` a `https://readon.ddev.site`.  
 - `public/build/*` está ignorado en `.gitignore` (assets generados por Vite).  
-- Recomendado: en Google Cloud Console, restringe la API key **solo** a *Books API* (API restrictions).
+- Recomendado: restringe la API key **solo** a *Books API* en Google Cloud Console.
 
 ---
 
@@ -85,85 +85,94 @@ ddev launch   # https://readon.ddev.site
   - `GET /books` → búsqueda (paginada).  
   - `GET /books/{id}` → ficha detalle.  
 - **Protección de cuota**: `throttle:30,1` aplicado al grupo de `/books` (30 req/min/IP).  
-- **Calidad de portadas**: se selecciona la mejor (`extraLarge → large → medium → ...`) y se **mejora** la miniatura de Google con parámetro `zoom` cuando procede.
+- **Calidad de portadas**: se selecciona la mejor (`extraLarge → large → medium → ...`) y se **mejora** la miniatura con `zoom`.
 
 ---
 
 ## 📘 Logs de lectura
 
 - **Modelo & migración**: `reading_logs`
-  - `user_id` (FK), `volume_id` (Google Books), `title`, `authors`, `thumbnail_url`
-  - `status` (`want | reading | read | dropped`), `rating` (`TINYINT 1–10`), `review` (opcional, pendiente)
+  - `user_id` (FK), `volume_id`, `title`, `authors`, `thumbnail_url`
+  - `status` (`wishlist | reading | read | dropped`)
+  - `rating` (`TINYINT 1–10`)
+  - `review` (nullable)
   - `unique (user_id, volume_id)`
 - **Controlador**:
-  - `POST /reading-logs` (auth) → crear/actualizar log (por defecto `want`).  
-  - `GET  /reading-logs` (auth) → listado de “Mis lecturas”.  
-  - `PATCH /reading-logs/{readingLog}` (auth) → actualizar **status**.  
-  - `PATCH /reading-logs/{readingLog}/rating` (auth) → actualizar **rating**.
+  - `POST /reading-logs` → crear/actualizar log.  
+  - `GET /reading-logs` → listado “Mis lecturas”.  
+  - `PATCH /reading-logs/{log}` → actualizar **status**.  
+  - `PATCH /reading-logs/{log}/rating` → actualizar **rating**.  
+  - `PATCH /reading-logs/{log}/review` → añadir/editar/eliminar **reseña**.  
+  - `DELETE /reading-logs/{log}` → eliminar registro (solo dueño).
 - **UI**:
-  - Listado con **cards** y portadas nítidas (mejora de `zoom`).  
-  - **Rating estilo Letterboxd** (5★ con medias) → envía 1..10.  
-  - Fila de **estado** con layout consistente (sin desbordes).  
-  - **Alerts** con buen contraste para mensajes *flash*.
+  - Listado con **cards** y portadas nítidas (mejora `zoom`).  
+  - **Rating estilo Letterboxd** (5★ con medias → 1..10).  
+  - **Estado** editable inline con select.  
+  - **Reseñas**: textarea plegable, snippet (140 chars) y flashes de éxito.  
+  - **Eliminación**: botón flotante (overlay) sobre la portada con confirmación.  
+  - **Alerts** con contraste (`success` y `warning`).
 
 ---
 
 ## 🧭 Rutas clave (resumen)
 
 ```text
-GET  /books               → BookController@index     (throttle:30,1)
-GET  /books/{id}          → BookController@show      (throttle:30,1)
+GET    /books                      → BookController@index       (throttle:30,1)
+GET    /books/{id}                 → BookController@show        (throttle:30,1)
 
-POST /reading-logs        → ReadingLogController@store    (auth)
-GET  /reading-logs        → ReadingLogController@index    (auth)
-PATCH /reading-logs/{log} → ReadingLogController@update   (auth)      # cambia status
-PATCH /reading-logs/{log}/rating → ReadingLogController@updateRating  (auth)
+POST   /reading-logs               → ReadingLogController@store    (auth)
+GET    /reading-logs               → ReadingLogController@index    (auth)
+PATCH  /reading-logs/{log}         → ReadingLogController@update   (auth)
+PATCH  /reading-logs/{log}/rating  → ReadingLogController@updateRating (auth)
+PATCH  /reading-logs/{log}/review  → ReadingLogController@updateReview (auth)
+DELETE /reading-logs/{log}         → ReadingLogController@destroy  (auth)
 ```
 
 ---
 
 ## 📂 Estructura relevante
 
-- `resources/views/layouts/app.blade.php` — layout principal (cabecera/nav)  
-- `resources/views/books/index.blade.php` — **grid compacto** de resultados  
+- `resources/views/layouts/app.blade.php` — layout principal  
+- `resources/views/books/index.blade.php` — grid de resultados  
 - `resources/views/books/show.blade.php` — ficha detalle con botón “Guardar en mis lecturas”  
-- `resources/views/reading-logs/index.blade.php` — **Mis lecturas** (estado + rating 0.5★)  
-- `resources/scss/app.scss` — estilos base, alerts, estrellas y utilidades  
-- `resources/js/app.js` — entrada JS para Vite
+- `resources/views/reading-logs/index.blade.php` — “Mis lecturas” (estado + rating + reseña + eliminar overlay)  
+- `resources/scss/app.scss` — tema oscuro, botones, estrellas, alerts, review-form  
+- `app/Http/Controllers/ReadingLogController.php` — lógica de estado, rating, review y eliminación  
 
 ---
 
 ## ✅ Estado actual
 
-- ✔️ Laravel 11 + PostgreSQL (DDEV) funcionando  
-- ✔️ Vite para SCSS/JS configurado  
-- ✔️ **Auth manual**: login/registro/logout + `/me` protegida  
-- ✔️ **Google Books**: servicio + búsqueda + detalle (+ rate limit)  
-- ✔️ **Reading logs**: crear desde ficha, ver listado, cambiar **estado** y **rating** (0.5★)  
-- ✔️ Tema oscuro base y componentes mínimos (cards, botones, inputs)
+- ✔️ Laravel 11 + PostgreSQL (DDEV)  
+- ✔️ Auth manual funcional (`login`, `register`, `logout`, `/me`)  
+- ✔️ Integración con Google Books + throttle  
+- ✔️ Logs de lectura: creación, edición, estado, rating  
+- ✔️ **NUEVO**: reseñas (add/edit/delete)  
+- ✔️ **NUEVO**: eliminación con botón flotante (overlay top-right)  
+- ✔️ SCSS y layout base en tema oscuro  
 
 ---
 
 ## 📑 Roadmap
 
-- **Review** en logs (texto) y edición inline.  
-- **Perfil** (`/me`) con estadísticas simples (libros leídos, media de rating, top géneros).  
-- **Validaciones front** y UX (mensajes, *loading*, errores de red).  
-- **Deploy** → Koyeb/Render, `.env` de producción, `artisan config:cache` / `route:cache`.  
-- **Docs** → capturas y guía final para portfolio.
+- **Perfil** (`/me`) con estadísticas de lectura (libros, media, top géneros).  
+- **Validaciones front** y mejoras UX (mensajes, loading, accesibilidad móvil).  
+- **Deploy** → Koyeb/Render, `.env` de producción.  
+- **Documentación** → capturas y guía final para portfolio.  
+- **Tests** → funcionales (feature tests) para logs y auth.
 
 ---
 
 ## 🧰 Scripts útiles
 
 ```bash
-# Desarrollo (watch)
+# Desarrollo
 ddev npm run dev
 
 # Build de producción
 ddev npm run build
 
-# Limpiar cachés de Laravel (rutas/config/views)
+# Limpiar cachés de Laravel
 ddev artisan optimize:clear
 ```
 
@@ -172,27 +181,24 @@ ddev artisan optimize:clear
 ## 🔗 Pull Requests relevantes
 
 - Books API + vistas + throttle → https://github.com/CristianSG2/ReadOn/pull/8  
-- Reading logs + rating + UI/SCSS → https://github.com/CristianSG2/ReadOn/pull/10
+- Reading logs + rating + UI/SCSS → https://github.com/CristianSG2/ReadOn/pull/10  
+- Reviews + eliminación de logs (overlay UI) → https://github.com/CristianSG2/ReadOn/pull/12
 
 ---
 
 ## 🛠️ Troubleshooting
 
-1) **Vite**: “Unable to locate file in Vite manifest: resources/css/app.css”  
+1) **Vite**: “Unable to locate file in Vite manifest”  
    → Usa `@vite(['resources/scss/app.scss','resources/js/app.js'])` y ejecuta `ddev npm run build`.
 
-2) **/login y /register no redirigen a /me con sesión**  
+2) **Redirecciones /me**  
    → En `bootstrap/app.php`, alias:  
-   `guest => App\Http\Middleware\RedirectIfAuthenticated::class`.  
+   `guest => App\Http\Middleware\RedirectIfAuthenticated::class`  
+   `auth  => App\Http\Middleware\Authenticate::class`  
    Limpia cachés: `ddev artisan optimize:clear`.
 
-3) **/me no protege sin sesión**  
-   → En `bootstrap/app.php`, alias:  
-   `auth => App\Http\Middleware\Authenticate::class`.  
-   En `Authenticate::redirectTo()`, devuelve `route('login')`.
-
-4) **Throttle de /books** no parece aplicar  
-   → Comprueba con `php artisan route:list` que las rutas `/books` están dentro del grupo `throttle:30,1`.
+3) **Throttle de /books**  
+   → Verifica con `php artisan route:list` que estén dentro de `throttle:30,1`.
 
 ---
 
