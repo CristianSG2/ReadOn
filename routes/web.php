@@ -5,7 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ReadingLogController;
-
+use App\Http\Controllers\ProfileController;
 
 // Home
 Route::get('/', function () {
@@ -64,5 +64,7 @@ Route::middleware('auth')->group(function () {
     ->name('reading-logs.review');// reseña
     Route::delete('/reading-logs/{readingLog}', [ReadingLogController::class, 'destroy'])
     ->name('reading-logs.destroy');// eliminar
+
+    Route::get('/me', [ProfileController::class, 'index'])->name('me');
 
 });

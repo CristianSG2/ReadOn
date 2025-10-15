@@ -306,3 +306,31 @@ h3 { font-size: 1.125rem; }
 .btn-danger:hover {
   background: rgba(177, 15, 38, 1);
 }
+
+/* ===== Profile (/me) ===== */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .8rem; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: .8rem; padding: .8rem; }
+.stat-label { color: var(--muted); font-size: .9rem; }
+.stat-value { font-size: 1.4rem; font-weight: 700; margin-top: .2rem; }
+.recent-list { list-style: none; padding: 0; margin: .5rem 0 0; }
+.recent-item { padding: .55rem .65rem; border: 1px solid var(--border); border-radius: .6rem; background: #0f1116; margin-bottom: .5rem; }
+.recent-title { font-weight: 600; color: #e9eaee; }
+.recent-meta { margin-left: .4rem; font-size: .95rem; }
+/* micro-UX */
+.stat-card {
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  border-color: #2d3343;
+}
+
+.recent-item {
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.recent-item:hover {
+  background: #12141a;
+  border-color: #323646;
+  transform: translateY(-1px);
+}
