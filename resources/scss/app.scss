@@ -316,17 +316,21 @@ h3 { font-size: 1.125rem; }
 .recent-item { padding: .55rem .65rem; border: 1px solid var(--border); border-radius: .6rem; background: #0f1116; margin-bottom: .5rem; }
 .recent-title { font-weight: 600; color: #e9eaee; }
 .recent-meta { margin-left: .4rem; font-size: .95rem; }
-
-.btn-secondary {
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: .45rem .9rem;
-  border-radius: .5rem;
-  font-size: .95rem;
-  transition: all .2s ease-in-out;
+/* micro-UX */
+.stat-card {
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
-.btn-secondary:hover {
-  background: #1a1c22;
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  border-color: #2d3343;
+}
+
+.recent-item {
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.recent-item:hover {
+  background: #12141a;
+  border-color: #323646;
   transform: translateY(-1px);
 }
