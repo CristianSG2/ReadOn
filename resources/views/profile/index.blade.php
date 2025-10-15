@@ -36,7 +36,7 @@
         </div>
     </section>
 
-    {{-- Últimos 5 registros --}}
+  {{-- Últimos 5 registros --}}
     <section class="mt-4">
         <h2 class="section-title">Últimos 5 registros</h2>
         @if ($recent->isEmpty())
@@ -54,6 +54,11 @@
                     </li>
                 @endforeach
             </ul>
+            <div class="mt-2">
+                <a href="{{ route('reading-logs.index') }}" class="btn btn-secondary">
+                    Ver todos mis logs
+                </a>
+            </div>
         @endif
     </section>
 </div>
