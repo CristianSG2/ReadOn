@@ -334,3 +334,133 @@ h3 { font-size: 1.125rem; }
   border-color: #323646;
   transform: translateY(-1px);
 }
+
+/* === NAVBAR GLOBAL (tema oscuro) ========================================= */
+/* Nota: Se añade al final para no romper estilos previos. */
+:root {
+  --nav-h: 56px;
+  --nav-bg: #0f1216;       /* fondo oscuro coherente */
+  --nav-border: #1f2937;   /* borde inferior sutil */
+  --nav-link: #c7d2fe;     /* texto link */
+  --nav-link-muted: #a3a3a3;
+  --nav-link-hover: #ffffff;
+  --nav-active-underline: #6366f1; /* violeta/índigo suave */
+}
+
+.site-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  z-index: 1000;
+}
+
+.nav {
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nav__brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--nav-link-hover);
+  letter-spacing: .2px;
+}
+
+.nav__toggle {
+  display: none; /* visible en mobile en el breakpoint */
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--nav-border);
+  background: transparent;
+  color: var(--nav-link);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--nav-link);
+  border: 1px solid transparent;
+  transition: border-color .15s ease, background-color .15s ease, color .15s ease;
+}
+
+.nav__link:hover,
+.nav__link:focus {
+  color: var(--nav-link-hover);
+  border-color: var(--nav-border);
+  outline: none;
+}
+
+.nav__logout-form {
+  display: inline-flex;
+}
+
+.nav__logout {
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* Estado activo (también se marca aria-current="page") */
+.nav__link.is-active {
+  color: var(--nav-link-hover);
+  box-shadow: inset 0 -2px 0 var(--nav-active-underline);
+}
+
+/* Offset del body para que no quede oculto bajo el nav fijo */
+body {
+  padding-top: calc(var(--nav-h) + 5px);
+}
+
+/* === Responsive simple ==================================================== */
+@media (max-width: 768px) {
+  .nav {
+    gap: 6px;
+  }
+  .nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav__links {
+    /* por defecto oculto en móvil (usa data-open=1 para mostrar) */
+    position: absolute;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--nav-border);
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .nav__links[data-open="1"] {
+    display: flex;
+  }
+  .nav__link {
+    height: 40px;
+    padding: 0 14px;
+  }
+}
+
