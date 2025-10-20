@@ -47,6 +47,7 @@ ddev npm run build
 
 # Abrir
 ddev launch   # https://readon.ddev.site
+```
 
 Notas  
 - Ajusta APP_URL a https://readon.ddev.site.  
@@ -68,6 +69,28 @@ Notas
 - Redirecciones:
   - Con sesión, /login y /register → /me.
   - Sin sesión, /me → /login.
+
+---
+
+## 🧭 Navbar global
+
+- Implementado en `resources/views/layouts/app.blade.php`.  
+- Header fijo superior con enlaces dinámicos según autenticación:
+
+  **Usuarios autenticados** → Books (/books), Mis lecturas (/reading-logs), Perfil (/me), Salir (POST /logout)  
+  **Visitantes** → Inicio (/), Login (/login), Registro (/register)
+
+- Incluye:
+  - Formulario POST de logout con @csrf integrado.  
+  - Estado activo mediante `request()->routeIs(...)` y `.is-active`.  
+  - Responsive básico con toggle “Menu” (JS inline, sin dependencias).  
+  - Accesibilidad: `aria-controls`, `aria-expanded`, `aria-current`.  
+  - Estilo coherente con el tema oscuro (fondo, bordes, hover, foco).  
+  - Offset global en `body` para evitar corte del contenido bajo el header.
+
+📸 Capturas
+- Navbar fijo en escritorio  
+- Navbar colapsado en móvil
 
 ---
 
@@ -127,37 +150,7 @@ Notas
 
 ---
 
-## 🧭 Rutas clave (resumen)
-
-```text
-GET    /books                      → BookController@index       (throttle:30,1)
-GET    /books/{id}                 → BookController@show        (throttle:30,1)
-
-POST   /reading-logs               → ReadingLogController@store    (auth)
-GET    /reading-logs               → ReadingLogController@index    (auth)
-PATCH  /reading-logs/{log}         → ReadingLogController@update   (auth)
-PATCH  /reading-logs/{log}/rating  → ReadingLogController@updateRating (auth)
-PATCH  /reading-logs/{log}/review  → ReadingLogController@updateReview (auth)
-DELETE /reading-logs/{log}         → ReadingLogController@destroy  (auth)
-
-GET    /me                         → ProfileController@index       (auth)
-
----
-
-## 📂 Estructura relevante
-
-- resources/views/layouts/app.blade.php — layout principal  
-- resources/views/books/index.blade.php — grid de resultados  
-- resources/views/books/show.blade.php — ficha detalle con botón “Guardar en mis lecturas”  
-- resources/views/reading-logs/index.blade.php — “Mis lecturas” (estado + rating + reseña + eliminar overlay)  
-- resources/views/profile/index.blade.php — perfil con estadísticas y recientes  
-- resources/scss/app.scss — tema oscuro, botones, estrellas, alerts, review-form, perfil  
-- app/Http/Controllers/ProfileController.php — lógica de estadísticas de usuario  
-- app/Http/Controllers/ReadingLogController.php — lógica de estado, rating, review y eliminación  
-
----
-
-## ✅ Estado actual
+## 📑 Estado actual
 
 - ✔️ Laravel 11 + PostgreSQL (DDEV)  
 - ✔️ Auth manual funcional (login, register, logout, /me)  
@@ -165,16 +158,37 @@ GET    /me                         → ProfileController@index       (auth)
 - ✔️ Logs de lectura: creación, edición, estado, rating  
 - ✔️ Reseñas (add/edit/delete) + eliminación con overlay  
 - ✔️ SCSS y layout base en tema oscuro  
-- ✔️ NUEVO: Perfil /me con estadísticas de lectura y micro-UX  
+- ✔️ Perfil /me con estadísticas de lectura  
+- ✔️ **Navbar global fijo con estado activo, responsive y micro-UX**
 
 ---
 
-## 📑 Roadmap
+## 🧭 Roadmap
 
-- Validaciones front y mejoras UX (mensajes, loading, accesibilidad móvil).  
-- Deploy → Koyeb/Render, .env de producción.  
-- Documentación → capturas y guía final para portfolio.  
-- Tests → funcionales (feature tests) para logs y auth.
+- **UX y visuales**
+  - Badges por estado de lectura.  
+  - Mensajes de vacíos más claros.  
+  - Transiciones suaves y feedback visual.  
+  - Botón “Ver todos” en /me hacia /reading-logs.  
+  - Ajustes de color y tipografía.
+
+- **Exportación**
+  - Endpoint protegido para exportar los reading logs (JSON/CSV).  
+  - Botón en /me para descarga directa (stream).
+
+- **Limpieza SCSS**
+  - Migrar a partials: `_buttons.scss`, `_cards.scss`, `_alerts.scss`, `_nav.scss`, `_profile.scss`.  
+
+- **Documentación**
+  - README final con capturas y sección “Funcionalidades”.  
+  - Guía de despliegue y variables de entorno.
+
+- **Deploy**
+  - Render o Koyeb, pipeline simple, APP_URL correcto, build Vite.  
+  - Cache de config y rutas.
+
+- **(Opcional) Tests**
+  - Feature tests para auth, reading logs y /me.
 
 ---
 
@@ -183,7 +197,8 @@ GET    /me                         → ProfileController@index       (auth)
 - Books API + vistas + throttle → https://github.com/CristianSG2/ReadOn/pull/8  
 - Reading logs + rating + UI/SCSS → https://github.com/CristianSG2/ReadOn/pull/10  
 - Reviews + eliminación de logs (overlay UI) → https://github.com/CristianSG2/ReadOn/pull/12  
-- Perfil /me con estadísticas de lectura → https://github.com/CristianSG2/ReadOn/pull/13
+- Perfil /me con estadísticas de lectura → https://github.com/CristianSG2/ReadOn/pull/13  
+- **Navbar global con enlaces dinámicos y diseño responsive** → https://github.com/CristianSG2/ReadOn/pull/14
 
 ---
 
@@ -199,14 +214,6 @@ ddev npm run build
 # Limpiar cachés de Laravel
 ddev artisan optimize:clear
 ```
-
----
-
-## 🔗 Pull Requests relevantes
-
-- Books API + vistas + throttle → https://github.com/CristianSG2/ReadOn/pull/8  
-- Reading logs + rating + UI/SCSS → https://github.com/CristianSG2/ReadOn/pull/10  
-- Reviews + eliminación de logs (overlay UI) → https://github.com/CristianSG2/ReadOn/pull/12
 
 ---
 
