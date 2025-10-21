@@ -30,6 +30,15 @@
                         return $url;
                     };
                     $cover = $upgrade($log->thumbnail_url, 4);
+
+                    // Clase visual según estado
+                    $badgeClass = match($log->status) {
+                        'wishlist' => 'badge badge--wishlist',
+                        'reading'  => 'badge badge--reading',
+                        'read'     => 'badge badge--read',
+                        'dropped'  => 'badge badge--dropped',
+                        default    => 'badge badge--wishlist',
+                    };
                 @endphp
 
                 <div class="card">
@@ -66,7 +75,8 @@
                         @endif
 
                         <p class="meta">
-                            Estado: <span class="badge">{{ $log->status }}</span>
+                            Estado:
+                            <span class="{{ $badgeClass }}">{{ ucfirst($log->status) }}</span>
                             @if(!is_null($log->rating)) · ⭐ {{ $log->rating }}/10 @endif
                         </p>
 

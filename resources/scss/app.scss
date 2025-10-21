@@ -464,3 +464,53 @@ body {
   }
 }
 
+/* ------------------------------
+   Badges de estado (reading logs)
+   ------------------------------ */
+
+/* Base */
+.badge {
+  display: inline-block;
+  padding: .2rem .5rem;
+  border-radius: .5rem;
+  font-size: .75rem;         /* ~12px */
+  font-weight: 600;
+  letter-spacing: .2px;
+  line-height: 1;
+  border: 1px solid transparent;
+  user-select: none;
+  vertical-align: middle;
+  transition: color .15s ease, background-color .15s ease, border-color .15s ease, transform .15s ease; /* micro-UX */
+}
+
+/* Variantes por estado */
+.badge--wishlist {
+  color: #cbd5e1;            /* gris claro */
+  background-color: rgba(148, 163, 184, .15); /* slate-400 con opacidad */
+  border-color: rgba(148, 163, 184, .35);
+}
+
+.badge--reading {
+  color: #93c5fd;            /* azul claro */
+  background-color: rgba(59, 130, 246, .15);
+  border-color: rgba(59, 130, 246, .35);
+}
+
+.badge--read {
+  color: #86efac;            /* verde claro */
+  background-color: rgba(34, 197, 94, .15);
+  border-color: rgba(34, 197, 94, .35);
+}
+
+.badge--dropped {
+  color: #fca5a5;            /* rojo suave */
+  background-color: rgba(239, 68, 68, .15);
+  border-color: rgba(239, 68, 68, .35);
+}
+
+/* Feedback sutil al hover/focus (si son clicables en el futuro no desentona) */
+.badge:hover,
+.badge:focus {
+  transform: translateY(-1px);
+}
+
