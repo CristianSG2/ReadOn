@@ -87,10 +87,10 @@
                             <label class="label">Estado</label>
                             <div class="form-row">
                                 <select class="input" name="status" required>
-                                    <option value="wishlist" @selected($log->status === 'wishlist')>wishlist</option>
-                                    <option value="reading" @selected($log->status === 'reading')>reading</option>
-                                    <option value="read"    @selected($log->status === 'read')>read</option>
-                                    <option value="dropped" @selected($log->status === 'dropped')>dropped</option>
+                                    <option value="wishlist" @selected($log->status === 'wishlist')>lista de deseos</option>
+                                    <option value="reading" @selected($log->status === 'reading')>leyendo</option>
+                                    <option value="read"    @selected($log->status === 'read')>leído</option>
+                                    <option value="dropped" @selected($log->status === 'dropped')>abandonado</option>
                                 </select>
                                 <button class="btn">Actualizar</button>
                             </div>
