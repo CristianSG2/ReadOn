@@ -49,10 +49,10 @@ class ReadingLog extends Model
     public function getStatusLabelAttribute(): string
     {
         $map = [
-            'wishlist' => 'lista de deseos',
-            'reading'  => 'leyendo',
-            'read'     => 'leído',
-            'dropped'  => 'abandonado',
+            'wishlist' => 'Lista de deseos',
+            'reading'  => 'Leyendo',
+            'read'     => 'Leído',
+            'dropped'  => 'Abandonado',
         ];
 
         return $map[$this->status] ?? ucfirst((string) $this->status);

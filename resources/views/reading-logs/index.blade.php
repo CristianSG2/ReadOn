@@ -76,7 +76,7 @@
 
                         <p class="meta">
                             Estado:
-                            <span class="{{ $badgeClass }}">{{ ucfirst($log->status) }}</span>
+                            <span class="{{ $badgeClass }}">{{ $log->status_label }}</span>
                             @if(!is_null($log->rating)) · ⭐ {{ $log->rating }}/10 @endif
                         </p>
 
@@ -87,10 +87,10 @@
                             <label class="label">Estado</label>
                             <div class="form-row">
                                 <select class="input" name="status" required>
-                                    <option value="wishlist" @selected($log->status === 'wishlist')>lista de deseos</option>
-                                    <option value="reading" @selected($log->status === 'reading')>leyendo</option>
-                                    <option value="read"    @selected($log->status === 'read')>leído</option>
-                                    <option value="dropped" @selected($log->status === 'dropped')>abandonado</option>
+                                    <option value="wishlist" @selected($log->status === 'wishlist')>Lista de deseos</option>
+                                    <option value="reading" @selected($log->status === 'reading')>Leyendo</option>
+                                    <option value="read"    @selected($log->status === 'read')>Leído</option>
+                                    <option value="dropped" @selected($log->status === 'dropped')>Abandonado</option>
                                 </select>
                                 <button class="btn">Actualizar</button>
                             </div>
