@@ -14,7 +14,6 @@ class ReadingLogController extends Controller
      */
     public function index()
     {
-        // Ordeno por lo último guardado/actualizado
         $logs = ReadingLog::where('user_id', Auth::id())
             ->latest()
             ->paginate(12);
@@ -23,24 +22,21 @@ class ReadingLogController extends Controller
     }
 
     /**
-     * Guarda/actualiza un log (se llama desde la ficha del libro).
-     * Por ahora solo crea/actualiza con estado 'want' por defecto.
+     * Guarda o actualiza un registro desde la ficha del libro.
      */
     public function store(Request $request)
     {
-        // Validación del payload que viene desde la vista de detalle
         $data = $request->validate([
             'volume_id'     => ['required', 'string'],
             'title'         => ['required', 'string'],
             'authors'       => ['nullable', 'string'],
-            'thumbnail_url' => ['nullable', 'string'], // a veces vienen URLs raras
-            'status'        => ['nullable', 'in:want,reading,read,dropped'],
+            'thumbnail_url' => ['nullable', 'string'],
+            'status'        => ['nullable', 'in:wishlist,reading,read,dropped'],
         ]);
 
         $userId = Auth::id();
-        $status = $data['status'] ?? 'want';
+        $status = $data['status'] ?? 'wishlist';
 
-        // Trunco a 255 para evitar problemas con VARCHAR (comentario en español, estilo “yo”)
         $payload = [
             'title'         => Str::limit($data['title'], 255, ''),
             'authors'       => Str::limit($data['authors'] ?? '', 255, ''),
@@ -65,15 +61,14 @@ class ReadingLogController extends Controller
     }
 
     /**
-     * Actualiza SOLO el estado del log (want/reading/read/dropped) desde el listado.
+     * Actualiza el estado (wishlist/reading/read/dropped) desde el listado.
      */
     public function update(Request $request, ReadingLog $readingLog)
     {
-        // Seguridad: solo el dueño del log puede modificarlo
         abort_unless($readingLog->user_id === Auth::id(), 403);
 
         $data = $request->validate([
-            'status' => ['required', 'in:want,reading,read,dropped'],
+            'status' => ['required', 'in:wishlist,reading,read,dropped'],
         ]);
 
         $readingLog->update([
@@ -83,55 +78,50 @@ class ReadingLogController extends Controller
         return back()->with('success', 'Estado actualizado.');
     }
 
-    public function updateRating(\Illuminate\Http\Request $request, \App\Models\ReadingLog $readingLog)
+    /**
+     * Actualiza el rating (1–10 o vacío para limpiar).
+     */
+    public function updateRating(Request $request, ReadingLog $readingLog)
     {
-        // Solo el dueño del log puede modificarlo
-        abort_unless($readingLog->user_id === \Illuminate\Support\Facades\Auth::id(), 403);
+        abort_unless($readingLog->user_id === Auth::id(), 403);
 
         $data = $request->validate([
             'rating' => ['nullable', 'integer', 'between:1,10'],
         ]);
 
-        // Si no viene rating, lo limpiamos (null)
         $readingLog->update([
             'rating' => $data['rating'] ?? null,
         ]);
 
         return back()->with('success', 'Rating actualizado.');
     }
-    
-    /**
-     * Actualiza SOLO la reseña (texto) del log.
-     * Si viene vacía o solo espacios, la deja en null (borra la reseña).
-     */
-    public function updateReview(\Illuminate\Http\Request $request, \App\Models\ReadingLog $readingLog)
-    {
-        // Autorización: solo el dueño del log puede modificarlo
-        abort_unless($readingLog->user_id === \Illuminate\Support\Facades\Auth::id(), 403);
 
-        // Validación: hasta 1000 caracteres.
+    /**
+     * Actualiza o elimina la reseña (texto).
+     */
+    public function updateReview(Request $request, ReadingLog $readingLog)
+    {
+        abort_unless($readingLog->user_id === Auth::id(), 403);
+
         $data = $request->validate([
             'review' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        // Normalizamos: si viene vacía o solo espacios, guardamos null
         $review = trim((string)($data['review'] ?? ''));
 
         $readingLog->update([
             'review' => $review !== '' ? $review : null,
         ]);
 
-        // Mensaje acorde a la acción
         return back()->with('success', $review !== '' ? 'Reseña actualizada.' : 'Reseña eliminada.');
     }
 
     /**
-     * Elimina un reading log. Solo el dueño puede hacerlo.
+     * Elimina un registro.
      */
-    public function destroy(\Illuminate\Http\Request $request, \App\Models\ReadingLog $readingLog)
+    public function destroy(Request $request, ReadingLog $readingLog)
     {
-        // Autorización: solo el dueño del log puede eliminarlo
-        abort_unless($readingLog->user_id === \Illuminate\Support\Facades\Auth::id(), 403);
+        abort_unless($readingLog->user_id === Auth::id(), 403);
 
         try {
             $readingLog->delete();
@@ -147,6 +137,4 @@ class ReadingLogController extends Controller
                 ->with('error', 'No se pudo eliminar el registro. Inténtalo de nuevo.');
         }
     }
-
-
 }
