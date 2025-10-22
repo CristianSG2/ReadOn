@@ -514,3 +514,39 @@ body {
   transform: translateY(-1px);
 }
 
+/* ------------------------------
+   Empty states (mensajes sin contenido)
+   ------------------------------ */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  border: 1px dashed rgba(148,163,184,.35); /* slate-400 */
+  border-radius: 1rem;
+  background: rgba(2,6,23,.25);            /* fondo oscuro sutil */
+  max-width: 640px;
+  margin: 2rem auto;
+}
+
+.empty-state__icon {
+  font-size: 2.25rem; /* ~36px */
+  line-height: 1;
+  margin-bottom: .5rem;
+  opacity: .9;
+}
+
+.empty-state__title {
+  font-size: 1.25rem;
+  margin: .25rem 0 .5rem;
+  font-weight: 700;
+  color: #f1f5f9; /* texto principal en oscuro */
+}
+
+.empty-state__text {
+  color: #94a3b8; /* slate-400 */
+  margin: 0 0 1rem;
+}
+
+.empty-state__cta {
+  margin-top: .25rem;
+}
+
