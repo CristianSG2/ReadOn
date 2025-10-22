@@ -550,3 +550,52 @@ body {
   margin-top: .25rem;
 }
 
+/* ------------------------------
+   Transiciones suaves (micro-UX)
+   ------------------------------ */
+
+/* Regla global: suaviza todos los cambios de color, fondo, borde y transform */
+*, *::before, *::after {
+  transition: color .15s ease, background-color .15s ease,
+              border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+/* Botones: sutil levantamiento y sombra */
+.btn {
+  transition: all .2s ease;
+  &:hover,
+  &:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+  }
+}
+
+/* Botones con borde (outline) */
+.btn-outline {
+  transition: all .2s ease;
+  &:hover,
+  &:focus {
+    background-color: rgba(139, 92, 246, .1); /* violeta tenue */
+    transform: translateY(-1px);
+  }
+}
+
+/* Tarjetas: elevación ligera al pasar el ratón */
+.card {
+  transition: all .2s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+  }
+}
+
+/* Inputs y selects: halo violeta al enfocar */
+.input,
+select,
+textarea {
+  transition: border-color .2s ease, box-shadow .2s ease;
+  &:focus {
+    border-color: #a78bfa; /* violeta claro */
+    box-shadow: 0 0 0 2px rgba(167, 139, 250, .25);
+  }
+}
