@@ -63,7 +63,7 @@
 
             {{-- CTA a listado completo --}}
             <div class="mt-2">
-                <a href="{{ route('reading-logs.index') }}" class="btn btn-secondary">
+                <a href="{{ route('reading-logs.index') }}" class="btn btn-outline">
                     Ver todos mis logs
                 </a>
             </div>
