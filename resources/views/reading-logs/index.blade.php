@@ -6,7 +6,7 @@
 <div class="container">
     <h1 class="mb-4">Mis lecturas</h1>
 
-    {{-- Mensajes flash --}}
+    {{-- Mensajes flash (mantengo estos tal cual) --}}
     @if(session('success'))
         <div class="alert alert-success mb-4">{{ session('success') }}</div>
     @endif
@@ -14,15 +14,20 @@
         <div class="alert alert-warning mb-4">{{ session('error') }}</div>
     @endif
 
+    {{-- Empty state cuando no hay registros --}}
     @if($logs->isEmpty())
-        <p>Todavía no has guardado ningún libro.</p>
-        <a class="btn mt-2" href="{{ route('books.index') }}">Buscar libros</a>
+        <div class="empty-state">
+            <div class="empty-state__icon" aria-hidden="true">📚</div>
+            <h2 class="empty-state__title">Aún no hay lecturas</h2>
+            <p class="empty-state__text">Busco un libro y creo mi primer registro para empezar a llevar el control.</p>
+            <a class="btn empty-state__cta" href="{{ route('books.index') }}">Buscar libros</a>
+        </div>
     @else
-        {{-- Grid de tarjetas --}}
+        {{-- Grid de tarjetas de lectura --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($logs as $log)
                 @php
-                    // Mejora de calidad de portadas
+                    // Subo la calidad de la miniatura si viene de Google Books
                     $upgrade = $upgrade ?? function (?string $url, int $zoom = 4) {
                         if (!$url) return $url;
                         if (str_contains($url, 'zoom=')) return preg_replace('/zoom=\d+/', 'zoom='.$zoom, $url);
@@ -31,7 +36,7 @@
                     };
                     $cover = $upgrade($log->thumbnail_url, 4);
 
-                    // Clase visual según estado
+                    // Mapeo estado → clase visual del badge
                     $badgeClass = match($log->status) {
                         'wishlist' => 'badge badge--wishlist',
                         'reading'  => 'badge badge--reading',
@@ -42,7 +47,7 @@
                 @endphp
 
                 <div class="card">
-                    {{-- Portada con botón eliminar flotante --}}
+                    {{-- Miniatura + overlay de borrar --}}
                     <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden relative">
                         @if($cover)
                             <img src="{{ $cover }}" alt="{{ $log->title }}">
@@ -50,12 +55,12 @@
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
 
-                        {{-- Botón eliminar overlay --}}
+                        {{-- Botón de borrar (confirmación simple por ahora) --}}
                         <form
                             action="{{ route('reading-logs.destroy', $log) }}"
                             method="POST"
                             class="thumb-actions"
-                            onsubmit="return confirm('¿Seguro que deseas eliminar este registro? Esta acción no se puede deshacer.');"
+                            onsubmit="return confirm('¿Seguro que quiero eliminar este registro?');"
                         >
                             @csrf
                             @method('DELETE')
@@ -65,7 +70,7 @@
                         </form>
                     </div>
 
-                    {{-- Contenido --}}
+                    {{-- Cuerpo de la tarjeta --}}
                     <div class="card-body">
                         <a class="block" href="{{ route('books.show', $log->volume_id) }}">
                             <h3 class="title line-clamp-2">{{ $log->title }}</h3>
@@ -74,13 +79,14 @@
                             <p class="muted line-clamp-1">{{ $log->authors }}</p>
                         @endif
 
+                        {{-- Badge con label en español (viene del accessor status_label del modelo) --}}
                         <p class="meta">
                             Estado:
                             <span class="{{ $badgeClass }}">{{ $log->status_label }}</span>
                             @if(!is_null($log->rating)) · ⭐ {{ $log->rating }}/10 @endif
                         </p>
 
-                        {{-- Cambiar estado --}}
+                        {{-- Selector de estado (labels en español, values en slugs ingleses) --}}
                         <form method="POST" action="{{ route('reading-logs.update', $log) }}" class="mt-2">
                             @csrf
                             @method('PATCH')
@@ -88,16 +94,16 @@
                             <div class="form-row">
                                 <select class="input" name="status" required>
                                     <option value="wishlist" @selected($log->status === 'wishlist')>Lista de deseos</option>
-                                    <option value="reading" @selected($log->status === 'reading')>Leyendo</option>
-                                    <option value="read"    @selected($log->status === 'read')>Leído</option>
-                                    <option value="dropped" @selected($log->status === 'dropped')>Abandonado</option>
+                                    <option value="reading"  @selected($log->status === 'reading')>Leyendo</option>
+                                    <option value="read"     @selected($log->status === 'read')>Leído</option>
+                                    <option value="dropped"  @selected($log->status === 'dropped')>Abandonado</option>
                                 </select>
                                 <button class="btn">Actualizar</button>
                             </div>
                         </form>
 
-                        {{-- Rating --}}
-                        <form method="POST" action="{{ route('reading-logs.rating', $log) }}" class="mt-3">
+                        {{-- Bloque de rating (10 pasos, media estrella cada paso) --}}
+                        <form method="POST" action="{{ route('reading-logs.rating', $log) }}"" class="mt-3">
                             @csrf
                             @method('PATCH')
                             <label class="label">Rating</label>
@@ -119,7 +125,7 @@
                             </div>
                         </form>
 
-                        {{-- Reseña (snippet + formulario plegable) --}}
+                        {{-- Reseña (muestro snippet y dejo el form plegable) --}}
                         @if (!empty($log->review))
                             @php($snippet = \Illuminate\Support\Str::limit($log->review, 140))
                             <div class="review-snippet mt-2">
@@ -127,6 +133,7 @@
                             </div>
                         @endif
 
+                        {{-- Toggle de reseña (simple, sin dependencias) --}}
                         <button
                             type="button"
                             class="btn btn-secondary review-toggle mt-2"
@@ -147,7 +154,7 @@
                                 @method('PATCH')
 
                                 <label for="review-{{ $log->id }}" class="review-form__label">
-                                    Escribe tu reseña (máx. 1000 caracteres):
+                                    Escribo mi reseña (máx. 1000 caracteres):
                                 </label>
                                 <textarea
                                     id="review-{{ $log->id }}"
@@ -155,7 +162,7 @@
                                     maxlength="1000"
                                     class="review-form__textarea"
                                     rows="5"
-                                    placeholder="¿Qué te ha parecido este libro?"
+                                    placeholder="¿Qué me ha parecido este libro?"
                                 >{{ old('review', $log->review) }}</textarea>
 
                                 <div class="review-form__actions">
@@ -173,12 +180,14 @@
             @endforeach
         </div>
 
+        {{-- Paginación estándar --}}
         <div class="mt-4">
             {{ $logs->links() }}
         </div>
     @endif
 </div>
 
+{{-- JS mínimo para rating y toggle de reseña (mantengo el patrón que ya vengo usando) --}}
 <script>
 // Rating interactivo
 document.querySelectorAll('.stars').forEach(stars => {
