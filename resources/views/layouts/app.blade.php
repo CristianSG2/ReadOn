@@ -44,8 +44,18 @@
                 <a href="{{ route('register') }}" class="nav__link {{ request()->routeIs('register') ? 'is-active' : '' }}"
                    @if(request()->routeIs('register')) aria-current="page" @endif>Registro</a>
             @endguest
-        </nav>
-    </div>
+            {{-- Selector de tema (cambia entre las paletas definidas en app.scss) --}}
+            <div class="nav__tools">
+              <label for="theme-switch" class="nav__tools-label">Tema</label>
+              <select id="theme-switch" class="theme-select input">
+                <option value="lavender">Lavender Dusk</option>
+                <option value="rose">Rose Slate</option>
+                <option value="blue">Blue Haze</option>
+                <option value="forest">Forest Sage</option>
+                <option value="mocha">Mocha Cream</option>
+                <option value="teal">Teal Breeze</option>
+              </select>
+            </div>
 </header>
   <main>
     @yield('content')
@@ -62,6 +72,24 @@
             btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
         });
       })();
+  </script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const select = document.getElementById("theme-switch");
+    if (!select) return;
+
+    // Cargar tema guardado o defecto
+    const saved = localStorage.getItem("theme") || "lavender";
+    document.documentElement.setAttribute("data-theme", saved);
+    select.value = saved;
+
+    // Cambiar en vivo + persistir
+    select.addEventListener("change", (e) => {
+      const theme = e.target.value;
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    });
+  });
   </script>
 
 </body>

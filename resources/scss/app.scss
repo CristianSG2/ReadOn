@@ -133,6 +133,22 @@
   color: var(--accent);
   border-color: var(--accent);
 }
+.theme-select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: .5rem;
+  padding: .3rem .5rem;
+  font-size: .9rem;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+/* Selector de temas */
+.theme-select:hover,
+.theme-select:focus {
+  border-color: var(--accent);
+  outline: none;
+}
 
 /* Botones (refuerzo del mapeo para que el tema se note más) */
 .btn {
@@ -1142,4 +1158,35 @@ a:focus .title {
 .card:hover .muted.line-clamp-1 {
   color: color-mix(in srgb, var(--accent), var(--muted) 50%);
   opacity: .95;
+}
+
+/* Nav tools (contenedor a la derecha del nav) */
+.nav { display: flex; align-items: center; gap: 1rem; }
+.nav__links { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.nav__tools {
+  margin-left: auto; display: inline-flex; align-items: center; gap: .5rem;
+  padding-left: .5rem; border-left: 1px solid var(--border);
+}
+.nav__tools-label {
+  font-size: .85rem; color: var(--muted);
+}
+
+/* Selector con tema */
+.theme-select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: .5rem;
+  padding: .3rem .5rem;
+  font-size: .9rem;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.theme-select:hover, .theme-select:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Responsive: en móviles, quitar borde separador y apilar mejor */
+@media (max-width: 640px) {
+  .nav__tools { margin-left: 0; border-left: 0; padding-left: 0; }
 }
