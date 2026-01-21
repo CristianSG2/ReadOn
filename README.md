@@ -1,156 +1,107 @@
 # ReadOn
 
-📚 Aplicación web para registrar y reseñar libros, inspirada en Letterboxd pero orientada a lecturas.  
-Proyecto personal de portfolio, construido con un stack sencillo y mantenible.
+📚 Aplicación web para registrar, seguir y reseñar libros, inspirada en Letterboxd pero orientada a lecturas.
+Proyecto personal de portfolio, enfocado en una arquitectura clara, UX cuidada y stack sencillo y mantenible.
 
 ---
 
 ## 🚀 Stack
 
-- **Backend**: Laravel 11 + Blade  
-- **Base de datos**: PostgreSQL (vía DDEV)  
-- **Frontend**: SCSS compilado con Vite (sin Tailwind ni Bootstrap)  
-- **Tooling**: Node.js 20 (Vite para assets)  
-- **Entorno**: DDEV (Docker), PHP 8.2, nginx-fpm
+- Backend: Laravel 11 + Blade
+- Base de datos: PostgreSQL (vía DDEV)
+- Frontend: SCSS compilado con Vite (sin Tailwind ni Bootstrap)
+- Tooling: Node.js 20
+- Entorno: DDEV (Docker), PHP 8.2
 
 ---
 
 ## ⚙️ Puesta en marcha (local)
 
-Requisitos: DDEV → https://ddev.readthedocs.io/en/stable/
+Requisitos: DDEV (https://ddev.readthedocs.io/en/stable/)
 
-```bash
-# Clonar repositorio
 git clone git@github.com:CristianSG2/ReadOn.git
 cd ReadOn
 
-# Iniciar entorno
 ddev start
-
-# Dependencias PHP
 ddev composer install
-
-# Dependencias JS
 ddev npm install
-
-# Clave de aplicación
 ddev artisan key:generate
 
-# Migraciones (users, sessions, etc.)
+Configurar en .env:
+GOOGLE_BOOKS_API_KEY=tu_api_key
+
 ddev artisan migrate
-
-# Compilar assets (producción) — o usa `ddev npm run dev` para desarrollo
 ddev npm run build
-
-# Abrir
-ddev launch   # https://readon.ddev.site
-```
-
-**Notas**  
-- Ajusta `APP_URL` a `https://readon.ddev.site` (o tu host DDEV).  
-- `public/build/*` está ignorado en `.gitignore` (assets generados por Vite).
+ddev launch
 
 ---
 
-## 🔐 Autenticación (manual, sin Breeze)
+## 🎨 UX, visuales y temas
 
-- **Rutas**:  
-  `GET /login`, `POST /login`, `GET /register`, `POST /register`,  
-  `POST /logout`, `GET /me` (protegida)
-- **Seguridad**:
-  - CSRF en formularios.
-  - `session()->regenerate()` tras login.
-  - `logout`: `invalidate()` + `regenerateToken()`.
-  - **Throttle** de login: 5 intentos/min por email+IP.
-- **Redirecciones**:
-  - Con sesión, `/login` y `/register` → **/me**.
-  - Sin sesión, `/me` → **/login**.
+La aplicación incorpora un sistema de temas visuales intercambiables basado en data-theme y variables CSS.
+El selector de tema está integrado en el header y la preferencia se guarda automáticamente en localStorage.
 
----
+Temas disponibles:
+- Lavender Dusk (por defecto)
+- Rose Slate
+- Blue Haze
+- Forest Sage
+- Mocha Cream
+- Teal Breeze
 
-## 🧭 Rutas clave
-
-```text
-GET  /login      → Auth\LoginController@showLoginForm
-POST /login      → Auth\LoginController@login      (throttle:login)
-GET  /register   → Auth\RegisterController@showRegisterForm
-POST /register   → Auth\RegisterController@register
-POST /logout     → Auth\LoginController@logout
-GET  /me         → (auth) vista de perfil
-```
+El theming se aplica de forma global a:
+- Navbar y enlaces activos
+- Botones, inputs y selects
+- Stat-cards y listas
+- Badges de estado
+- Empty states y formularios
 
 ---
 
-## 📂 Estructura relevante
+## 📘 Logs de lectura
 
-- `resources/views/layouts/app.blade.php` — layout principal (cabecera/nav)  
-- `resources/views/welcome.blade.php` — landing mínima (tema oscuro)  
-- `resources/views/auth/login.blade.php` — formulario de login  
-- `resources/views/auth/register.blade.php` — formulario de registro  
-- `resources/views/me.blade.php` — perfil protegido  
-- `resources/scss/app.scss` — estilos (paleta en variables CSS)  
-- `resources/js/app.js` — entrada JS para Vite
+Funcionalidades:
+- Búsqueda de libros mediante Google Books API
+- Registro en lista personal
+- Estados: Lista de deseos, Leyendo, Leído, Abandonado
+- Rating (1–10) y reseñas
+- Edición y eliminación de registros propios
 
----
-
-## ✅ Estado actual
-
-- ✔️ Laravel 11 + PostgreSQL (DDEV) funcionando  
-- ✔️ Vite para SCSS/JS configurado  
-- ✔️ **Auth manual**: login/registro/logout + `/me` protegida  
-- ✔️ Tema oscuro base (sin frameworks CSS)
+Los estados se muestran con badges de color y labels en español.
 
 ---
 
-## 📑 Próximos pasos
+## 👤 Perfil
 
-- **Google Books API** → servicio PHP, búsqueda de libros, ficha detalle.  
-- **Logs de lectura** → modelo `logs`, migración y CRUD básico (estado/rating/reseña por usuario).  
-- **Perfil de usuario** → página “Mi perfil” con lecturas guardadas y estadísticas simples.  
-- **Estilos con Sass** → organización en _partials_ (variables, layout, componentes: cards, botones, inputs).  
-- **Mejoras de UX** → paginación en búsqueda, mensajes *flash*, validaciones en frontend.  
-- **Deploy** → Koyeb / Render, `.env` de producción, `artisan config:cache`, `route:cache`, etc.  
-- **Documentación** → README final, capturas de pantalla e instrucciones para portfolio.
+La vista de perfil incluye:
+- Total de lecturas
+- Conteo por estado
+- Media de rating
+- Últimos registros añadidos
 
 ---
 
-## 🧰 Scripts útiles
+## 📑 Estado del proyecto
 
-```bash
-# Desarrollo (watch)
-ddev npm run dev
+Actualmente el proyecto se encuentra en una fase avanzada a nivel funcional y visual, pero aún requiere algunos ajustes antes de considerarse cerrado como pieza de portfolio.
 
-# Build de producción
-ddev npm run build
+Implementado:
+- Autenticación manual (login, registro, logout).
+- Integración con Google Books API.
+- CRUD completo de logs de lectura.
+- Sistema de temas con selector persistente.
+- UX refinada (badges de estado, empty states, transiciones y micro-interacciones).
 
-# Limpiar cachés de Laravel (rutas/config/views)
-ddev artisan optimize:clear
-```
-
----
-
-## 🛠️ Troubleshooting
-
-1) **Vite**: “Unable to locate file in Vite manifest: resources/css/app.css”  
-   → Usa `@vite(['resources/scss/app.scss','resources/js/app.js'])` y ejecuta `ddev npm run build`.
-
-2) **/login y /register no redirigen a /me con sesión**  
-   → En `bootstrap/app.php`, alias:  
-   `guest => App\Http\Middleware\RedirectIfAuthenticated::class`.  
-   Limpia cachés: `ddev artisan optimize:clear`.
-
-3) **/me no protege sin sesión**  
-   → En `bootstrap/app.php`, alias:  
-   `auth => App\Http\Middleware\Authenticate::class`.  
-   En `Authenticate::redirectTo()`, devuelve `route('login')`.
-
-4) **Throttle no aplica**  
-   → Define `RateLimiter::for('login', ...)` en `AppServiceProvider::boot()`  
-   y aplica `->middleware('throttle:login')` a `POST /login`.
+Pendiente antes de portfolio:
+- Ajustar la landing inicial.
+- Corregir el guardado de libros desde la búsqueda a “Mis lecturas”.
+- Revisar el tamaño y comportamiento de las imágenes en la vista de detalle del libro.
+- Revisión final de accesibilidad y pequeños detalles visuales.
+- Documentación final del proyecto.
 
 ---
+
 
 ## Licencia
 
-Este proyecto se distribuye bajo la **MIT License**.  
-Consulta el archivo [LICENSE](./LICENSE) para más detalles.
+MIT License
