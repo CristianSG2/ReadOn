@@ -1365,3 +1365,116 @@ body.landing .btn:hover {
   text-decoration: none;
 }
 
+/* ---------- Auth UI (login / register) ---------- */
+
+.auth-page {
+  padding: 2.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+}
+
+.auth-frame {
+  width: 100%;
+  max-width: 1100px;
+  padding: 2.75rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+/* Grid similar al hero */
+.auth-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.auth-content h1 {
+  margin: 0 0 1rem;
+}
+
+.auth-field {
+  margin-bottom: 1rem;
+}
+
+.auth-field label {
+  display: block;
+  margin-bottom: .4rem;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.auth-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Error box tokenizado */
+.auth-errors {
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+  background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+  color: var(--text);
+  padding: .75rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+/* Visual decorativa (tipo “libros”) */
+.auth-visual {
+  height: 420px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(300px 200px at 30% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+    radial-gradient(260px 180px at 70% 55%, color-mix(in srgb, var(--success) 16%, transparent), transparent 60%),
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--surface-2) 55%, transparent),
+      color-mix(in srgb, var(--surface) 40%, transparent)
+    );
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .65;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--text) 10%, transparent) 0px,
+      color-mix(in srgb, var(--text) 10%, transparent) 2px,
+      transparent 2px,
+      transparent 18px
+    );
+  mask-image: radial-gradient(closest-side at 50% 50%, #000 60%, transparent 100%);
+}
+
+/* Botones sin subrayado */
+.auth-page .btn,
+.auth-page .btn:hover {
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .auth-frame {
+    padding: 1.5rem;
+  }
+
+  .auth-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .auth-visual {
+    height: 240px;
+  }
+}
