@@ -81,7 +81,7 @@
                         <input type="hidden" name="title" value="{{ $title }}">
                         <input type="hidden" name="authors" value="{{ $authors === 'Autor desconocido' ? '' : $authors }}">
                         <input type="hidden" name="thumbnail_url" value="{{ $thumb }}">
-                        <input type="hidden" name="status" value="want">
+                        <input type="hidden" name="status" value="wishlist">
 
                         <button class="btn">Guardar en mis lecturas</button>
                     </form>
