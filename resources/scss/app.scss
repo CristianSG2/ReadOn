@@ -1190,3 +1190,178 @@ a:focus .title {
 @media (max-width: 640px) {
   .nav__tools { margin-left: 0; border-left: 0; padding-left: 0; }
 }
+/* ---------- Landing (hero integrado, versión final) ---------- */
+
+body.landing {
+  /* Base del tema */
+  background:
+    radial-gradient(900px 520px at 50% 55%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
+    radial-gradient(700px 420px at 20% 15%, rgba(0, 0, 0, .0), transparent 55%),
+    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 85%, #000) 100%);
+  color: var(--text);
+}
+
+/* Centrado vertical del hero */
+body.landing main.container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1400px;
+}
+
+/* Frame principal */
+body.landing .landing-frame--full {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3.25rem;
+
+  border: 1px solid var(--border);
+  border-radius: 20px;
+
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+/* Topbar interna */
+body.landing .landing-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+body.landing .landing-logo {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+body.landing .landing-login {
+  font-size: .9rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+body.landing .landing-login:hover {
+  text-decoration: underline;
+}
+
+/* Hero layout */
+body.landing .landing-hero {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 3.25rem;
+  align-items: center;
+}
+
+/* Contenido */
+body.landing .landing-hero__content {
+  max-width: 560px;
+}
+
+body.landing .landing-hero__content h1 {
+  margin: 0 0 .8rem;
+  font-size: 3.2rem;
+  line-height: 1.05;
+  color: var(--text);
+}
+
+body.landing .landing-hero__content p {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Acciones */
+body.landing .actions {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* CTA: si tu .btn no está tokenizado globalmente, lo tokenizamos aquí solo para landing */
+body.landing .btn.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0b1220; /* texto oscuro sobre accent claro */
+}
+
+body.landing .btn.btn-outline {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  color: var(--text);
+}
+
+body.landing .btn.btn-outline:hover {
+  border-color: var(--accent);
+}
+
+/* Visual derecha */
+body.landing .landing-hero__visual {
+  height: 460px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(300px 200px at 30% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+    radial-gradient(260px 180px at 70% 55%, color-mix(in srgb, var(--success) 16%, transparent), transparent 60%),
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--surface-2) 55%, transparent),
+      color-mix(in srgb, var(--surface) 40%, transparent)
+    );
+  position: relative;
+  overflow: hidden;
+}
+
+/* Líneas tipo lomos de libros */
+body.landing .landing-hero__visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .65;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--text) 10%, transparent) 0px,
+      color-mix(in srgb, var(--text) 10%, transparent) 2px,
+      transparent 2px,
+      transparent 18px
+    );
+  mask-image: radial-gradient(closest-side at 50% 50%, #000 60%, transparent 100%);
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  body.landing .landing-frame--full {
+    padding: 1.5rem;
+  }
+
+  body.landing .landing-topbar {
+    margin-bottom: 2rem;
+  }
+
+  body.landing .landing-hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  body.landing .landing-hero__visual {
+    height: 240px;
+  }
+
+  body.landing .landing-hero__content h1 {
+    font-size: 2.2rem;
+  }
+}
+body.landing .landing-login-btn {
+  padding: .55rem .9rem;
+  font-size: .9rem;
+}
+/* Evitar subrayado en botones de la landing */
+body.landing .btn,
+body.landing .btn:hover {
+  text-decoration: none;
+}
+
