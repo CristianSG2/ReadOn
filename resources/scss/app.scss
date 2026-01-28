@@ -1551,3 +1551,20 @@ body.landing .btn:hover {
     height: 240px;
   }
 }
+
+/* Books: buscador */
+.book-search .flex {
+  gap: .75rem;            /* un pelín más de aire que gap-2 */
+  align-items: center;
+}
+
+.book-search .input {
+  flex: 1;
+  min-width: 0;           /* evita overflow raro en flex */
+}
+
+.book-search .btn {
+  flex: 0 0 auto;         /* evita que se aplaste */
+  white-space: nowrap;
+  margin-top: .75em;
+}
