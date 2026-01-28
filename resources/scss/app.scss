@@ -318,6 +318,12 @@ body {
 a { color: #7aa2ff; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+
+/* Layout base */
+main {
+  padding-top: clamp(1em, 2vh, 1.5rem);
+}
+
 /* ---------- Layout ---------- */
 .container {
   max-width: 1100px;
