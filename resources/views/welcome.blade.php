@@ -6,48 +6,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   @vite(['resources/scss/app.scss','resources/js/app.js'])
 </head>
-<body>
-  <header class="site-header">
-    <div class="container">
-      <strong>ReadOn</strong>
-      <nav class="nav">
-        <a href="{{ url('/') }}">Inicio</a>
-        @guest
-          <a href="{{ url('/login') }}">Login</a>
-          <a href="{{ url('/register') }}">Registro</a>
-        @endguest
-        @auth
-          <a href="{{ url('/me') }}">Mi perfil</a>
-          <form action="{{ url('/logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn-link">Logout</button>
-          </form>
-        @endauth
-      </nav>
-    </div>
-  </header>
+<body class="landing">
 
-  <main class="container">
-    <section class="card hero">
-      <h1>Bienvenido a <span>ReadOn</span></h1>
-      <p>Tu biblioteca personal de lectura. Próximamente: login, registro y más.</p>
+<main class="container">
+  <section class="landing-frame landing-frame--full">
+    {{-- Header interno --}}
+    <div class="landing-topbar">
+      <div class="landing-logo">ReadOn</div>
 
       @guest
-        <div class="actions">
-          <a class="btn" href="{{ url('/login') }}">Entrar</a>
-          <a class="btn btn-outline" href="{{ url('/register') }}">Crear cuenta</a>
-        </div>
+        <a class="btn btn-outline landing-login-btn" href="{{ url('/login') }}">Entrar</a>
       @endguest
 
       @auth
-        <p>Estás logueado como <strong>{{ auth()->user()->email }}</strong>.</p>
-        <a class="btn" href="{{ url('/me') }}">Ir a mi perfil</a>
+        <a class="landing-login" href="{{ url('/me') }}">Mi perfil</a>
       @endauth
-    </section>
-  </main>
+    </div>
+
+    {{-- Hero --}}
+    <div class="landing-hero">
+      <div class="landing-hero__content">
+        <h1>Bienvenido a <span>ReadOn</span></h1>
+        <p>
+          Tu biblioteca personal de lectura.
+          Guarda, valora y organiza tus libros en un solo sitio.
+        </p>
+
+        @guest
+          <div class="actions">
+            <a class="btn btn-primary" href="{{ url('/register') }}">
+              Crear cuenta
+            </a>
+          </div>
+        @endguest
+
+        @auth
+          <p class="logged-info">
+            Estás logueado como <strong>{{ auth()->user()->email }}</strong>.
+          </p>
+          <a class="btn btn-primary" href="{{ url('/me') }}">Ir a mi perfil</a>
+        @endauth
+      </div>
+
+      {{-- Visual --}}
+      <div class="landing-hero__visual" aria-hidden="true"></div>
+    </div>
+  </section>
+</main>
+
 
   <footer class="site-footer">
     <div class="container">© {{ date('Y') }} ReadOn</div>
   </footer>
+
 </body>
 </html>
