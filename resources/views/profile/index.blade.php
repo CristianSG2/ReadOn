@@ -52,7 +52,22 @@
                     <li class="recent-item">
                         <span class="recent-title">{{ $log->title }}</span>
                         {{-- Muestro el estado con el label en español si está disponible --}}
-                        <span class="recent-meta">| {{ method_exists($log,'getStatusLabelAttribute') ? $log->status_label : ucfirst($log->status) }}</span>
+                        @php
+                            $badgeClass = match($log->status) {
+                                'wishlist' => 'badge badge--light badge--wishlist',
+                                'reading'  => 'badge badge--light badge--reading',
+                                'read'     => 'badge badge--light badge--read',
+                                'dropped'  => 'badge badge--light badge--dropped',
+                                default    => 'badge badge--light badge--wishlist',
+                            };
+
+                            $label = method_exists($log,'getStatusLabelAttribute')
+                                ? $log->status_label
+                                : ucfirst($log->status);
+                        @endphp
+
+                        <span class="recent-meta">| <span class="{{ $badgeClass }}">{{ $label }}</span></span>
+
                         @if (!is_null($log->rating))
                             <span class="recent-meta">| ⭐ {{ $log->rating }}</span>
                         @endif
