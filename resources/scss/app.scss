@@ -16,10 +16,11 @@
   --success: #86efac;
   --warning: #fde68a;
   --danger:  #fca5a5;
-  --badge-wishlist: #94a3b8;
+  --badge-wishlist: #c4b5fd;
   --badge-reading:  #93c5fd;
   --badge-read:     #86efac;
   --badge-dropped:  #fca5a5;
+  --on-accent: #0b1220;
 }
 
 /* Rose Slate (warm minimal) */
@@ -35,10 +36,11 @@
   --success: #a7f3d0;
   --warning: #fcd34d;
   --danger:  #fda4af;
-  --badge-wishlist: #9aa2b1;
+  --badge-wishlist: #c4b5fd;
   --badge-reading:  #93c5fd;
   --badge-read:     #a7f3d0;
   --badge-dropped:  #fda4af;
+  --on-accent: #0b1220;
 }
 
 /* Blue Haze (cool techy) */
@@ -54,10 +56,11 @@
   --success: #34d399;
   --warning: #fbbf24;
   --danger:  #ef4444;
-  --badge-wishlist: #93a1b7;
+  --badge-wishlist: #c4b5fd;
   --badge-reading:  #7dd3fc;
   --badge-read:     #34d399;
   --badge-dropped:  #ef4444;
+  --on-accent: #0b1220;
 }
 
 /* Forest Sage (green calm) */
@@ -73,10 +76,11 @@
   --success: #86efac;
   --warning: #fcd34d;
   --danger:  #fca5a5;
-  --badge-wishlist: #93b1a6;
+  --badge-wishlist: #c4b5fd;
   --badge-reading:  #86c5ff;
   --badge-read:     #86efac;
   --badge-dropped:  #fca5a5;
+  --on-accent: #0b1220;
 }
 
 /* Mocha Cream (cozy neutral) */
@@ -92,10 +96,11 @@
   --success: #b8e2b1;
   --warning: #f2d08b;
   --danger:  #e9a6ac;
-  --badge-wishlist: #c8b8a6;
+  --badge-wishlist: #c4b5fd;
   --badge-reading:  #a7c7ff;
   --badge-read:     #b8e2b1;
   --badge-dropped:  #e9a6ac;
+  --on-accent: #0b1220;
 }
 
 /* Teal Breeze (fresh teal) */
@@ -111,10 +116,11 @@
   --success: #86efac;
   --warning: #fcd34d;
   --danger:  #fda4af;
-  --badge-wishlist: #9cc7ca;
+  --badge-wishlist: #c4b5fd;
   --badge-reading:  #93c5fd;
   --badge-read:     #86efac;
   --badge-dropped:  #fda4af;
+  --on-accent: #0b1220;
 }
 
 /* Nav: links y estado activo */
@@ -151,50 +157,79 @@
 }
 
 /* Botones (refuerzo del mapeo para que el tema se note más) */
+/* Base de botones (forma compartida) */
+.btn,
+.btn-outline,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .55rem .9rem;
+  border-radius: .75rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+}
+
+/* Botón primario */
 .btn {
   background: var(--accent);
   border: 1px solid transparent;
   color: #0b0e14;
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
-.btn:hover,
-.btn:focus { background: var(--accent-2); }
 
-.btn-outline {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--text);
+
+.btn:hover,
+.btn:focus-visible {
+  background: var(--accent-2);
+  color: #0b0e14; /* forzado para evitar texto ilegible */
 }
-.btn-outline:hover,
-.btn-outline:focus {
-  background: var(--accent);
-  color: #0b0e14;
+
+/* Opcional: micro feedback sin cambiar layout */
+.btn:hover {
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--text);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
+
 .btn-secondary:hover,
-.btn-secondary:focus {
+.btn-secondary:focus-visible {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 80%);
 }
+
+.btn-secondary:hover {
+  transform: translateY(-1px);
+}
+
 /* ---------------------------------
-   Ajuste: botones outline con fondo temático visible
+   Botones outline con fondo temático visible
    --------------------------------- */
 .btn-outline {
-  background: color-mix(in srgb, var(--accent), transparent 90%);
+  background: transparent;
   border: 1px solid var(--accent);
-  color: var(--accent);
-  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  color: var(--text);
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
+
 .btn-outline:hover,
-.btn-outline:focus {
-  background: var(--accent);
-  color: #0b0e14;
-  border-color: var(--accent-2);
+.btn-outline:focus-visible {
+  background-color: color-mix(in srgb, var(--accent), transparent 85%);
+  border-color: color-mix(in srgb, var(--accent), transparent 30%);
+  color: var(--text);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 80%);
 }
+
+
+
 
 /* Tarjetas y stats */
 .card,
@@ -227,6 +262,13 @@ textarea:focus {
   border-color: var(--accent-2);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
   outline: none;
+}
+
+/* Focus visible consistente (teclado) */
+:where(a, button, .btn, .btn-outline, .btn-secondary, .btn-icon, select, .input, textarea):focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
 }
 
 /* Badges (ya leen tokens por variante) */
@@ -281,6 +323,12 @@ body {
 }
 a { color: #7aa2ff; text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+
+/* Layout base */
+main {
+  padding-top: clamp(1em, 2vh, 1.5rem);
+}
 
 /* ---------- Layout ---------- */
 .container {
@@ -354,25 +402,10 @@ h3 { font-size: 1.125rem; }
   box-shadow: 0 0 0 3px rgba(63,74,156,.15);
 }
 
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid transparent;
-  background: var(--primary);
-  color: #fff; padding: .55rem .9rem;
-  border-radius: .7rem; font-weight: 600;
-  cursor: pointer; box-shadow: var(--shadow);
-  transition: transform .05s ease-in, filter .15s ease-in;
-  white-space: nowrap;
-}
 .btn:hover { filter: brightness(1.05); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: .6; cursor: not-allowed; }
 
-.btn-outline {
-  background: transparent;
-  border-color: var(--primary);
-  color: var(--text);
-}
 .btn-secondary {
   background: #2d3343;
   border-color: #3a4155;
@@ -519,10 +552,13 @@ h3 { font-size: 1.125rem; }
   z-index: 2;
 }
 
-.card:hover .thumb-actions {
+/* Mostrar acciones en hover (ratón) y focus-within (teclado) */
+.card:hover .thumb-actions,
+.card:focus-within .thumb-actions {
   opacity: 1;
   transform: translateY(0);
 }
+
 
 .btn-icon {
   display: inline-flex;
@@ -543,6 +579,17 @@ h3 { font-size: 1.125rem; }
 
 .btn-icon:hover {
   filter: brightness(1.1);
+}
+
+.btn-icon:focus-visible {
+  filter: brightness(1.1);
+}
+
+
+.btn-icon:focus-visible {
+  filter: brightness(1.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
 }
 
 .btn-danger {
@@ -718,33 +765,52 @@ body {
   border: 1px solid transparent;
   user-select: none;
   vertical-align: middle;
-  transition: color .15s ease, background-color .15s ease, border-color .15s ease, transform .15s ease; /* micro-UX */
+  transition: color .15s ease, background-color .15s ease, border-color .15s ease, transform .15s ease;
 }
 
-/* Variantes por estado */
+/* Versión más suave para contextos tipo /me */
+.badge--light {
+  font-size: .68rem;
+  padding: .16rem .42rem;
+  font-weight: 600;
+  letter-spacing: .15px;
+}
+
+
+/* Variantes por estado (usando tokens del tema) */
 .badge--wishlist {
-  color: #cbd5e1;            /* gris claro */
-  background-color: rgba(148, 163, 184, .15); /* slate-400 con opacidad */
-  border-color: rgba(148, 163, 184, .35);
+  color: var(--badge-wishlist);
+  background-color: color-mix(in srgb, var(--badge-wishlist), transparent 88%);
+  border-color: color-mix(in srgb, var(--badge-wishlist), transparent 70%);
 }
 
 .badge--reading {
-  color: #93c5fd;            /* azul claro */
-  background-color: rgba(59, 130, 246, .15);
-  border-color: rgba(59, 130, 246, .35);
+  color: var(--badge-reading);
+  background-color: color-mix(in srgb, var(--badge-reading), transparent 88%);
+  border-color: color-mix(in srgb, var(--badge-reading), transparent 70%);
 }
 
 .badge--read {
-  color: #86efac;            /* verde claro */
-  background-color: rgba(34, 197, 94, .15);
-  border-color: rgba(34, 197, 94, .35);
+  color: var(--badge-read);
+  background-color: color-mix(in srgb, var(--badge-read), transparent 88%);
+  border-color: color-mix(in srgb, var(--badge-read), transparent 70%);
 }
 
 .badge--dropped {
-  color: #fca5a5;            /* rojo suave */
-  background-color: rgba(239, 68, 68, .15);
-  border-color: rgba(239, 68, 68, .35);
+  color: var(--badge-dropped);
+  background-color: color-mix(in srgb, var(--badge-dropped), transparent 88%);
+  border-color: color-mix(in srgb, var(--badge-dropped), transparent 70%);
 }
+
+/* Si es light, aún más discreto */
+.badge--light.badge--wishlist,
+.badge--light.badge--reading,
+.badge--light.badge--read,
+.badge--light.badge--dropped {
+  background-color: color-mix(in srgb, currentColor, transparent 92%);
+  border-color: color-mix(in srgb, currentColor, transparent 80%);
+}
+
 
 /* Feedback sutil al hover/focus (si son clicables en el futuro no desentona) */
 .badge:hover,
@@ -808,15 +874,6 @@ body {
   }
 }
 
-/* Botones con borde (outline) */
-.btn-outline {
-  transition: all .2s ease;
-  &:hover,
-  &:focus {
-    background-color: rgba(139, 92, 246, .1); /* violeta tenue */
-    transform: translateY(-1px);
-  }
-}
 
 /* Tarjetas: elevación ligera al pasar el ratón */
 .card {
@@ -833,10 +890,19 @@ select,
 textarea {
   transition: border-color .2s ease, box-shadow .2s ease;
   &:focus {
-    border-color: #a78bfa; /* violeta claro */
-    box-shadow: 0 0 0 2px rgba(167, 139, 250, .25);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
   }
 }
+/* Selects del dropdown para escoger estado en readinglogs */
+
+select option[value="wishlist"] { color: var(--badge-wishlist); }
+select option[value="reading"]  { color: var(--badge-reading); }
+select option[value="read"]     { color: var(--badge-read); }
+select option[value="dropped"]  { color: var(--badge-dropped); }
+
+select option:checked { font-weight: 600; }
+
 
 /* ===========================================================
    Themed extensions — acentos más visibles por tema
@@ -984,6 +1050,13 @@ textarea {
   padding-bottom: .25rem;
   border-bottom: 2px solid color-mix(in srgb, var(--accent), transparent 70%);
 }
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 
 /* Enlaces utilitarios */
 .link-muted { color: var(--muted); }
@@ -1477,4 +1550,21 @@ body.landing .btn:hover {
   .auth-visual {
     height: 240px;
   }
+}
+
+/* Books: buscador */
+.book-search .flex {
+  gap: .75rem;            /* un pelín más de aire que gap-2 */
+  align-items: center;
+}
+
+.book-search .input {
+  flex: 1;
+  min-width: 0;           /* evita overflow raro en flex */
+}
+
+.book-search .btn {
+  flex: 0 0 auto;         /* evita que se aplaste */
+  white-space: nowrap;
+  margin-top: .75em;
 }

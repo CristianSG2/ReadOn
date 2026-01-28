@@ -36,7 +36,10 @@
 
     {{-- Últimos registros (muestro 5 o los que mande el controlador) --}}
     <section class="mt-4">
-        <h2 class="section-title">Últimos registros</h2>
+        <div class="section-header">
+            <h2>Últimos registros</h2>
+            <a href="{{ route('reading-logs.index') }}" class="btn-outline">Ver todos</a>
+        </div>
 
         {{-- Empty state si no hay recientes --}}
         @if ($recent->isEmpty())
@@ -52,7 +55,22 @@
                     <li class="recent-item">
                         <span class="recent-title">{{ $log->title }}</span>
                         {{-- Muestro el estado con el label en español si está disponible --}}
-                        <span class="recent-meta">| {{ method_exists($log,'getStatusLabelAttribute') ? $log->status_label : ucfirst($log->status) }}</span>
+                        @php
+                            $badgeClass = match($log->status) {
+                                'wishlist' => 'badge badge--light badge--wishlist',
+                                'reading'  => 'badge badge--light badge--reading',
+                                'read'     => 'badge badge--light badge--read',
+                                'dropped'  => 'badge badge--light badge--dropped',
+                                default    => 'badge badge--light badge--wishlist',
+                            };
+
+                            $label = method_exists($log,'getStatusLabelAttribute')
+                                ? $log->status_label
+                                : ucfirst($log->status);
+                        @endphp
+
+                        <span class="recent-meta">| <span class="{{ $badgeClass }}">{{ $label }}</span></span>
+
                         @if (!is_null($log->rating))
                             <span class="recent-meta">| ⭐ {{ $log->rating }}</span>
                         @endif
@@ -60,13 +78,6 @@
                     </li>
                 @endforeach
             </ul>
-
-            {{-- CTA a listado completo --}}
-            <div class="mt-2">
-                <a href="{{ route('reading-logs.index') }}" class="btn btn-outline">
-                    Ver todos mis logs
-                </a>
-            </div>
         @endif
     </section>
 </div>

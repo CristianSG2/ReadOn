@@ -81,7 +81,6 @@
 
                         {{-- Badge con label en español (viene del accessor status_label del modelo) --}}
                         <p class="meta">
-                            Estado:
                             <span class="{{ $badgeClass }}">{{ $log->status_label }}</span>
                             @if(!is_null($log->rating)) · ⭐ {{ $log->rating }}/10 @endif
                         </p>
