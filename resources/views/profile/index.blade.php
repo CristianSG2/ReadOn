@@ -36,7 +36,10 @@
 
     {{-- Últimos registros (muestro 5 o los que mande el controlador) --}}
     <section class="mt-4">
-        <h2 class="section-title">Últimos registros</h2>
+        <div class="section-header">
+            <h2>Últimos registros</h2>
+            <a href="{{ route('reading-logs.index') }}" class="btn-outline">Ver todos</a>
+        </div>
 
         {{-- Empty state si no hay recientes --}}
         @if ($recent->isEmpty())
@@ -75,13 +78,6 @@
                     </li>
                 @endforeach
             </ul>
-
-            {{-- CTA a listado completo --}}
-            <div class="mt-2">
-                <a href="{{ route('reading-logs.index') }}" class="btn btn-outline">
-                    Ver todos mis logs
-                </a>
-            </div>
         @endif
     </section>
 </div>
