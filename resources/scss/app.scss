@@ -123,8 +123,6 @@
   --on-accent: #0b1220;
 }
 
-
-
 /* Nav: links y estado activo */
 .nav-link {
   color: var(--muted);
@@ -173,6 +171,14 @@
   cursor: pointer;
   text-decoration: none;
   user-select: none;
+}
+
+/* Botón primario */
+.btn {
+  background: var(--accent);
+  border: 1px solid transparent;
+  color: #0b0e14;
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
 
 
@@ -396,16 +402,6 @@ h3 { font-size: 1.125rem; }
   box-shadow: 0 0 0 3px rgba(63,74,156,.15);
 }
 
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid transparent;
-  background: var(--primary);
-  color: #fff; padding: .55rem .9rem;
-  border-radius: .7rem; font-weight: 600;
-  cursor: pointer; box-shadow: var(--shadow);
-  transition: transform .05s ease-in, filter .15s ease-in;
-  white-space: nowrap;
-}
 .btn:hover { filter: brightness(1.05); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: .6; cursor: not-allowed; }
