@@ -20,6 +20,7 @@
   --badge-reading:  #93c5fd;
   --badge-read:     #86efac;
   --badge-dropped:  #fca5a5;
+  --on-accent: #0b1220;
 }
 
 /* Rose Slate (warm minimal) */
@@ -39,6 +40,7 @@
   --badge-reading:  #93c5fd;
   --badge-read:     #a7f3d0;
   --badge-dropped:  #fda4af;
+  --on-accent: #0b1220;
 }
 
 /* Blue Haze (cool techy) */
@@ -58,6 +60,7 @@
   --badge-reading:  #7dd3fc;
   --badge-read:     #34d399;
   --badge-dropped:  #ef4444;
+  --on-accent: #0b1220;
 }
 
 /* Forest Sage (green calm) */
@@ -77,6 +80,7 @@
   --badge-reading:  #86c5ff;
   --badge-read:     #86efac;
   --badge-dropped:  #fca5a5;
+  --on-accent: #0b1220;
 }
 
 /* Mocha Cream (cozy neutral) */
@@ -96,6 +100,7 @@
   --badge-reading:  #a7c7ff;
   --badge-read:     #b8e2b1;
   --badge-dropped:  #e9a6ac;
+  --on-accent: #0b1220;
 }
 
 /* Teal Breeze (fresh teal) */
@@ -115,6 +120,7 @@
   --badge-reading:  #93c5fd;
   --badge-read:     #86efac;
   --badge-dropped:  #fda4af;
+  --on-accent: #0b1220;
 }
 
 
@@ -157,17 +163,29 @@
   background: var(--accent);
   border: 1px solid transparent;
   color: #0b0e14;
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
+
 .btn:hover,
-.btn:focus { background: var(--accent-2); }
+.btn:focus-visible {
+  background: var(--accent-2);
+  color: #0b0e14; /* forzado para evitar texto ilegible */
+}
+
+/* Opcional: micro feedback sin cambiar layout */
+.btn:hover {
+  transform: translateY(-1px);
+}
 
 .btn-outline {
   background: transparent;
   border: 1px solid var(--accent);
   color: var(--text);
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
 }
+
 .btn-outline:hover,
-.btn-outline:focus {
+.btn-outline:focus-visible {
   background: var(--accent);
   color: #0b0e14;
 }
@@ -176,12 +194,19 @@
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--text);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
+
 .btn-secondary:hover,
-.btn-secondary:focus {
+.btn-secondary:focus-visible {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 80%);
 }
+
+.btn-secondary:hover {
+  transform: translateY(-1px);
+}
+
 /* ---------------------------------
    Ajuste: botones outline con fondo temático visible
    --------------------------------- */
@@ -229,6 +254,13 @@ textarea:focus {
   border-color: var(--accent-2);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
   outline: none;
+}
+
+/* Focus visible consistente (teclado) */
+:where(a, button, .btn, .btn-outline, .btn-secondary, .btn-icon, select, .input, textarea):focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
 }
 
 /* Badges (ya leen tokens por variante) */
@@ -521,10 +553,13 @@ h3 { font-size: 1.125rem; }
   z-index: 2;
 }
 
-.card:hover .thumb-actions {
+/* Mostrar acciones en hover (ratón) y focus-within (teclado) */
+.card:hover .thumb-actions,
+.card:focus-within .thumb-actions {
   opacity: 1;
   transform: translateY(0);
 }
+
 
 .btn-icon {
   display: inline-flex;
@@ -545,6 +580,17 @@ h3 { font-size: 1.125rem; }
 
 .btn-icon:hover {
   filter: brightness(1.1);
+}
+
+.btn-icon:focus-visible {
+  filter: brightness(1.1);
+}
+
+
+.btn-icon:focus-visible {
+  filter: brightness(1.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
 }
 
 .btn-danger {
