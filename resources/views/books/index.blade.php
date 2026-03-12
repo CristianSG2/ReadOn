@@ -7,7 +7,7 @@
     <h1 class="mb-3">Buscar libros</h1>
 
     {{-- Buscador simple (GET) --}}
-    <form method="GET" action="{{ route('books.index') }}" class="mb-4">
+    <form method="GET" action="{{ route('books.index') }}" class="mb-4 book-search">
         <div class="flex gap-2">
             <input
                 type="text"

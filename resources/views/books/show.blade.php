@@ -59,18 +59,6 @@
         <div class="md:col-span-2">
             <h1 class="text-2xl font-bold">{{ $title }}</h1>
             <p class="muted">de {{ $authors }}</p>
-
-            <div class="mt-2 text-sm muted">
-                <span>Publicado: {{ $published }}</span>
-                @if($pages) · <span>{{ $pages }} páginas</span>@endif
-                @if($cats) · <span>{{ $cats }}</span>@endif
-                @if($avg) · <span>⭐ {{ $avg }}/5</span>@endif
-            </div>
-
-            <div class="prose prose-sm mt-4 max-w-none">
-                {!! $desc ?? '<em>Sin descripción.</em>' !!}
-            </div>
-
             {{-- Guardar en mis lecturas --}}
             <div class="mt-6">
                 @auth
@@ -89,6 +77,18 @@
                     <a class="btn" href="{{ route('login') }}">Inicia sesión para guardar</a>
                 @endauth
             </div>
+            <div class="mt-2 text-sm muted">
+                <span>Publicado: {{ $published }}</span>
+                @if($pages) · <span>{{ $pages }} páginas</span>@endif
+                @if($cats) · <span>{{ $cats }}</span>@endif
+                @if($avg) · <span>⭐ {{ $avg }}/5</span>@endif
+            </div>
+
+            <div class="prose prose-sm mt-4 max-w-none">
+                {!! $desc ?? '<em>Sin descripción.</em>' !!}
+            </div>
+
+
 
             @if($error ?? false)
                 <div class="alert alert-warning mt-4">{{ $error }}</div>
