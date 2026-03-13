@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="{{ str_replace('_','-',app()->getLocale()) }}" data-theme="mocha">
+<html lang="{{ str_replace('_','-',app()->getLocale()) }}" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>@yield('title','ReadOn')</title>
+  <script>(function(){var t=localStorage.getItem('theme')||'dark';var el=document.documentElement;el.setAttribute('data-theme',t);el.classList.add('no-transitions');setTimeout(function(){el.classList.remove('no-transitions');},100);})();</script>
   @vite(['resources/scss/app.scss','resources/js/app.js'])
 </head>
 <body>
@@ -44,52 +45,43 @@
                 <a href="{{ route('register') }}" class="nav__link {{ request()->routeIs('register') ? 'is-active' : '' }}"
                    @if(request()->routeIs('register')) aria-current="page" @endif>Registro</a>
             @endguest
-            {{-- Selector de tema (cambia entre las paletas definidas en app.scss) --}}
-            <div class="nav__tools">
-              <label for="theme-switch" class="nav__tools-label">Tema</label>
-              <select id="theme-switch" class="theme-select input">
-                <option value="lavender">Lavender Dusk</option>
-                <option value="rose">Rose Slate</option>
-                <option value="blue">Blue Haze</option>
-                <option value="forest">Forest Sage</option>
-                <option value="mocha">Mocha Cream</option>
-                <option value="teal">Teal Breeze</option>
-              </select>
-            </div>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Activar tema claro" title="Cambiar tema">☀</button>
 </header>
   <main>
     @yield('content')
   </main>
   <script>
-    // JS mínimo y sin dependencias para el menú móvil
-    (function () {
-        const btn = document.getElementById('navToggle');
-        const menu = document.getElementById('navMenu');
-        if (!btn || !menu) return;
-        btn.addEventListener('click', function () {
-            const isOpen = menu.getAttribute('data-open') === '1';
-            menu.setAttribute('data-open', isOpen ? '0' : '1');
-            btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-        });
-      })();
-  </script>
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const select = document.getElementById("theme-switch");
-    if (!select) return;
+  (function () {
+    // ── Menú móvil ──
+    var navBtn = document.getElementById('navToggle');
+    var menu   = document.getElementById('navMenu');
+    if (navBtn && menu) {
+      navBtn.addEventListener('click', function () {
+        var isOpen = menu.getAttribute('data-open') === '1';
+        menu.setAttribute('data-open', isOpen ? '0' : '1');
+        navBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      });
+    }
 
-    // Cargar tema guardado o defecto
-    const saved = localStorage.getItem("theme") || "lavender";
-    document.documentElement.setAttribute("data-theme", saved);
-    select.value = saved;
-
-    // Cambiar en vivo + persistir
-    select.addEventListener("change", (e) => {
-      const theme = e.target.value;
-      document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("theme", theme);
-    });
-  });
+    // ── Theme toggle ──
+    var themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+      function updateIcon(theme) {
+        themeBtn.textContent = theme === 'dark' ? '☀' : '☽';
+        themeBtn.setAttribute('aria-label', theme === 'dark' ? 'Activar tema claro' : 'Activar tema oscuro');
+      }
+      updateIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+      themeBtn.addEventListener('click', function () {
+        document.documentElement.classList.add('no-transitions');
+        var cur  = document.documentElement.getAttribute('data-theme') || 'dark';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateIcon(next);
+        setTimeout(function () { document.documentElement.classList.remove('no-transitions'); }, 100);
+      });
+    }
+  })();
   </script>
 
 </body>

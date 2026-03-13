@@ -1,144 +1,135 @@
+/* Prevent transition flash on theme switch / page load */
+.no-transitions * { transition: none !important; }
+
 /* ==========================================================================
-   THEME TOKENS (switch via <html data-theme="...">)
-   Default = Lavender Dusk
+   THEME TOKENS — Catppuccin
+   dark  → Mocha  (https://github.com/catppuccin/catppuccin)
+   light → Latte
+   Accent: Mauve (#cba6f7 dark / #8839ef light)
+   Switch via: document.documentElement.setAttribute("data-theme", "dark"|"light")
    ========================================================================== */
 
-/* Default — Lavender Dusk */
+/* ── :root base (= dark/Mocha) — valores antes de que cargue el JS ── */
 :root {
-  --bg: #0b1220;
-  --surface: #121a2b;
-  --surface-2: #182138;
-  --border: rgba(148,163,184,.25);
-  --text: #e6eaf3;
-  --muted: #94a3b8;
-  --accent: #a78bfa;
-  --accent-2: #7c3aed;
-  --success: #86efac;
-  --warning: #fde68a;
-  --danger:  #fca5a5;
-  --badge-wishlist: #c4b5fd;
-  --badge-reading:  #93c5fd;
-  --badge-read:     #86efac;
-  --badge-dropped:  #fca5a5;
-  --on-accent: #0b1220;
+  --bg:        #1e1e2e;  /* Base     */
+  --card:      #181825;  /* Mantle   */
+  --nav-bg:    #11111b;  /* Crust    */
+  --surface:   #313244;  /* Surface0 */
+  --surface-2: #45475a;  /* Surface1 */
+  --border:    rgba(88,91,112,.5);
+  --text:      #cdd6f4;
+  --muted:     #a6adc8;  /* Subtext0 */
+  --accent:    #cba6f7;  /* Mauve    */
+  --accent-2:  #b4befe;  /* Lavender */
+  --primary:   #cba6f7;
+  --on-accent: #11111b;
+  --success:        #a6e3a1;
+  --success-bg:     rgba(166,227,161,.12);
+  --success-border: rgba(166,227,161,.35);
+  --success-text:   #a6e3a1;
+  --warning:        #f9e2af;
+  --warning-bg:     rgba(249,226,175,.12);
+  --warning-border: rgba(249,226,175,.35);
+  --warning-text:   #f9e2af;
+  --error:          #f38ba8;
+  --danger:         #f38ba8;  /* alias → error, backwards compat */
+  --badge-wishlist: #cba6f7;
+  --badge-reading:  #89b4fa;
+  --badge-read:     #a6e3a1;
+  --badge-dropped:  #f38ba8;
+  --nav-h:          56px;
+  --nav-border:     rgba(88,91,112,.5);
+  --nav-link:       #a6adc8;
+  --nav-link-hover: #cdd6f4;
+  --shadow:         rgba(17,17,27,.5);
 }
 
-/* Rose Slate (warm minimal) */
-:root[data-theme="rose"] {
-  --bg: #0f0f14;
-  --surface: #15161c;
-  --surface-2: #1c1d25;
-  --border: rgba(156,163,175,.25);
-  --text: #f3f4f6;
-  --muted: #9aa2b1;
-  --accent: #f4a6b0;
-  --accent-2: #f97380;
-  --success: #a7f3d0;
-  --warning: #fcd34d;
-  --danger:  #fda4af;
-  --badge-wishlist: #c4b5fd;
-  --badge-reading:  #93c5fd;
-  --badge-read:     #a7f3d0;
-  --badge-dropped:  #fda4af;
-  --on-accent: #0b1220;
+/* ── dark — Catppuccin Mocha ── */
+:root[data-theme="dark"] {
+  --bg:        #1e1e2e;
+  --card:      #181825;
+  --nav-bg:    #11111b;
+  --surface:   #313244;
+  --surface-2: #45475a;
+  --border:    rgba(88,91,112,.5);
+  --text:      #cdd6f4;
+  --muted:     #a6adc8;
+  --accent:    #cba6f7;
+  --accent-2:  #b4befe;
+  --primary:   #cba6f7;
+  --on-accent: #11111b;
+  --success:        #a6e3a1;
+  --success-bg:     rgba(166,227,161,.12);
+  --success-border: rgba(166,227,161,.35);
+  --success-text:   #a6e3a1;
+  --warning:        #f9e2af;
+  --warning-bg:     rgba(249,226,175,.12);
+  --warning-border: rgba(249,226,175,.35);
+  --warning-text:   #f9e2af;
+  --error:          #f38ba8;
+  --danger:         #f38ba8;
+  --badge-wishlist: #cba6f7;
+  --badge-reading:  #89b4fa;
+  --badge-read:     #a6e3a1;
+  --badge-dropped:  #f38ba8;
+  --nav-h:          56px;
+  --nav-border:     rgba(88,91,112,.5);
+  --nav-link:       #a6adc8;
+  --nav-link-hover: #cdd6f4;
+  --shadow:         rgba(17,17,27,.5);
 }
 
-/* Blue Haze (cool techy) */
-:root[data-theme="blue"] {
-  --bg: #0a0f1a;
-  --surface: #101726;
-  --surface-2: #182036;
-  --border: rgba(147,161,183,.25);
-  --text: #e5e7eb;
-  --muted: #93a1b7;
-  --accent: #7dd3fc;
-  --accent-2: #38bdf8;
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger:  #ef4444;
-  --badge-wishlist: #c4b5fd;
-  --badge-reading:  #7dd3fc;
-  --badge-read:     #34d399;
-  --badge-dropped:  #ef4444;
-  --on-accent: #0b1220;
+/* ── light — Catppuccin Latte ── */
+:root[data-theme="light"] {
+  --bg:        #eff1f5;
+  --card:      #e6e9ef;
+  --nav-bg:    #dce0e8;
+  --surface:   #ccd0da;
+  --surface-2: #bcc0cc;
+  --border:    rgba(172,176,190,.5);
+  --text:      #4c4f69;
+  --muted:     #6c6f85;
+  --accent:    #8839ef;
+  --accent-2:  #7287fd;
+  --primary:   #8839ef;
+  --on-accent: #eff1f5;
+  --success:        #40a02b;
+  --success-bg:     rgba(64,160,43,.1);
+  --success-border: rgba(64,160,43,.3);
+  --success-text:   #40a02b;
+  --warning:        #df8e1d;
+  --warning-bg:     rgba(223,142,29,.1);
+  --warning-border: rgba(223,142,29,.3);
+  --warning-text:   #df8e1d;
+  --error:          #d20f39;
+  --danger:         #d20f39;
+  --badge-wishlist: #8839ef;
+  --badge-reading:  #1e66f5;
+  --badge-read:     #40a02b;
+  --badge-dropped:  #d20f39;
+  --nav-h:          56px;
+  --nav-border:     rgba(172,176,190,.5);
+  --nav-link:       #6c6f85;
+  --nav-link-hover: #4c4f69;
+  --shadow:         rgba(220,224,232,.8);
 }
 
-/* Forest Sage (green calm) */
-:root[data-theme="forest"] {
-  --bg: #0a1210;
-  --surface: #0f1a18;
-  --surface-2: #14231f;
-  --border: rgba(135,164,155,.25);
-  --text: #e8f1ee;
-  --muted: #93b1a6;
-  --accent: #8bd1b2;
-  --accent-2: #66c0a0;
-  --success: #86efac;
-  --warning: #fcd34d;
-  --danger:  #fca5a5;
-  --badge-wishlist: #c4b5fd;
-  --badge-reading:  #86c5ff;
-  --badge-read:     #86efac;
-  --badge-dropped:  #fca5a5;
-  --on-accent: #0b1220;
-}
-
-/* Mocha Cream (cozy neutral) */
-:root[data-theme="mocha"] {
-  --bg: #0e0c0a;
-  --surface: #14110e;
-  --surface-2: #1a1713;
-  --border: rgba(214,188,154,.20);
-  --text: #efeae3;
-  --muted: #c8b8a6;
-  --accent: #e7c59a;
-  --accent-2: #d7b07d;
-  --success: #b8e2b1;
-  --warning: #f2d08b;
-  --danger:  #e9a6ac;
-  --badge-wishlist: #c4b5fd;
-  --badge-reading:  #a7c7ff;
-  --badge-read:     #b8e2b1;
-  --badge-dropped:  #e9a6ac;
-  --on-accent: #0b1220;
-}
-
-/* Teal Breeze (fresh teal) */
-:root[data-theme="teal"] {
-  --bg: #071316;
-  --surface: #0c1b20;
-  --surface-2: #11242a;
-  --border: rgba(94,174,179,.25);
-  --text: #e6f6f7;
-  --muted: #9cc7ca;
-  --accent: #5eead4;
-  --accent-2: #2dd4bf;
-  --success: #86efac;
-  --warning: #fcd34d;
-  --danger:  #fda4af;
-  --badge-wishlist: #c4b5fd;
-  --badge-reading:  #93c5fd;
-  --badge-read:     #86efac;
-  --badge-dropped:  #fda4af;
-  --on-accent: #0b1220;
-}
-
-/* Nav: links y estado activo */
-.nav-link {
-  color: var(--muted);
-  border-bottom: 2px solid transparent;
-  transition: color .15s ease, border-color .15s ease;
-}
-.nav-link:hover,
-.nav-link:focus {
+/* ── Theme toggle button ── */
+.theme-toggle {
+  background: var(--surface);
+  border: 1px solid var(--border);
   color: var(--text);
-  border-color: color-mix(in srgb, var(--accent), transparent 70%);
+  border-radius: .5rem;
+  padding: .3rem .6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: background-color .15s ease, border-color .15s ease;
+  &:hover { background: var(--surface-2); border-color: var(--accent); }
 }
-.nav-link.active,
-.nav-link[aria-current="page"] {
-  color: var(--accent);
-  border-color: var(--accent);
-}
+
+
+/* TODO(refactor-bloque-limpieza): OBSOLETO — .theme-select #1, eliminar cuando se confirme el toggle */
 .theme-select {
   background: var(--surface-2);
   border: 1px solid var(--border);
@@ -709,7 +700,7 @@ h3 { font-size: 1.125rem; }
 /* Estado activo (también se marca aria-current="page") */
 .nav__link.is-active {
   color: var(--nav-link-hover);
-  box-shadow: inset 0 -2px 0 var(--nav-active-underline);
+  box-shadow: inset 0 -2px 0 var(--accent);
 }
 
 /* Offset del body para que no quede oculto bajo el nav fijo */
@@ -1244,6 +1235,7 @@ a:focus .title {
   font-size: .85rem; color: var(--muted);
 }
 
+/* TODO(refactor-bloque-limpieza): OBSOLETO — .theme-select #2 (duplicado), eliminar cuando se confirme el toggle */
 /* Selector con tema */
 .theme-select {
   background: var(--surface-2);
