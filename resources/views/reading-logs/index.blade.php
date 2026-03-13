@@ -24,7 +24,7 @@
         </div>
     @else
         {{-- Grid de tarjetas de lectura --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="logs-grid">
             @foreach($logs as $log)
                 @php
                     // Subo la calidad de la miniatura si viene de Google Books
@@ -48,7 +48,7 @@
 
                 <div class="card">
                     {{-- Miniatura + overlay de borrar --}}
-                    <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden relative">
+                    <div class="card-thumb">
                         @if($cover)
                             <img src="{{ $cover }}" alt="{{ $log->title }}">
                         @else
