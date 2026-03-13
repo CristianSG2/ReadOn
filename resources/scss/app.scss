@@ -805,6 +805,7 @@ select option:checked { font-weight: 600; }
   border: 1px solid var(--border);
   color: var(--text);
   overflow: hidden;
+  padding: .9rem;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 .stat-card::before {
