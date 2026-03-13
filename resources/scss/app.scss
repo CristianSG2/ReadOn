@@ -129,23 +129,6 @@
 }
 
 
-/* TODO(refactor-bloque-limpieza): OBSOLETO — .theme-select #1, eliminar cuando se confirme el toggle */
-.theme-select {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: .5rem;
-  padding: .3rem .5rem;
-  font-size: .9rem;
-  transition: background-color .15s ease, color .15s ease;
-}
-
-/* Selector de temas */
-.theme-select:hover,
-.theme-select:focus {
-  border-color: var(--accent);
-  outline: none;
-}
 
 /* Botones (refuerzo del mapeo para que el tema se note más) */
 /* Base de botones (forma compartida) */
@@ -168,7 +151,7 @@
 .btn {
   background: var(--accent);
   border: 1px solid transparent;
-  color: #0b0e14;
+  color: var(--on-accent);
   transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
 
@@ -176,7 +159,7 @@
 .btn:hover,
 .btn:focus-visible {
   background: var(--accent-2);
-  color: #0b0e14; /* forzado para evitar texto ilegible */
+  color: var(--on-accent);
 }
 
 /* Opcional: micro feedback sin cambiar layout */
@@ -184,22 +167,6 @@
   transform: translateY(-1px);
 }
 
-.btn-secondary {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
-}
-
-.btn-secondary:hover,
-.btn-secondary:focus-visible {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 80%);
-}
-
-.btn-secondary:hover {
-  transform: translateY(-1px);
-}
 
 /* ---------------------------------
    Botones outline con fondo temático visible
@@ -236,23 +203,9 @@ a { color: var(--accent); }
 a:hover, a:focus { color: var(--accent-2); }
 
 /* Formularios y focus ring */
-.input,
-select,
-textarea {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-}
 .input::placeholder,
 textarea::placeholder {
   color: color-mix(in srgb, var(--muted), transparent 25%);
-}
-.input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--accent-2);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
-  outline: none;
 }
 
 /* Focus visible consistente (teclado) */
@@ -262,17 +215,15 @@ textarea:focus {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
 }
 
-/* Badges (ya leen tokens por variante) */
-.badge { border-color: var(--border); }
 
 /* Alerts */
 .alert { border: 1px solid var(--border); }
 .alert-success { background: color-mix(in srgb, var(--success), transparent 86%); color: var(--success); }
-.alert-warning { background: color-mix(in srgb, var(--warning), transparent 86%); color: #f59e0b; }
+.alert-warning { background: color-mix(in srgb, var(--warning), transparent 86%); color: var(--warning-text); }
 .alert-danger  { background: color-mix(in srgb, var(--danger),  transparent 86%); color: var(--danger); }
 
 /* Selección de texto y elementos nativos temables */
-::selection { background: var(--accent); color: #0b0e14; }
+::selection { background: var(--accent); color: var(--on-accent); }
 input[type="checkbox"],
 input[type="radio"],
 progress { accent-color: var(--accent); }
@@ -312,9 +263,6 @@ body {
   color: var(--text);
   font: 16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Noto Sans","Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji";
 }
-a { color: #7aa2ff; text-decoration: none; }
-a:hover { text-decoration: underline; }
-
 
 /* Layout base */
 main {
@@ -363,60 +311,27 @@ h3 { font-size: 1.125rem; }
 
 /* ---------- Texto/Meta ---------- */
 .title { margin: 0 0 .25rem; }
-.muted { color: var(--muted); }
 .meta { margin: .35rem 0; font-size: .95rem; }
-.badge {
-  display: inline-block;
-  background: #1f2430;
-  color: #c7d0e0;
-  border: 1px solid var(--border);
-  border-radius: .5rem;
-  padding: .1rem .45rem;
-  font-size: .85rem;
-}
 
 /* ---------- Inputs/Buttons ---------- */
 .label { display:block; font-weight: 600; margin-bottom: .25rem; }
 .form-row { display:flex; gap:.6rem; align-items:center; flex-wrap: wrap; }
 
-.input {
-  width: 100%;
-  border: 1px solid var(--border);
-  background: #0f1116;
-  color: var(--text);
-  border-radius: .6rem;
-  padding: .55rem .7rem;
-  outline: none;
-}
-.input:focus {
-  border-color: #3f4a9c;
-  box-shadow: 0 0 0 3px rgba(63,74,156,.15);
-}
 
-.btn:hover { filter: brightness(1.05); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: .6; cursor: not-allowed; }
 
-.btn-secondary {
-  background: #2d3343;
-  border-color: #3a4155;
-  color: #e3e6ef;
-}
 
 /* ---------- Utilities ---------- */
 .mt-2 { margin-top: .5rem; }
 .mt-3 { margin-top: .75rem; }
 .mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
 .mb-2 { margin-bottom: .5rem; }
 .mb-3 { margin-bottom: .75rem; }
 .mb-4 { margin-bottom: 1rem; }
 .text-sm { font-size: .875rem; }
 .block { display: block; }
-.grid { display: grid; }
-.grid-cols-1 { grid-template-columns: 1fr; }
-.md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.gap-4 { gap: 1rem; }
 .overflow-hidden { overflow: hidden; }
 
 /* Error inline (corrige bug UX: errores de validación invisibles) */
@@ -455,7 +370,7 @@ h3 { font-size: 1.125rem; }
 }
 .stars__display,
 .stars__fill { letter-spacing: 2px; }
-.stars__display { color: #575a62; }   /* vacías */
+.stars__display { color: var(--surface-2); }   /* vacías */
 .stars__fill {
   position: absolute; inset: 0;
   width: var(--p, 0%);
@@ -475,7 +390,7 @@ h3 { font-size: 1.125rem; }
   border: 1px solid var(--border); background: var(--card); color: var(--text);
 }
 .pagination .active span {
-  background: var(--primary); border-color: var(--primary); color: #fff;
+  background: var(--primary); border-color: var(--primary); color: var(--on-accent);
 }
 
 /* ---------- Helpers ---------- */
@@ -598,50 +513,17 @@ h3 { font-size: 1.125rem; }
 
 .btn-icon:focus-visible {
   filter: brightness(1.1);
-}
-
-
-.btn-icon:focus-visible {
-  filter: brightness(1.1);
   border-color: var(--accent);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
 }
 
-.btn-danger {
-  border-color: color-mix(in srgb, var(--error), transparent 50%);
-  background: color-mix(in srgb, var(--error), transparent 15%);
-}
-.btn-danger:hover {
-  background: rgba(177, 15, 38, 1);
-}
 
 /* ===== Profile (/me) ===== */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .8rem; }
-.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: .8rem; padding: .8rem; }
 .stat-label { color: var(--muted); font-size: .9rem; }
 .stat-value { font-size: 1.4rem; font-weight: 700; margin-top: .2rem; }
-.recent-list { list-style: none; padding: 0; margin: .5rem 0 0; }
-.recent-item { padding: .55rem .65rem; border: 1px solid var(--border); border-radius: .6rem; background: var(--card); margin-bottom: .5rem; }
-.recent-title { font-weight: 600; color: var(--text); }
 .recent-meta { margin-left: .4rem; font-size: .95rem; }
-/* micro-UX */
-.stat-card {
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-.stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
-  border-color: color-mix(in srgb, var(--accent), transparent 80%);
-}
 
-.recent-item {
-  transition: background .15s ease, border-color .15s ease, transform .15s ease;
-}
-.recent-item:hover {
-  background: var(--surface);
-  border-color: var(--border);
-  transform: translateY(-1px);
-}
 
 /* === NAVBAR GLOBAL (tema oscuro) ========================================= */
 /* Nota: Se añade al final para no romper estilos previos. */
@@ -777,7 +659,7 @@ body {
   font-weight: 600;
   letter-spacing: .2px;
   line-height: 1;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   user-select: none;
   vertical-align: middle;
   transition: color .15s ease, background-color .15s ease, border-color .15s ease, transform .15s ease;
@@ -839,9 +721,9 @@ body {
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
-  border: 1px dashed rgba(148,163,184,.35); /* slate-400 */
+  border: 1px dashed color-mix(in srgb, var(--accent), transparent 70%);
   border-radius: 1rem;
-  background: rgba(2,6,23,.25);            /* fondo oscuro sutil */
+  background: color-mix(in srgb, var(--surface), var(--accent) 5%);
   max-width: 640px;
   margin: 2rem auto;
 }
@@ -851,17 +733,18 @@ body {
   line-height: 1;
   margin-bottom: .5rem;
   opacity: .9;
+  color: var(--accent);
 }
 
 .empty-state__title {
   font-size: 1.25rem;
   margin: .25rem 0 .5rem;
   font-weight: 700;
-  color: #f1f5f9; /* texto principal en oscuro */
+  color: var(--text);
 }
 
 .empty-state__text {
-  color: #94a3b8; /* slate-400 */
+  color: var(--muted);
   margin: 0 0 1rem;
 }
 
@@ -899,16 +782,7 @@ body {
   }
 }
 
-/* Inputs y selects: halo violeta al enfocar */
-.input,
-select,
-textarea {
-  transition: border-color .2s ease, box-shadow .2s ease;
-  &:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 75%);
-  }
-}
+
 /* Selects del dropdown para escoger estado en readinglogs */
 
 select option[value="wishlist"] { color: var(--badge-wishlist); }
@@ -923,27 +797,6 @@ select option:checked { font-weight: 600; }
    Themed extensions — acentos más visibles por tema
    =========================================================== */
 
-/* Nav: activo bien marcado con subrayado temático */
-.nav {
-  border-bottom: 1px solid var(--border);
-}
-.nav-link {
-  color: var(--muted);
-  border-bottom: 2px solid transparent;
-  text-decoration: none;
-  transition: color .15s ease, border-color .15s ease;
-}
-.nav-link:hover,
-.nav-link:focus {
-  color: var(--text);
-  border-color: color-mix(in srgb, var(--accent), transparent 70%);
-}
-.nav-link.active,
-.nav-link[aria-current="page"] {
-  color: var(--accent);
-  border-color: var(--accent);
-  text-underline-offset: 6px; /* si el UA decide pintar subrayado, que quede bonito */
-}
 
 /* Stat-cards: línea de acento + halo suave al hover */
 .stat-card {
@@ -952,6 +805,7 @@ select option:checked { font-weight: 600; }
   border: 1px solid var(--border);
   color: var(--text);
   overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 .stat-card::before {
   content: "";
@@ -967,26 +821,10 @@ select option:checked { font-weight: 600; }
   transform: translateY(-1px);
 }
 
-/* Botones por tipo (success / warning / danger) */
-.btn-success {
-  background: var(--success);
-  color: #0b0e14;
-  border: 1px solid transparent;
-}
-.btn-success:hover,
-.btn-success:focus { filter: brightness(.95); }
-
-.btn-warning {
-  background: var(--warning);
-  color: #0b0e14;
-  border: 1px solid transparent;
-}
-.btn-warning:hover,
-.btn-warning:focus { filter: brightness(.95); }
 
 .btn-danger {
   background: var(--danger);
-  color: #0b0e14;
+  color: var(--on-accent);
   border: 1px solid transparent;
 }
 .btn-danger:hover,
@@ -1014,57 +852,11 @@ select option:checked { font-weight: 600; }
 .page-item.active .page-link {
   background: var(--accent);
   border-color: var(--accent);
-  color: #0b0e14;
+  color: var(--on-accent);
 }
 
-/* Tablist genérico (si lo usara en alguna vista) */
-.tabs {
-  display: flex;
-  gap: .75rem;
-  border-bottom: 1px solid var(--border);
-}
-.tabs a {
-  padding: .5rem 0;
-  color: var(--muted);
-  border-bottom: 2px solid transparent;
-  text-decoration: none;
-}
-.tabs a:hover { color: var(--text); }
-.tabs a.active {
-  color: var(--accent);
-  border-color: var(--accent);
-}
 
-/* Tablas: cabecera diferenciada y zebra suave */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid var(--border);
-}
-.table th,
-.table td {
-  border-top: 1px solid var(--border);
-  padding: .6rem .75rem;
-}
-.table th {
-  background: var(--surface-2);
-  color: var(--muted);
-  text-align: left;
-}
-.table tbody tr:nth-child(odd) {
-  background: color-mix(in srgb, var(--surface), transparent 90%);
-}
-.table tbody tr:hover {
-  background: color-mix(in srgb, var(--accent), transparent 94%);
-}
 
-/* Títulos de sección: subrayado temático sutil */
-.section-title {
-  display: inline-block;
-  margin: 0 0 .5rem 0;
-  padding-bottom: .25rem;
-  border-bottom: 2px solid color-mix(in srgb, var(--accent), transparent 70%);
-}
 .section-header {
   display: flex;
   align-items: center;
@@ -1073,11 +865,6 @@ select option:checked { font-weight: 600; }
 }
 
 
-/* Enlaces utilitarios */
-.link-muted { color: var(--muted); }
-.link-muted:hover { color: var(--text); }
-.link-accent { color: var(--accent); }
-.link-accent:hover { color: var(--accent-2); }
 
 /* Inputs disabled / readonly con contraste claro */
 :where(input, select, textarea):disabled {
@@ -1088,17 +875,6 @@ select option:checked { font-weight: 600; }
   background: color-mix(in srgb, var(--surface-2), transparent 10%);
 }
 
-/* Badges: aseguro borde y contraste en todos los temas */
-.badge {
-  border: 1px solid var(--border);
-}
-
-/* Pequeños utilitarios */
-.border-accent { border-color: var(--accent) !important; }
-.bg-surface   { background: var(--surface) !important; }
-.bg-surface-2 { background: var(--surface-2) !important; }
-.text-accent  { color: var(--accent) !important; }
-.text-muted   { color: var(--muted) !important; }
 
 /* ===========================================================
    Deep theming pass — más coherencia visual por tema
@@ -1117,7 +893,7 @@ select option:checked { font-weight: 600; }
 .review-toggle:hover,
 .review-toggle:focus {
   background: var(--accent);
-  color: #0b0e14;
+  color: var(--on-accent);
   border-color: var(--accent-2);
 }
 
@@ -1159,21 +935,6 @@ textarea:focus {
   font-weight: 600;
 }
 
-/* Espaciados (mt-4, mt-2, etc.) con más aire temático */
-.mt-4,
-.mt-2,
-.mt-3 {
-  scroll-margin-top: 4rem;
-}
-.mt-4::before,
-.mt-3::before,
-.mt-2::before {
-  content: "";
-  display: block;
-  height: 0;
-  border-top: 1px solid color-mix(in srgb, var(--accent), transparent 85%);
-  margin-bottom: .5rem;
-}
 
 /* Formularios de reseña (review-form) y acciones */
 .review-form__inner {
@@ -1189,33 +950,17 @@ textarea:focus {
   color: color-mix(in srgb, var(--danger), transparent 30%);
 }
 
-/* Empty states unificados con el tema */
-.empty-state {
-  border-color: color-mix(in srgb, var(--accent), transparent 70%);
-  background: color-mix(in srgb, var(--surface), var(--accent) 5%);
-}
-.empty-state__icon { color: var(--accent); }
-.empty-state__title { color: var(--text); }
-.empty-state__text { color: var(--muted); }
 .empty-state__cta {
   background: var(--accent);
   border: none;
-  color: #0b0e14;
+  color: var(--on-accent);
 }
 .empty-state__cta:hover { background: var(--accent-2); }
 
 /* Elementos pequeños: hr, muted text, labels */
 hr { border-color: color-mix(in srgb, var(--accent), transparent 80%); }
 .label { color: color-mix(in srgb, var(--accent), transparent 25%); font-weight: 600; }
-.muted { color: color-mix(in srgb, var(--muted), transparent 10%); }
 
-/* Hover general de tarjetas y cajas pequeñas */
-.card:hover,
-.stat-card:hover,
-.recent-item:hover {
-  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent), transparent 88%);
-  transform: translateY(-1px);
-}
 /* ---------------------------------
    Títulos de libro en reading-logs
    --------------------------------- */
@@ -1248,37 +993,6 @@ a:focus .title {
   opacity: .95;
 }
 
-/* Nav tools (contenedor a la derecha del nav) */
-.nav { display: flex; align-items: center; gap: 1rem; }
-.nav__links { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-.nav__tools {
-  margin-left: auto; display: inline-flex; align-items: center; gap: .5rem;
-  padding-left: .5rem; border-left: 1px solid var(--border);
-}
-.nav__tools-label {
-  font-size: .85rem; color: var(--muted);
-}
-
-/* TODO(refactor-bloque-limpieza): OBSOLETO — .theme-select #2 (duplicado), eliminar cuando se confirme el toggle */
-/* Selector con tema */
-.theme-select {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: .5rem;
-  padding: .3rem .5rem;
-  font-size: .9rem;
-  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
-}
-.theme-select:hover, .theme-select:focus {
-  border-color: var(--accent);
-  outline: none;
-}
-
-/* Responsive: en móviles, quitar borde separador y apilar mejor */
-@media (max-width: 640px) {
-  .nav__tools { margin-left: 0; border-left: 0; padding-left: 0; }
-}
 /* ---------- Landing (hero integrado, versión final) ---------- */
 
 body.landing {
@@ -1375,7 +1089,7 @@ body.landing .actions {
 body.landing .btn.btn-primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: #0b1220; /* texto oscuro sobre accent claro */
+  color: var(--on-accent);
 }
 
 body.landing .btn.btn-outline {
@@ -1623,4 +1337,25 @@ body.landing .btn:hover {
   em { font-style: italic; }
   p { margin: 0 0 .75rem; }
   p:last-child { margin-bottom: 0; }
+}
+
+/* ---------- Misc components ---------- */
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: .25rem 0 1rem;
+}
+
+.logged-info {
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+.site-footer {
+  margin-top: 3rem;
+  padding: 1.25rem;
+  text-align: center;
+  font-size: .875rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
 }
