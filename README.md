@@ -10,9 +10,9 @@ Proyecto personal de portfolio, enfocado en una arquitectura clara, UX cuidada y
 - Backend: Laravel 11 + Blade
 - Base de datos: PostgreSQL
 - Frontend: SCSS compilado con Vite
-  - SCSS como base y fuente de verdad visual
-  - Uso puntual de utilidades Tailwind en algunos ajustes rápidos de layout
-  - Objetivo: consolidar todo en SCSS progresivamente
+  - SCSS como única fuente de verdad visual, estructurado por secciones
+  - Sin Tailwind en vistas — clases semánticas propias en todas las plantillas
+  - Sistema de tokens CSS basado en Catppuccin (Mocha dark / Latte light)
 - Tooling: Node.js 20 (Vite para assets)
 - Entorno: DDEV (Docker), PHP 8.2, nginx-fpm
 
@@ -70,25 +70,26 @@ Vista /me con:
 
 ## 🎨 UX y temas
 
-Sistema de temas con variables CSS y selector persistente.
-Temas incluidos:
-Lavender Dusk, Rose Slate, Blue Haze, Forest Sage, Mocha Cream, Teal Breeze
+Sistema de temas basado en la paleta Catppuccin:
+- **Mocha** (oscuro) — activo por defecto
+- **Latte** (claro) — seleccionable desde el nav
+
+El switch persiste entre sesiones vía `localStorage`. El tema se aplica antes del primer render para evitar flash. Todos los colores consumen tokens CSS (`--accent`, `--bg`, `--surface`, `--text`, etc.); no hay valores hardcoded fuera del bloque de tokens.
 
 ---
 
 ## 📑 Estado del proyecto
 
-Estado estable y funcional:
+v0.2.0 — estable y funcional tras refactor visual completo:
 - Flujo completo de lectura operativo
 - Landing pública mínima funcional
 - Login y registro unificados visualmente
-- Sistema de temas aplicado globalmente
+- SCSS limpio: sin duplicados, sin código muerto, sin clases de utilidad inline
+- Bugs corregidos: variables CSS indefinidas, errores de validación invisibles, colores que ignoraban el tema
 
 ### Próximos pasos
-- Pulido final de UX
-- Consolidación visual
-- Identidad visual ligera
 - Despliegue público
+- Identidad visual ligera
 
 ---
 
