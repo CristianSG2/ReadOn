@@ -8,7 +8,7 @@
 
     {{-- Buscador simple (GET) --}}
     <form method="GET" action="{{ route('books.index') }}" class="mb-4 book-search">
-        <div class="flex gap-2">
+        <div class="book-search__row">
             <input
                 type="text"
                 name="q"
@@ -20,7 +20,7 @@
             <button class="btn">Buscar</button>
         </div>
         @error('q')
-            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            <p class="text-error">{{ $message }}</p>
         @enderror
     </form>
 
@@ -87,7 +87,7 @@
 
         {{-- Paginación básica --}}
         @if($total > 0)
-            <div class="flex items-center gap-2 mt-4">
+            <div class="mt-4 form-actions">
                 @if($hasPrev)
                     <a class="btn btn-outline" href="{{ route('books.index', ['q'=>$q, 'page'=>$page-1]) }}">⬅️ Anterior</a>
                 @endif

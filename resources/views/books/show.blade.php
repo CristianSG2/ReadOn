@@ -41,14 +41,14 @@
         <div class="alert alert-warning mb-4">{{ session('error') }}</div>
     @endif
 
-    <a href="{{ route('books.index') }}" class="text-sm" style="color:#7aa2ff;">&larr; Volver a la búsqueda</a>
+    <a href="{{ route('books.index') }}" class="back-link">&larr; Volver a la búsqueda</a>
 
-    <div class="mt-4 grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
+    <div class="book-detail-grid">
         {{-- Portada grande --}}
         <div>
-            <div class="card-thumb aspect-[2/3] bg-gray-100 overflow-hidden" style="max-width:420px; max-height:630px;">
+            <div class="card-thumb card-thumb--contain aspect-[2/3]">
                 @if($thumb)
-                    <img src="{{ $thumb }}" alt="{{ $title }}" class="w-full h-full object-contain block">
+                    <img src="{{ $thumb }}" alt="{{ $title }}">
                 @else
                     <div class="thumb-placeholder">Sin portada</div>
                 @endif
@@ -56,8 +56,8 @@
         </div>
 
         {{-- Info --}}
-        <div class="md:col-span-2">
-            <h1 class="text-2xl font-bold">{{ $title }}</h1>
+        <div>
+            <h1>{{ $title }}</h1>
             <p class="muted">de {{ $authors }}</p>
             {{-- Guardar en mis lecturas --}}
             <div class="mt-6">
@@ -84,7 +84,7 @@
                 @if($avg) · <span>⭐ {{ $avg }}/5</span>@endif
             </div>
 
-            <div class="prose prose-sm mt-4 max-w-none">
+            <div class="book-prose mt-4">
                 {!! $desc ?? '<em>Sin descripción.</em>' !!}
             </div>
 
