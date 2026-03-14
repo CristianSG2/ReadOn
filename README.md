@@ -29,7 +29,7 @@ Proyecto personal de portfolio, enfocado en una arquitectura clara, UX cuidada y
 
 ---
 
-## Stack
+## 🛠️ Stack
 
 | Capa | Tecnología |
 |---|---|
@@ -42,7 +42,7 @@ Proyecto personal de portfolio, enfocado en una arquitectura clara, UX cuidada y
 
 ---
 
-## Puesta en marcha (local)
+## 🚀 Puesta en marcha (local)
 
 Requisitos: [DDEV](https://ddev.readthedocs.io/en/stable/)
 
@@ -78,7 +78,7 @@ Crea un usuario demo con libros de ejemplo. Requiere `GOOGLE_BOOKS_API_KEY` conf
 
 ---
 
-## Autenticación
+## 🔐 Autenticación
 
 Autenticación manual (sin Breeze):
 - Login, registro y logout propios
@@ -88,7 +88,7 @@ Autenticación manual (sin Breeze):
 
 ---
 
-## Logs de lectura
+## 📚 Logs de lectura
 
 - Búsqueda vía Google Books API
 - Guardado de libros en lista personal
@@ -111,7 +111,7 @@ El ISBN se extrae de `industryIdentifiers` en la respuesta de Google Books y se 
 
 ---
 
-## Perfil
+## 👤 Perfil
 
 Vista `/me` con:
 - Estadísticas de lectura (total, wishlist, leyendo, leído, abandonado)
@@ -121,7 +121,7 @@ Vista `/me` con:
 
 ---
 
-## UX y temas
+## 🎨 UX y temas
 
 ### Sistema de temas
 
@@ -152,16 +152,16 @@ Login y registro con el mismo layout de dos columnas que la homepage: formulario
 
 ---
 
-## Estado del proyecto
+## 📌 Estado del proyecto
 
 **v0.5.0** — seeders de demo, screenshots y sistema visual completo:
-- Flujo de lectura operativo de extremo a extremo
-- Sistema de portadas con fallback multinivel
-- Homepage rediseñada con visual SVG adaptativo
-- Tokens Catppuccin con roles diferenciados por función
-- Logo como componente reutilizable
-- SCSS limpio: sin duplicados, sin código muerto, sin utilidades inline
-- 16 Feature tests (auth, reading logs, perfil) — SQLite en memoria
+- [x] Flujo de lectura operativo de extremo a extremo
+- [x] Sistema de portadas con fallback multinivel
+- [x] Homepage rediseñada con visual SVG adaptativo
+- [x] Tokens Catppuccin con roles diferenciados por función
+- [x] Logo como componente reutilizable
+- [x] SCSS limpio: sin duplicados, sin código muerto, sin utilidades inline
+- [x] 16 Feature tests (auth, reading logs, perfil) — SQLite en memoria
 
 ### Tests
 
@@ -173,11 +173,10 @@ Configurados con SQLite en memoria (`phpunit.xml`). Cubren auth, logs de lectura
 
 ### Próximos pasos
 - Despliegue público
-- Paginación en el listado de lecturas
 
 ---
 
-## Scripts útiles
+## 🧰 Scripts útiles
 
 ```bash
 ddev npm run dev
