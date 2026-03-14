@@ -1213,6 +1213,12 @@ body.landing .landing-hero__visual {
   font-size: .95rem;
 }
 
+.auth-field .input {
+  width: 100%;
+  padding: .7rem .9rem;
+  font-size: 1rem;
+}
+
 .auth-actions {
   margin-top: 1.25rem;
   display: flex;
@@ -1231,36 +1237,15 @@ body.landing .landing-hero__visual {
   margin-bottom: 1rem;
 }
 
-/* Visual decorativa (tipo “libros”) */
+/* Visual decorativa — estantería SVG */
 .auth-visual {
   height: 420px;
   border-radius: 16px;
   border: 1px solid var(--border);
-  background:
-    radial-gradient(300px 200px at 30% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    radial-gradient(260px 180px at 70% 55%, color-mix(in srgb, var(--success) 16%, transparent), transparent 60%),
-    linear-gradient(135deg,
-      color-mix(in srgb, var(--surface-2) 55%, transparent),
-      color-mix(in srgb, var(--surface) 40%, transparent)
-    );
-  position: relative;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   overflow: hidden;
-}
-
-.auth-visual::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: .65;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--text) 10%, transparent) 0px,
-      color-mix(in srgb, var(--text) 10%, transparent) 2px,
-      transparent 2px,
-      transparent 18px
-    );
-  mask-image: radial-gradient(closest-side at 50% 50%, #000 60%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
 }
 
 /* Botones sin subrayado */
