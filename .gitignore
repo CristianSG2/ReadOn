@@ -16,3 +16,5 @@ yarn-error.log*
 /screenshots/*.jpg
 /screenshots/*.jpeg
 /screenshots/*.webp
+.DS_Store
+**/.DS_Store
