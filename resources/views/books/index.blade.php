@@ -24,6 +24,27 @@
         @enderror
     </form>
 
+    @if(empty($q) && empty($results))
+        <div class="search-empty">
+            <p class="search-empty__title">¿Qué vas a leer hoy?</p>
+            <p class="search-empty__sub">Busca por título, autor o ISBN</p>
+            <div class="search-chips" id="search-chips">
+                @foreach(['Brandon Sanderson', 'Dune', 'Sapiens', 'Tolkien', 'Haruki Murakami'] as $suggestion)
+                    <button type="button" class="search-chip" data-q="{{ $suggestion }}">{{ $suggestion }}</button>
+                @endforeach
+            </div>
+        </div>
+        <script>
+        document.getElementById('search-chips').addEventListener('click', function(e) {
+            const chip = e.target.closest('.search-chip');
+            if (!chip) return;
+            const form = document.querySelector('.book-search');
+            form.querySelector('input[name=q]').value = chip.dataset.q;
+            form.submit();
+        });
+        </script>
+    @endif
+
     @if(!empty($results))
         @php
             $items = $results['items'] ?? [];

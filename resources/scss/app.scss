@@ -1302,6 +1302,43 @@ body.landing .landing-hero__visual {
   white-space: nowrap;
 }
 
+/* Search empty state */
+.search-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+.search-empty__title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 .35rem;
+}
+.search-empty__sub {
+  font-size: .9rem;
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+.search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: center;
+}
+.search-chip {
+  padding: .35rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: .875rem;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
 /* Back link */
 .back-link {
   font-size: .875rem;
