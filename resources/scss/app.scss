@@ -91,7 +91,7 @@
   --muted:     #6c6f85;  /* Subtext0 */
   --accent:    #dc8a78;  /* Rosewater */
   --accent-2:  #dd7878;  /* Flamingo  */
-  --primary:   #8839ef;  /* Mauve     */
+  --primary:   #dc8a78;  /* Rosewater — btn color, matches accent */
   --on-accent: #eff1f5;
   --success:        #40a02b;
   --success-bg:     rgba(64,160,43,.1);
@@ -149,7 +149,7 @@
 
 /* Botón primario */
 .btn {
-  background: var(--accent);
+  background: var(--primary);
   border: 1px solid transparent;
   color: var(--on-accent);
   transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
@@ -173,17 +173,17 @@
    --------------------------------- */
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--primary);
   color: var(--text);
   transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
 
 .btn-outline:hover,
 .btn-outline:focus-visible {
-  background-color: color-mix(in srgb, var(--accent), transparent 85%);
-  border-color: color-mix(in srgb, var(--accent), transparent 30%);
+  background-color: color-mix(in srgb, var(--primary), transparent 85%);
+  border-color: color-mix(in srgb, var(--primary), transparent 30%);
   color: var(--text);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 80%);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary), transparent 80%);
 }
 
 
@@ -1126,19 +1126,6 @@ body.landing .actions {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-}
-
-body.landing .btn.btn-primary {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--on-accent);
-}
-
-body.landing .btn.btn-outline {
-  background: transparent;
-  border-color: color-mix(in srgb, var(--primary) 50%, var(--border));
-  color: var(--text);
-  &:hover { border-color: var(--primary); }
 }
 
 body.landing .btn,
