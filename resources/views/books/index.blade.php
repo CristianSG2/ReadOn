@@ -29,7 +29,7 @@
             <p class="search-empty__title">¿Qué vas a leer hoy?</p>
             <p class="search-empty__sub">Busca por título, autor o ISBN</p>
             <div class="search-chips" id="search-chips">
-                @foreach(['Brandon Sanderson', 'Stephen King', 'Sapiens', 'Gabriel García Márquez', 'Haruki Murakami'] as $suggestion)
+                @foreach(['Brandon Sanderson', 'Stephen King', 'Agatha Christie', 'George Orwell', 'Haruki Murakami'] as $suggestion)
                     <button type="button" class="search-chip" data-q="{{ $suggestion }}">{{ $suggestion }}</button>
                 @endforeach
             </div>
