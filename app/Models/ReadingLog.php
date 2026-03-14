@@ -16,6 +16,7 @@ class ReadingLog extends Model
         'title',
         'authors',
         'thumbnail_url',
+        'isbn',
         'status',
         'rating',
         'review',
@@ -56,6 +57,23 @@ class ReadingLog extends Model
         ];
 
         return $map[$this->status] ?? ucfirst((string) $this->status);
+    }
+
+    /**
+     * Devuelve la mejor URL de portada disponible.
+     * Prioridad: thumbnail de Google Books → Open Library por ISBN → placeholder local.
+     */
+    public function getCoverUrl(): string
+    {
+        if (!empty($this->thumbnail_url)) {
+            return str_replace('http://', 'https://', $this->thumbnail_url);
+        }
+
+        if (!empty($this->isbn)) {
+            return "https://covers.openlibrary.org/b/isbn/{$this->isbn}-L.jpg?default=false";
+        }
+
+        return asset('images/no-cover.svg');
     }
 
     /**

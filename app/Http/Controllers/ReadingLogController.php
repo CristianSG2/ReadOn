@@ -31,6 +31,7 @@ class ReadingLogController extends Controller
             'title'         => ['required', 'string'],
             'authors'       => ['nullable', 'string'],
             'thumbnail_url' => ['nullable', 'string'],
+            'isbn'          => ['nullable', 'string', 'max:20'],
             'status'        => ['nullable', 'in:wishlist,reading,read,dropped'],
         ]);
 
@@ -40,7 +41,8 @@ class ReadingLogController extends Controller
         $payload = [
             'title'         => Str::limit($data['title'], 255, ''),
             'authors'       => Str::limit($data['authors'] ?? '', 255, ''),
-            'thumbnail_url' => Str::limit($data['thumbnail_url'] ?? '', 255, ''),
+            'thumbnail_url' => Str::limit(str_replace('http://', 'https://', $data['thumbnail_url'] ?? ''), 255, ''),
+            'isbn'          => $data['isbn'] ?? null,
             'status'        => $status,
         ];
 

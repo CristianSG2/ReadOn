@@ -935,6 +935,12 @@ textarea:focus {
   color: var(--accent);
   font-weight: 600;
 }
+.recent-item__link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
 
 
 /* Formularios de reseña (review-form) y acciones */

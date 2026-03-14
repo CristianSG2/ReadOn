@@ -34,7 +34,7 @@
                         if (str_contains($url, 'books.google')) return $url.(str_contains($url, '?') ? '&' : '?').'zoom='.$zoom;
                         return $url;
                     };
-                    $cover = $upgrade($log->thumbnail_url, 4);
+                    $cover = $upgrade($log->getCoverUrl(), 4);
 
                     // Mapeo estado → clase visual del badge
                     $badgeClass = match($log->status) {
@@ -50,7 +50,8 @@
                     {{-- Miniatura + overlay de borrar --}}
                     <div class="card-thumb">
                         @if($cover)
-                            <img src="{{ $cover }}" alt="{{ $log->title }}">
+                            <img src="{{ $cover }}" alt="{{ $log->title }}"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
