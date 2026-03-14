@@ -382,6 +382,15 @@ h3 { font-size: 1.125rem; }
   display: grid; grid-template-columns: repeat(10, 1fr);
 }
 .stars__hit button { background: transparent; border: 0; padding: 0; cursor: pointer; }
+.stars__feedback {
+  margin-left: .5rem;
+  font-size: .85rem;
+  font-weight: 600;
+  &--ok  { color: var(--success); }
+  &--err { color: var(--error); }
+}
+.status-select--saved { outline: 2px solid var(--success); outline-offset: 2px; }
+.status-select--err   { outline: 2px solid var(--error);   outline-offset: 2px; }
 
 /* ---------- Paginación (links()) ---------- */
 .pagination { display:flex; gap:.4rem; align-items:center; margin-top:1rem; }
