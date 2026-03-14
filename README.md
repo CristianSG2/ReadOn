@@ -130,7 +130,7 @@ Login y registro con el mismo layout de dos columnas que la homepage: formulario
 
 ## Estado del proyecto
 
-**v0.4.0** — tests automatizados y sistema visual completo:
+**v0.5.0** — seeders de demo, screenshots y sistema visual completo:
 - Flujo de lectura operativo de extremo a extremo
 - Sistema de portadas con fallback multinivel
 - Homepage rediseñada con visual SVG adaptativo
