@@ -5,7 +5,7 @@
    THEME TOKENS — Catppuccin
    dark  → Mocha  (https://github.com/catppuccin/catppuccin)
    light → Latte
-   Accent: Mauve (#cba6f7 dark / #8839ef light)
+   Accent: Lavender (#b4befe dark) / Rosewater (#dc8a78 light) — Primary: Mauve
    Switch via: document.documentElement.setAttribute("data-theme", "dark"|"light")
    ========================================================================== */
 
@@ -16,11 +16,11 @@
   --nav-bg:    #11111b;  /* Crust    */
   --surface:   #313244;  /* Surface0 */
   --surface-2: #45475a;  /* Surface1 */
-  --border:    rgba(88,91,112,.5);
+  --border:    #585b70;  /* Surface2 */
   --text:      #cdd6f4;
   --muted:     #a6adc8;  /* Subtext0 */
-  --accent:    #cba6f7;  /* Mauve    */
-  --accent-2:  #b4befe;  /* Lavender */
+  --accent:    #b4befe;  /* Lavender */
+  --accent-2:  #cba6f7;  /* Mauve    */
   --primary:   #cba6f7;
   --on-accent: #11111b;
   --success:        #a6e3a1;
@@ -33,13 +33,13 @@
   --warning-text:   #f9e2af;
   --error:          #f38ba8;
   --danger:         #f38ba8;  /* alias → error, backwards compat */
-  --badge-wishlist: #cba6f7;
+  --badge-wishlist: #b4befe;  /* Lavender */
   --badge-reading:  #89b4fa;
   --badge-read:     #a6e3a1;
   --badge-dropped:  #f38ba8;
   --nav-h:          56px;
-  --nav-border:     rgba(88,91,112,.5);
-  --nav-link:       #a6adc8;
+  --nav-border:     #585b70;  /* Surface2 */
+  --nav-link:       #bac2de;  /* Subtext1 */
   --nav-link-hover: #cdd6f4;
   --shadow:         rgba(17,17,27,.5);
 }
@@ -51,11 +51,11 @@
   --nav-bg:    #11111b;
   --surface:   #313244;
   --surface-2: #45475a;
-  --border:    rgba(88,91,112,.5);
+  --border:    #585b70;  /* Surface2 */
   --text:      #cdd6f4;
   --muted:     #a6adc8;
-  --accent:    #cba6f7;
-  --accent-2:  #b4befe;
+  --accent:    #b4befe;  /* Lavender */
+  --accent-2:  #cba6f7;  /* Mauve    */
   --primary:   #cba6f7;
   --on-accent: #11111b;
   --success:        #a6e3a1;
@@ -68,30 +68,30 @@
   --warning-text:   #f9e2af;
   --error:          #f38ba8;
   --danger:         #f38ba8;
-  --badge-wishlist: #cba6f7;
+  --badge-wishlist: #b4befe;  /* Lavender */
   --badge-reading:  #89b4fa;
   --badge-read:     #a6e3a1;
   --badge-dropped:  #f38ba8;
   --nav-h:          56px;
-  --nav-border:     rgba(88,91,112,.5);
-  --nav-link:       #a6adc8;
+  --nav-border:     #585b70;  /* Surface2 */
+  --nav-link:       #bac2de;  /* Subtext1 */
   --nav-link-hover: #cdd6f4;
   --shadow:         rgba(17,17,27,.5);
 }
 
 /* ── light — Catppuccin Latte ── */
 :root[data-theme="light"] {
-  --bg:        #eff1f5;
-  --card:      #e6e9ef;
-  --nav-bg:    #dce0e8;
-  --surface:   #ccd0da;
-  --surface-2: #bcc0cc;
-  --border:    rgba(172,176,190,.5);
+  --bg:        #eff1f5;  /* Base     */
+  --card:      #e6e9ef;  /* Mantle   */
+  --nav-bg:    #dce0e8;  /* Crust    */
+  --surface:   #e6e9ef;  /* Mantle   */
+  --surface-2: #dce0e8;  /* Crust    */
+  --border:    #bcc0cc;  /* Surface1 */
   --text:      #4c4f69;
-  --muted:     #6c6f85;
-  --accent:    #8839ef;
-  --accent-2:  #7287fd;
-  --primary:   #8839ef;
+  --muted:     #6c6f85;  /* Subtext0 */
+  --accent:    #dc8a78;  /* Rosewater */
+  --accent-2:  #dd7878;  /* Flamingo  */
+  --primary:   #8839ef;  /* Mauve     */
   --on-accent: #eff1f5;
   --success:        #40a02b;
   --success-bg:     rgba(64,160,43,.1);
@@ -103,13 +103,13 @@
   --warning-text:   #df8e1d;
   --error:          #d20f39;
   --danger:         #d20f39;
-  --badge-wishlist: #8839ef;
+  --badge-wishlist: #7287fd;  /* Lavender */
   --badge-reading:  #1e66f5;
   --badge-read:     #40a02b;
   --badge-dropped:  #d20f39;
   --nav-h:          56px;
-  --nav-border:     rgba(172,176,190,.5);
-  --nav-link:       #6c6f85;
+  --nav-border:     #bcc0cc;  /* Surface1 */
+  --nav-link:       #6c6f85;  /* Subtext0 */
   --nav-link-hover: #4c4f69;
   --shadow:         rgba(220,224,232,.8);
 }
