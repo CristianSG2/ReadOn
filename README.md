@@ -2,21 +2,43 @@
 
 # ReadOn
 
+![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=flat&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=flat&logo=php&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&logoColor=white)
+![SCSS](https://img.shields.io/badge/SCSS-Catppuccin-CBA6F7?style=flat&logo=sass&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite&logoColor=white)
+![Docker](https://img.shields.io/badge/DDEV-Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![Tests](https://img.shields.io/badge/Tests-16%20passed-40A02B?style=flat&logo=php&logoColor=white)
+
 Aplicación web para registrar, seguir y reseñar libros, inspirada en Letterboxd pero orientada a lecturas.
 Proyecto personal de portfolio, enfocado en una arquitectura clara, UX cuidada y un stack sencillo y mantenible.
 
 ---
 
+| Dark (Mocha) | Light (Latte) |
+|---|---|
+| ![Homepage dark](screenshots/home-dark.png) | ![Homepage light](screenshots/home-light.png) |
+
+| Búsqueda | Detalle de libro |
+|---|---|
+| ![Búsqueda](screenshots/books-search.png) | ![Detalle](screenshots/book-detail.png) |
+
+| Mis lecturas | Perfil |
+|---|---|
+| ![Mis lecturas](screenshots/reading-logs.png) | ![Perfil](screenshots/profile.png) |
+
+---
+
 ## Stack
 
-- **Backend:** Laravel 11 + Blade
-- **Base de datos:** PostgreSQL
-- **Frontend:** SCSS compilado con Vite
-  - SCSS como única fuente de verdad visual, estructurado por secciones
-  - Sin Tailwind en vistas — clases semánticas BEM en todas las plantillas
-  - Sistema de tokens CSS basado en Catppuccin (Mocha dark / Latte light)
-- **Tooling:** Node.js 20, Vite
-- **Entorno:** DDEV (Docker), PHP 8.2, nginx-fpm
+| Capa | Tecnología |
+|---|---|
+| Backend | Laravel 11 + Blade |
+| Base de datos | PostgreSQL |
+| Frontend | SCSS + Vite (BEM, sin Tailwind) |
+| Temas | Catppuccin Mocha / Latte |
+| Entorno | DDEV · Docker · PHP 8.2 · nginx-fpm |
+| Tests | PHPUnit · SQLite in-memory |
 
 ---
 
@@ -127,28 +149,6 @@ Página standalone con:
 ### Vistas de autenticación
 
 Login y registro con el mismo layout de dos columnas que la homepage: formulario a la izquierda y estantería SVG decorativa a la derecha. Los botones comparten los mismos tokens de color que el resto de la app.
-
-<details>
-<summary>📸 Screenshots</summary>
-
-### Homepage
-| Dark (Mocha) | Light (Latte) |
-|---|---|
-| ![Homepage dark](screenshots/home-dark.png) | ![Homepage light](screenshots/home-light.png) |
-
-### Búsqueda de libros
-![Búsqueda](screenshots/books-search.png)
-
-### Detalle de libro
-![Detalle](screenshots/book-detail.png)
-
-### Mis lecturas
-![Mis lecturas](screenshots/reading-logs.png)
-
-### Perfil
-![Perfil](screenshots/profile.png)
-
-</details>
 
 ---
 
