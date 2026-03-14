@@ -1,4 +1,6 @@
-![ReadOn](screenshots/banner.svg)
+[![ReadOn](screenshots/banner.png)](https://readon.cristiansg.dev)
+
+[![Visitar ReadOn](https://img.shields.io/badge/🌐_ReadOn-readon.cristiansg.dev-CBA6F7?style=flat)](https://readon.cristiansg.dev)
 
 # ReadOn
 
@@ -154,7 +156,9 @@ Login y registro con el mismo layout de dos columnas que la homepage: formulario
 
 ## 📌 Estado del proyecto
 
-**v0.5.0** — seeders de demo, screenshots y sistema visual completo:
+**v1.0.0** — desplegado en producción:
+🌐 [readon.cristiansg.dev](https://readon.cristiansg.dev)
+
 - [x] Flujo de lectura operativo de extremo a extremo
 - [x] Sistema de portadas con fallback multinivel
 - [x] Homepage rediseñada con visual SVG adaptativo
@@ -170,9 +174,6 @@ ddev php artisan test
 ```
 
 Configurados con SQLite en memoria (`phpunit.xml`). Cubren auth, logs de lectura y perfil — 16 tests, 42 assertions.
-
-### Próximos pasos
-- Despliegue público
 
 ---
 
