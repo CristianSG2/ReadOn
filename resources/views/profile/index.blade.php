@@ -53,7 +53,7 @@
             <ul class="recent-list">
                 @foreach ($recent as $log)
                     <li class="recent-item">
-                        <span class="recent-title">{{ $log->title }}</span>
+                        <a class="recent-item__link" href="{{ route('books.show', $log->volume_id) }}">{{ $log->title }}</a>
                         {{-- Muestro el estado con el label en español si está disponible --}}
                         @php
                             $badgeClass = match($log->status) {
