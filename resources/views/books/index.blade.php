@@ -8,7 +8,7 @@
 
     {{-- Buscador simple (GET) --}}
     <form method="GET" action="{{ route('books.index') }}" class="mb-4 book-search">
-        <div class="flex gap-2">
+        <div class="book-search__row">
             <input
                 type="text"
                 name="q"
@@ -20,7 +20,7 @@
             <button class="btn">Buscar</button>
         </div>
         @error('q')
-            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            <p class="text-error">{{ $message }}</p>
         @enderror
     </form>
 
@@ -62,13 +62,32 @@
                     $imgs = $v['imageLinks'] ?? [];
                     $thumb = $imgs['extraLarge'] ?? $imgs['large'] ?? $imgs['medium']
                           ?? $imgs['small'] ?? $imgs['thumbnail'] ?? $imgs['smallThumbnail'] ?? null;
+                    $thumb = $thumb ? str_replace('http://', 'https://', $thumb) : null;
                     $thumb = $upgrade($thumb, 3);
+
+                    // Fallback Open Library si Google Books no devuelve portada
+                    if (!$thumb) {
+                        $identifiers = $v['industryIdentifiers'] ?? [];
+                        $isbn = null;
+                        foreach ($identifiers as $_id) {
+                            if (($_id['type'] ?? '') === 'ISBN_13') { $isbn = $_id['identifier']; break; }
+                        }
+                        if (!$isbn) {
+                            foreach ($identifiers as $_id) {
+                                if (($_id['type'] ?? '') === 'ISBN_10') { $isbn = $_id['identifier']; break; }
+                            }
+                        }
+                        if ($isbn) {
+                            $thumb = "https://covers.openlibrary.org/b/isbn/{$isbn}-L.jpg?default=false";
+                        }
+                    }
                 @endphp
 
                 <a href="{{ $id ? route('books.show', $id) : '#' }}" class="card block">
                     <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden">
                         @if($thumb)
-                            <img src="{{ $thumb }}" alt="{{ $title }}">
+                            <img src="{{ $thumb }}" alt="{{ $title }}"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
@@ -87,7 +106,7 @@
 
         {{-- Paginación básica --}}
         @if($total > 0)
-            <div class="flex items-center gap-2 mt-4">
+            <div class="mt-4 form-actions">
                 @if($hasPrev)
                     <a class="btn btn-outline" href="{{ route('books.index', ['q'=>$q, 'page'=>$page-1]) }}">⬅️ Anterior</a>
                 @endif

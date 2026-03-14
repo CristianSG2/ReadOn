@@ -24,7 +24,7 @@
         </div>
     @else
         {{-- Grid de tarjetas de lectura --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="logs-grid">
             @foreach($logs as $log)
                 @php
                     // Subo la calidad de la miniatura si viene de Google Books
@@ -34,7 +34,7 @@
                         if (str_contains($url, 'books.google')) return $url.(str_contains($url, '?') ? '&' : '?').'zoom='.$zoom;
                         return $url;
                     };
-                    $cover = $upgrade($log->thumbnail_url, 4);
+                    $cover = $upgrade($log->getCoverUrl(), 4);
 
                     // Mapeo estado → clase visual del badge
                     $badgeClass = match($log->status) {
@@ -48,9 +48,10 @@
 
                 <div class="card">
                     {{-- Miniatura + overlay de borrar --}}
-                    <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden relative">
+                    <div class="card-thumb">
                         @if($cover)
-                            <img src="{{ $cover }}" alt="{{ $log->title }}">
+                            <img src="{{ $cover }}" alt="{{ $log->title }}"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif

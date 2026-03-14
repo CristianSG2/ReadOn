@@ -39,7 +39,7 @@ class ProfileController extends Controller
         $recentLogs = ReadingLog::where('user_id', $userId)
             ->orderByDesc('created_at')
             ->limit(5)
-            ->get(['id', 'title', 'status', 'rating', 'created_at']);
+            ->get(['id', 'volume_id', 'title', 'status', 'rating', 'created_at']);
 
         return view('profile.index', [
             'total'     => $total,
