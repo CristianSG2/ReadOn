@@ -1,3 +1,5 @@
+![ReadOn](screenshots/banner.svg)
+
 # ReadOn
 
 Aplicación web para registrar, seguir y reseñar libros, inspirada en Letterboxd pero orientada a lecturas.
@@ -125,6 +127,28 @@ Página standalone con:
 ### Vistas de autenticación
 
 Login y registro con el mismo layout de dos columnas que la homepage: formulario a la izquierda y estantería SVG decorativa a la derecha. Los botones comparten los mismos tokens de color que el resto de la app.
+
+<details>
+<summary>📸 Screenshots</summary>
+
+### Homepage
+| Dark (Mocha) | Light (Latte) |
+|---|---|
+| ![Homepage dark](screenshots/home-dark.png) | ![Homepage light](screenshots/home-light.png) |
+
+### Búsqueda de libros
+![Búsqueda](screenshots/books-search.png)
+
+### Detalle de libro
+![Detalle](screenshots/book-detail.png)
+
+### Mis lecturas
+![Mis lecturas](screenshots/reading-logs.png)
+
+### Perfil
+![Perfil](screenshots/profile.png)
+
+</details>
 
 ---
 
