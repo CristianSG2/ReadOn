@@ -18,6 +18,7 @@
     $imgs = $v['imageLinks'] ?? [];
     $thumb = $imgs['extraLarge'] ?? $imgs['large'] ?? $imgs['medium']
           ?? $imgs['small'] ?? $imgs['thumbnail'] ?? $imgs['smallThumbnail'] ?? null;
+    $thumb = $thumb ? str_replace('http://', 'https://', $thumb) : null;
 
     $upgrade = function (?string $url, int $zoom = 3) {
         if (!$url) return $url;
@@ -30,6 +31,21 @@
         return $url;
     };
     $thumb = $upgrade($thumb, 3);
+
+    // ISBN para fallback de portada (preferimos ISBN_13, aceptamos ISBN_10)
+    $identifiers = $v['industryIdentifiers'] ?? [];
+    $isbn = null;
+    foreach ($identifiers as $_id) {
+        if (($_id['type'] ?? '') === 'ISBN_13') { $isbn = $_id['identifier']; break; }
+    }
+    if (!$isbn) {
+        foreach ($identifiers as $_id) {
+            if (($_id['type'] ?? '') === 'ISBN_10') { $isbn = $_id['identifier']; break; }
+        }
+    }
+    if (!$thumb && $isbn) {
+        $thumb = "https://covers.openlibrary.org/b/isbn/{$isbn}-L.jpg?default=false";
+    }
 @endphp
 
 <div class="container">
@@ -48,7 +64,8 @@
         <div>
             <div class="card-thumb card-thumb--contain aspect-[2/3]">
                 @if($thumb)
-                    <img src="{{ $thumb }}" alt="{{ $title }}">
+                    <img src="{{ $thumb }}" alt="{{ $title }}"
+                         onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
                 @else
                     <div class="thumb-placeholder">Sin portada</div>
                 @endif
@@ -69,6 +86,7 @@
                         <input type="hidden" name="title" value="{{ $title }}">
                         <input type="hidden" name="authors" value="{{ $authors === 'Autor desconocido' ? '' : $authors }}">
                         <input type="hidden" name="thumbnail_url" value="{{ $thumb }}">
+                        <input type="hidden" name="isbn" value="{{ $isbn }}">
                         <input type="hidden" name="status" value="wishlist">
 
                         <button class="btn">Guardar en mis lecturas</button>

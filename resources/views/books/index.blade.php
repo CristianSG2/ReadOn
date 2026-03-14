@@ -62,13 +62,32 @@
                     $imgs = $v['imageLinks'] ?? [];
                     $thumb = $imgs['extraLarge'] ?? $imgs['large'] ?? $imgs['medium']
                           ?? $imgs['small'] ?? $imgs['thumbnail'] ?? $imgs['smallThumbnail'] ?? null;
+                    $thumb = $thumb ? str_replace('http://', 'https://', $thumb) : null;
                     $thumb = $upgrade($thumb, 3);
+
+                    // Fallback Open Library si Google Books no devuelve portada
+                    if (!$thumb) {
+                        $identifiers = $v['industryIdentifiers'] ?? [];
+                        $isbn = null;
+                        foreach ($identifiers as $_id) {
+                            if (($_id['type'] ?? '') === 'ISBN_13') { $isbn = $_id['identifier']; break; }
+                        }
+                        if (!$isbn) {
+                            foreach ($identifiers as $_id) {
+                                if (($_id['type'] ?? '') === 'ISBN_10') { $isbn = $_id['identifier']; break; }
+                            }
+                        }
+                        if ($isbn) {
+                            $thumb = "https://covers.openlibrary.org/b/isbn/{$isbn}-L.jpg?default=false";
+                        }
+                    }
                 @endphp
 
                 <a href="{{ $id ? route('books.show', $id) : '#' }}" class="card block">
                     <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden">
                         @if($thumb)
-                            <img src="{{ $thumb }}" alt="{{ $title }}">
+                            <img src="{{ $thumb }}" alt="{{ $title }}"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
