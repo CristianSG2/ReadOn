@@ -1,54 +1,60 @@
 # ReadOn
 
-📚 Aplicación web para registrar, seguir y reseñar libros, inspirada en Letterboxd pero orientada a lecturas.
+Aplicación web para registrar, seguir y reseñar libros, inspirada en Letterboxd pero orientada a lecturas.
 Proyecto personal de portfolio, enfocado en una arquitectura clara, UX cuidada y un stack sencillo y mantenible.
 
 ---
 
-## 🚀 Stack
+## Stack
 
-- Backend: Laravel 11 + Blade
-- Base de datos: PostgreSQL
-- Frontend: SCSS compilado con Vite
+- **Backend:** Laravel 11 + Blade
+- **Base de datos:** PostgreSQL
+- **Frontend:** SCSS compilado con Vite
   - SCSS como única fuente de verdad visual, estructurado por secciones
-  - Sin Tailwind en vistas — clases semánticas propias en todas las plantillas
+  - Sin Tailwind en vistas — clases semánticas BEM en todas las plantillas
   - Sistema de tokens CSS basado en Catppuccin (Mocha dark / Latte light)
-- Tooling: Node.js 20 (Vite para assets)
-- Entorno: DDEV (Docker), PHP 8.2, nginx-fpm
+- **Tooling:** Node.js 20, Vite
+- **Entorno:** DDEV (Docker), PHP 8.2, nginx-fpm
 
 ---
 
-## ⚙️ Puesta en marcha (local)
+## Puesta en marcha (local)
 
-Requisitos: DDEV → https://ddev.readthedocs.io/en/stable/
+Requisitos: [DDEV](https://ddev.readthedocs.io/en/stable/)
 
+```bash
 git clone git@github.com:CristianSG2/ReadOn.git
 cd ReadOn
 ddev start
 ddev composer install
 ddev npm install
 ddev artisan key:generate
+```
 
-Añadir en .env:
+Añadir en `.env`:
+```
 GOOGLE_BOOKS_API_KEY=tu_api_key
+```
 
+```bash
 ddev artisan migrate
 ddev npm run build
 ddev launch
+```
 
 ---
 
-## 🔐 Autenticación
+## Autenticación
 
 Autenticación manual (sin Breeze):
 - Login, registro y logout propios
-- Middleware auth
+- Middleware auth en rutas protegidas
 - CSRF, regeneración de sesión y throttle de login
-- Redirección post-login a /me
+- Redirección post-login a `/me`
 
 ---
 
-## 📚 Logs de lectura
+## Logs de lectura
 
 - Búsqueda vía Google Books API
 - Guardado de libros en lista personal
@@ -56,48 +62,77 @@ Autenticación manual (sin Breeze):
 - Rating (1–10) y reseñas
 - Edición y borrado de registros propios
 
+### Portadas
+
+Sistema de fallback en tres niveles:
+1. Thumbnail de Google Books (forzado a HTTPS para evitar mixed-content)
+2. Open Library por ISBN (`/b/isbn/{ISBN}-L.jpg`) si Google Books no devuelve portada
+3. Placeholder SVG local (`/images/no-cover.svg`) si ninguna fuente tiene imagen
+
+El ISBN se extrae de `industryIdentifiers` en la respuesta de Google Books y se persiste en `reading_logs`. El método `getCoverUrl()` del modelo aplica la prioridad en tiempo de lectura; todas las vistas añaden `onerror` como última línea de defensa.
+
 ---
 
-## 👤 Perfil
+## Perfil
 
-Vista /me con:
-- Estadísticas de lectura
+Vista `/me` con:
+- Estadísticas de lectura (total, wishlist, leyendo, leído, abandonado)
 - Media de ratings
-- Últimos registros
-- Acceso a listado completo
+- Últimos 5 registros, clicables — enlazan al detalle del libro
+- Acceso al listado completo
 
 ---
 
-## 🎨 UX y temas
+## UX y temas
 
-Sistema de temas basado en la paleta Catppuccin:
-- **Mocha** (oscuro) — activo por defecto
-- **Latte** (claro) — seleccionable desde el nav
+### Sistema de temas
 
-El switch persiste entre sesiones vía `localStorage`. El tema se aplica antes del primer render para evitar flash. Todos los colores consumen tokens CSS (`--accent`, `--bg`, `--surface`, `--text`, etc.); no hay valores hardcoded fuera del bloque de tokens.
+Paleta Catppuccin con roles de color diferenciados:
+
+| Token | Mocha (dark) | Latte (light) | Rol |
+|---|---|---|---|
+| `--accent` | Lavender `#b4befe` | Rosewater `#dc8a78` | Links, nav activo |
+| `--primary` | Mauve `#cba6f7` | Mauve `#8839ef` | Botones CTA |
+| `--accent-2` | Mauve `#cba6f7` | Flamingo `#dd7878` | Hover, estados secundarios |
+
+El switch dark/light persiste entre sesiones vía `localStorage`. El tema se aplica antes del primer render (script inline en `<head>`) para evitar flash. Ningún color está hardcodeado fuera del bloque de tokens.
+
+### Logo
+
+Componente Blade reutilizable (`<x-logo size="sm|md|lg" />`): icono SVG bookmark + wordmark "ReadOn" en tres tamaños, todo via tokens CSS.
+
+### Homepage
+
+Página standalone con:
+- Topbar con logo, toggle dark/light y CTA de acceso
+- Hero a dos columnas: tagline + CTAs / estantería SVG decorativa con colores de la paleta activa
+- Estado autenticado: muestra el nombre del usuario y enlaza a `/books`
 
 ---
 
-## 📑 Estado del proyecto
+## Estado del proyecto
 
-v0.2.0 — estable y funcional tras refactor visual completo:
-- Flujo completo de lectura operativo
-- Landing pública mínima funcional
-- Login y registro unificados visualmente
-- SCSS limpio: sin duplicados, sin código muerto, sin clases de utilidad inline
-- Bugs corregidos: variables CSS indefinidas, errores de validación invisibles, colores que ignoraban el tema
+**v0.3.0** — funcional con sistema visual completo:
+- Flujo de lectura operativo de extremo a extremo
+- Sistema de portadas con fallback multinivel
+- Homepage rediseñada con visual SVG adaptativo
+- Tokens Catppuccin con roles diferenciados por función
+- Logo como componente reutilizable
+- SCSS limpio: sin duplicados, sin código muerto, sin utilidades inline
 
 ### Próximos pasos
 - Despliegue público
-- Identidad visual ligera
+- Paginación en el listado de lecturas
 
 ---
 
-## 🧰 Scripts útiles
+## Scripts útiles
 
+```bash
 ddev npm run dev
 ddev npm run build
 ddev artisan optimize:clear
+```
 
 ---
 
