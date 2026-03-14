@@ -12,6 +12,7 @@
             <input
                 type="text"
                 name="q"
+                id="book-search-input"
                 value="{{ old('q', $q ?? '') }}"
                 placeholder="Título, autor, ISBN…"
                 class="input"
@@ -38,9 +39,10 @@
         document.getElementById('search-chips').addEventListener('click', function(e) {
             const chip = e.target.closest('.search-chip');
             if (!chip) return;
-            const form = document.querySelector('.book-search');
-            form.querySelector('input[name=q]').value = chip.dataset.q;
-            form.submit();
+            const input = document.getElementById('book-search-input');
+            input.value = chip.dataset.q;
+            input.setSelectionRange(input.value.length, input.value.length);
+            input.closest('form').submit();
         });
         </script>
     @endif
@@ -138,4 +140,13 @@
         @endif
     @endif
 </div>
+<script>
+// Cursor al final del input al cargar la página con valor previo
+(function() {
+    const input = document.getElementById('book-search-input');
+    if (input && input.value.length) {
+        input.setSelectionRange(input.value.length, input.value.length);
+    }
+})();
+</script>
 @endsection
