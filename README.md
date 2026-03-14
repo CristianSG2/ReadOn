@@ -120,16 +120,24 @@ Login y registro con el mismo layout de dos columnas que la homepage: formulario
 
 ## Estado del proyecto
 
-**v0.3.0** — funcional con sistema visual completo:
+**v0.4.0** — tests automatizados y sistema visual completo:
 - Flujo de lectura operativo de extremo a extremo
 - Sistema de portadas con fallback multinivel
 - Homepage rediseñada con visual SVG adaptativo
 - Tokens Catppuccin con roles diferenciados por función
 - Logo como componente reutilizable
 - SCSS limpio: sin duplicados, sin código muerto, sin utilidades inline
+- 16 Feature tests (auth, reading logs, perfil) — SQLite en memoria
+
+### Tests
+
+```bash
+ddev php artisan test
+```
+
+Configurados con SQLite en memoria (`phpunit.xml`). Cubren auth, logs de lectura y perfil — 16 tests, 42 assertions.
 
 ### Próximos pasos
-- Tests automatizados (Feature tests: auth, reading logs, perfil)
 - Despliegue público
 - Paginación en el listado de lecturas
 
