@@ -573,7 +573,8 @@ h3 { font-size: 1.125rem; }
   line-height: 1;
 }
 .logo--sm { gap: .35rem; }
-.logo--lg { gap: .65rem; }
+.logo--lg { gap: .75rem; }
+.logo--xl { gap: .9rem; }
 .logo__icon {
   display: flex;
   align-items: center;
@@ -1074,6 +1075,7 @@ body.landing .landing-topbar {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 3rem;
+  padding-top: .75rem;
 }
 
 body.landing .landing-topbar__actions {
