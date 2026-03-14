@@ -59,8 +59,12 @@ Autenticación manual (sin Breeze):
 - Búsqueda vía Google Books API
 - Guardado de libros en lista personal
 - Estados: Wishlist, Leyendo, Leído, Abandonado
-- Rating (1–10) y reseñas
+- Rating de 0.5 a 5 estrellas (escala en medias estrellas) y reseñas
 - Edición y borrado de registros propios
+
+### Autosave
+
+El rating y el estado se guardan automáticamente sin botón: un click en las estrellas envía el valor vía fetch PATCH, y cambiar el select de estado hace lo mismo. La reseña mantiene un botón explícito de guardado.
 
 ### Portadas
 
@@ -92,7 +96,7 @@ Paleta Catppuccin con roles de color diferenciados:
 | Token | Mocha (dark) | Latte (light) | Rol |
 |---|---|---|---|
 | `--accent` | Lavender `#b4befe` | Rosewater `#dc8a78` | Links, nav activo |
-| `--primary` | Mauve `#cba6f7` | Mauve `#8839ef` | Botones CTA |
+| `--primary` | Mauve `#cba6f7` | Rosewater `#dc8a78` | Botones CTA |
 | `--accent-2` | Mauve `#cba6f7` | Flamingo `#dd7878` | Hover, estados secundarios |
 
 El switch dark/light persiste entre sesiones vía `localStorage`. El tema se aplica antes del primer render (script inline en `<head>`) para evitar flash. Ningún color está hardcodeado fuera del bloque de tokens.
@@ -108,6 +112,10 @@ Página standalone con:
 - Hero a dos columnas: tagline + CTAs / estantería SVG decorativa con colores de la paleta activa
 - Estado autenticado: muestra el nombre del usuario y enlaza a `/books`
 
+### Vistas de autenticación
+
+Login y registro con el mismo layout de dos columnas que la homepage: formulario a la izquierda y estantería SVG decorativa a la derecha. Los botones comparten los mismos tokens de color que el resto de la app.
+
 ---
 
 ## Estado del proyecto
@@ -121,6 +129,7 @@ Página standalone con:
 - SCSS limpio: sin duplicados, sin código muerto, sin utilidades inline
 
 ### Próximos pasos
+- Tests automatizados (Feature tests: auth, reading logs, perfil)
 - Despliegue público
 - Paginación en el listado de lecturas
 
