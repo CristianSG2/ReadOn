@@ -10,7 +10,7 @@
 <body>
   <header class="site-nav" role="banner">
     <div class="nav">
-        <a class="nav__brand" href="{{ url('/') }}">ReadOn</a>
+        <a class="nav__brand" href="{{ url('/') }}"><x-logo size="sm" /></a>
 
         {{-- Toggle simple para móvil (JS mínimo más abajo en el layout) --}}
         <button class="nav__toggle" id="navToggle" aria-controls="navMenu" aria-expanded="false">

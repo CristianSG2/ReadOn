@@ -5,7 +5,7 @@
    THEME TOKENS — Catppuccin
    dark  → Mocha  (https://github.com/catppuccin/catppuccin)
    light → Latte
-   Accent: Mauve (#cba6f7 dark / #8839ef light)
+   Accent: Lavender (#b4befe dark) / Rosewater (#dc8a78 light) — Primary: Mauve
    Switch via: document.documentElement.setAttribute("data-theme", "dark"|"light")
    ========================================================================== */
 
@@ -16,11 +16,11 @@
   --nav-bg:    #11111b;  /* Crust    */
   --surface:   #313244;  /* Surface0 */
   --surface-2: #45475a;  /* Surface1 */
-  --border:    rgba(88,91,112,.5);
+  --border:    #585b70;  /* Surface2 */
   --text:      #cdd6f4;
   --muted:     #a6adc8;  /* Subtext0 */
-  --accent:    #cba6f7;  /* Mauve    */
-  --accent-2:  #b4befe;  /* Lavender */
+  --accent:    #b4befe;  /* Lavender */
+  --accent-2:  #cba6f7;  /* Mauve    */
   --primary:   #cba6f7;
   --on-accent: #11111b;
   --success:        #a6e3a1;
@@ -33,13 +33,13 @@
   --warning-text:   #f9e2af;
   --error:          #f38ba8;
   --danger:         #f38ba8;  /* alias → error, backwards compat */
-  --badge-wishlist: #cba6f7;
+  --badge-wishlist: #b4befe;  /* Lavender */
   --badge-reading:  #89b4fa;
   --badge-read:     #a6e3a1;
   --badge-dropped:  #f38ba8;
   --nav-h:          56px;
-  --nav-border:     rgba(88,91,112,.5);
-  --nav-link:       #a6adc8;
+  --nav-border:     #585b70;  /* Surface2 */
+  --nav-link:       #bac2de;  /* Subtext1 */
   --nav-link-hover: #cdd6f4;
   --shadow:         rgba(17,17,27,.5);
 }
@@ -51,11 +51,11 @@
   --nav-bg:    #11111b;
   --surface:   #313244;
   --surface-2: #45475a;
-  --border:    rgba(88,91,112,.5);
+  --border:    #585b70;  /* Surface2 */
   --text:      #cdd6f4;
   --muted:     #a6adc8;
-  --accent:    #cba6f7;
-  --accent-2:  #b4befe;
+  --accent:    #b4befe;  /* Lavender */
+  --accent-2:  #cba6f7;  /* Mauve    */
   --primary:   #cba6f7;
   --on-accent: #11111b;
   --success:        #a6e3a1;
@@ -68,30 +68,30 @@
   --warning-text:   #f9e2af;
   --error:          #f38ba8;
   --danger:         #f38ba8;
-  --badge-wishlist: #cba6f7;
+  --badge-wishlist: #b4befe;  /* Lavender */
   --badge-reading:  #89b4fa;
   --badge-read:     #a6e3a1;
   --badge-dropped:  #f38ba8;
   --nav-h:          56px;
-  --nav-border:     rgba(88,91,112,.5);
-  --nav-link:       #a6adc8;
+  --nav-border:     #585b70;  /* Surface2 */
+  --nav-link:       #bac2de;  /* Subtext1 */
   --nav-link-hover: #cdd6f4;
   --shadow:         rgba(17,17,27,.5);
 }
 
 /* ── light — Catppuccin Latte ── */
 :root[data-theme="light"] {
-  --bg:        #eff1f5;
-  --card:      #e6e9ef;
-  --nav-bg:    #dce0e8;
-  --surface:   #ccd0da;
-  --surface-2: #bcc0cc;
-  --border:    rgba(172,176,190,.5);
+  --bg:        #eff1f5;  /* Base     */
+  --card:      #e6e9ef;  /* Mantle   */
+  --nav-bg:    #dce0e8;  /* Crust    */
+  --surface:   #e6e9ef;  /* Mantle   */
+  --surface-2: #dce0e8;  /* Crust    */
+  --border:    #bcc0cc;  /* Surface1 */
   --text:      #4c4f69;
-  --muted:     #6c6f85;
-  --accent:    #8839ef;
-  --accent-2:  #7287fd;
-  --primary:   #8839ef;
+  --muted:     #6c6f85;  /* Subtext0 */
+  --accent:    #dc8a78;  /* Rosewater */
+  --accent-2:  #dd7878;  /* Flamingo  */
+  --primary:   #8839ef;  /* Mauve     */
   --on-accent: #eff1f5;
   --success:        #40a02b;
   --success-bg:     rgba(64,160,43,.1);
@@ -103,13 +103,13 @@
   --warning-text:   #df8e1d;
   --error:          #d20f39;
   --danger:         #d20f39;
-  --badge-wishlist: #8839ef;
+  --badge-wishlist: #7287fd;  /* Lavender */
   --badge-reading:  #1e66f5;
   --badge-read:     #40a02b;
   --badge-dropped:  #d20f39;
   --nav-h:          56px;
-  --nav-border:     rgba(172,176,190,.5);
-  --nav-link:       #6c6f85;
+  --nav-border:     #bcc0cc;  /* Surface1 */
+  --nav-link:       #6c6f85;  /* Subtext0 */
   --nav-link-hover: #4c4f69;
   --shadow:         rgba(220,224,232,.8);
 }
@@ -550,10 +550,41 @@ h3 { font-size: 1.125rem; }
 }
 
 .nav__brand {
-  font-weight: 700;
   text-decoration: none;
-  color: var(--nav-link-hover);
-  letter-spacing: .2px;
+  display: flex;
+  align-items: center;
+}
+
+/* Logo component */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  text-decoration: none;
+  line-height: 1;
+}
+.logo--sm { gap: .35rem; }
+.logo--lg { gap: .65rem; }
+.logo__icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.logo__wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  line-height: 1.1;
+}
+.logo__read {
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: .01em;
+}
+.logo__on {
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: .01em;
 }
 
 .nav__toggle {
@@ -1002,16 +1033,15 @@ a:focus .title {
 
 /* ---------- Landing (hero integrado, versión final) ---------- */
 
+/* === Landing === */
+
 body.landing {
-  /* Base del tema */
   background:
-    radial-gradient(900px 520px at 50% 55%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
-    radial-gradient(700px 420px at 20% 15%, rgba(0, 0, 0, .0), transparent 55%),
-    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 85%, #000) 100%);
+    radial-gradient(900px 520px at 50% 55%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 90%, var(--surface)) 100%);
   color: var(--text);
 }
 
-/* Centrado vertical del hero */
 body.landing main.container {
   min-height: calc(100vh - 120px);
   display: flex;
@@ -1020,20 +1050,16 @@ body.landing main.container {
   max-width: 1400px;
 }
 
-/* Frame principal */
 body.landing .landing-frame--full {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 3.25rem;
-
   border: 1px solid var(--border);
   border-radius: 20px;
-
   background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
-/* Topbar interna */
 body.landing .landing-topbar {
   display: flex;
   align-items: center;
@@ -1041,23 +1067,24 @@ body.landing .landing-topbar {
   margin-bottom: 3rem;
 }
 
-body.landing .landing-logo {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text);
+body.landing .landing-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
 }
 
 body.landing .landing-login {
   font-size: .9rem;
   color: var(--accent);
   text-decoration: none;
+  &:hover { text-decoration: underline; }
 }
 
-body.landing .landing-login:hover {
-  text-decoration: underline;
+body.landing .landing-login-btn {
+  padding: .55rem .9rem;
+  font-size: .9rem;
 }
 
-/* Hero layout */
 body.landing .landing-hero {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
@@ -1065,114 +1092,74 @@ body.landing .landing-hero {
   align-items: center;
 }
 
-/* Contenido */
 body.landing .landing-hero__content {
   max-width: 560px;
 }
 
 body.landing .landing-hero__content h1 {
-  margin: 0 0 .8rem;
+  margin: 0 0 .9rem;
   font-size: 3.2rem;
-  line-height: 1.05;
+  line-height: 1.1;
+  font-weight: 700;
   color: var(--text);
+  span { color: var(--accent); }
 }
 
 body.landing .landing-hero__content p {
   margin: 0;
-  max-width: 60ch;
+  max-width: 52ch;
   color: var(--muted);
   line-height: 1.6;
 }
 
-/* Acciones */
 body.landing .actions {
-  margin-top: 1.6rem;
+  margin-top: 1.8rem;
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* CTA: si tu .btn no está tokenizado globalmente, lo tokenizamos aquí solo para landing */
 body.landing .btn.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  border-color: var(--primary);
   color: var(--on-accent);
 }
 
 body.landing .btn.btn-outline {
   background: transparent;
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-color: color-mix(in srgb, var(--primary) 50%, var(--border));
   color: var(--text);
+  &:hover { border-color: var(--primary); }
 }
 
-body.landing .btn.btn-outline:hover {
-  border-color: var(--accent);
-}
+body.landing .btn,
+body.landing .btn:hover { text-decoration: none; }
 
-/* Visual derecha */
 body.landing .landing-hero__visual {
   height: 460px;
   border-radius: 16px;
   border: 1px solid var(--border);
-  background:
-    radial-gradient(300px 200px at 30% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    radial-gradient(260px 180px at 70% 55%, color-mix(in srgb, var(--success) 16%, transparent), transparent 60%),
-    linear-gradient(135deg,
-      color-mix(in srgb, var(--surface-2) 55%, transparent),
-      color-mix(in srgb, var(--surface) 40%, transparent)
-    );
-  position: relative;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
 }
 
-/* Líneas tipo lomos de libros */
-body.landing .landing-hero__visual::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: .65;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--text) 10%, transparent) 0px,
-      color-mix(in srgb, var(--text) 10%, transparent) 2px,
-      transparent 2px,
-      transparent 18px
-    );
-  mask-image: radial-gradient(closest-side at 50% 50%, #000 60%, transparent 100%);
+.landing-bookshelf {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-/* Responsive */
 @media (max-width: 860px) {
-  body.landing .landing-frame--full {
-    padding: 1.5rem;
-  }
-
-  body.landing .landing-topbar {
-    margin-bottom: 2rem;
-  }
-
+  body.landing .landing-frame--full { padding: 1.5rem; }
+  body.landing .landing-topbar { margin-bottom: 2rem; }
   body.landing .landing-hero {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-
-  body.landing .landing-hero__visual {
-    height: 240px;
-  }
-
-  body.landing .landing-hero__content h1 {
-    font-size: 2.2rem;
-  }
-}
-body.landing .landing-login-btn {
-  padding: .55rem .9rem;
-  font-size: .9rem;
-}
-/* Evitar subrayado en botones de la landing */
-body.landing .btn,
-body.landing .btn:hover {
-  text-decoration: none;
+  body.landing .landing-hero__visual { height: 240px; }
+  body.landing .landing-hero__content h1 { font-size: 2.2rem; }
 }
 
 /* ---------- Auth UI (login / register) ---------- */
