@@ -42,6 +42,16 @@ ddev npm run build
 ddev launch
 ```
 
+### Datos de demo (opcional)
+```bash
+ddev artisan db:seed
+```
+
+Crea un usuario demo con libros de ejemplo. Requiere `GOOGLE_BOOKS_API_KEY` configurada en `.env`.
+
+- Email: `demo@readon.app`
+- Contraseña: `password`
+
 ---
 
 ## Autenticación

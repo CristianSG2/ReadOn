@@ -13,7 +13,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .phpunit.result.cache
-/screenshots/*.png
 /screenshots/*.jpg
 /screenshots/*.jpeg
 /screenshots/*.webp
