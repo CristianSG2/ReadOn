@@ -1,4 +1,4 @@
-[![ReadOn](screenshots/banner.png)](https://readon.cristiansg.dev)
+![ReadOn](screenshots/banner.svg)
 
 [![Visitar ReadOn](https://img.shields.io/badge/🌐_ReadOn-readon.cristiansg.dev-CBA6F7?style=flat)](https://readon.cristiansg.dev)
 
