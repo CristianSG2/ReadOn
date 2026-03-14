@@ -14,7 +14,7 @@
 
     {{-- Topbar --}}
     <div class="landing-topbar">
-      <a href="{{ url('/') }}"><x-logo size="sm" /></a>
+      <a href="{{ url('/') }}"><x-logo size="lg" /></a>
       <div class="landing-topbar__actions">
         <button id="theme-toggle" class="theme-toggle" aria-label="Activar tema claro" title="Cambiar tema">☀</button>
         @guest
