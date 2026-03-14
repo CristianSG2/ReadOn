@@ -26,7 +26,7 @@ class ReadingLog extends Model
      * Casts útiles.
      */
     protected $casts = [
-        'rating' => 'integer',
+        'rating' => 'float',
     ];
 
     /**

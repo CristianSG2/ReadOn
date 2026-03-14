@@ -77,23 +77,35 @@ class ReadingLogController extends Controller
             'status' => $data['status'],
         ]);
 
+        if ($request->wantsJson()) {
+            return response()->json(['ok' => true]);
+        }
+
         return back()->with('success', 'Estado actualizado.');
     }
 
     /**
-     * Actualiza el rating (1–10 o vacío para limpiar).
+     * Actualiza el rating (0.5–5.0 en pasos de 0.5, o vacío para limpiar).
      */
     public function updateRating(Request $request, ReadingLog $readingLog)
     {
         abort_unless($readingLog->user_id === Auth::id(), 403);
 
         $data = $request->validate([
-            'rating' => ['nullable', 'integer', 'between:1,10'],
+            'rating' => ['nullable', 'numeric', 'min:0.5', 'max:5', function ($attr, $value, $fail) {
+                if ($value !== null && fmod((float) $value * 2, 1) !== 0.0) {
+                    $fail('El rating debe ser múltiplo de 0.5.');
+                }
+            }],
         ]);
 
         $readingLog->update([
-            'rating' => $data['rating'] ?? null,
+            'rating' => isset($data['rating']) ? (float) $data['rating'] : null,
         ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['ok' => true]);
+        }
 
         return back()->with('success', 'Rating actualizado.');
     }
