@@ -12,6 +12,7 @@
             <input
                 type="text"
                 name="q"
+                id="book-search-input"
                 value="{{ old('q', $q ?? '') }}"
                 placeholder="Título, autor, ISBN…"
                 class="input"
@@ -23,6 +24,28 @@
             <p class="text-error">{{ $message }}</p>
         @enderror
     </form>
+
+    @if(empty($q) && empty($results))
+        <div class="search-empty">
+            <p class="search-empty__title">¿Qué vas a leer hoy?</p>
+            <p class="search-empty__sub">Busca por título, autor o ISBN</p>
+            <div class="search-chips" id="search-chips">
+                @foreach(['Brandon Sanderson', 'Stephen King', 'Agatha Christie', 'George Orwell', 'Haruki Murakami'] as $suggestion)
+                    <button type="button" class="search-chip" data-q="{{ $suggestion }}">{{ $suggestion }}</button>
+                @endforeach
+            </div>
+        </div>
+        <script>
+        document.getElementById('search-chips').addEventListener('click', function(e) {
+            const chip = e.target.closest('.search-chip');
+            if (!chip) return;
+            const input = document.getElementById('book-search-input');
+            input.value = chip.dataset.q;
+            input.setSelectionRange(input.value.length, input.value.length);
+            input.closest('form').submit();
+        });
+        </script>
+    @endif
 
     @if(!empty($results))
         @php
@@ -117,4 +140,13 @@
         @endif
     @endif
 </div>
+<script>
+// Cursor al final del input al cargar la página con valor previo
+(function() {
+    const input = document.getElementById('book-search-input');
+    if (input && input.value.length) {
+        input.setSelectionRange(input.value.length, input.value.length);
+    }
+})();
+</script>
 @endsection

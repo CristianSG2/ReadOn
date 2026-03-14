@@ -18,7 +18,7 @@
       <div class="landing-topbar__actions">
         <button id="theme-toggle" class="theme-toggle" aria-label="Activar tema claro" title="Cambiar tema">☀</button>
         @guest
-          <a class="btn btn-outline landing-login-btn" href="{{ url('/login') }}">Entrar</a>
+          <a class="btn btn-outline" href="{{ url('/login') }}">Entrar</a>
         @endguest
         @auth
           <a class="landing-login" href="{{ route('me') }}">Mi perfil</a>

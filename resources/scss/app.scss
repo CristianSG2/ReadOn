@@ -91,7 +91,7 @@
   --muted:     #6c6f85;  /* Subtext0 */
   --accent:    #dc8a78;  /* Rosewater */
   --accent-2:  #dd7878;  /* Flamingo  */
-  --primary:   #8839ef;  /* Mauve     */
+  --primary:   #dc8a78;  /* Rosewater — btn color, matches accent */
   --on-accent: #eff1f5;
   --success:        #40a02b;
   --success-bg:     rgba(64,160,43,.1);
@@ -149,7 +149,7 @@
 
 /* Botón primario */
 .btn {
-  background: var(--accent);
+  background: var(--primary);
   border: 1px solid transparent;
   color: var(--on-accent);
   transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
@@ -173,17 +173,17 @@
    --------------------------------- */
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--primary);
   color: var(--text);
   transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
 
 .btn-outline:hover,
 .btn-outline:focus-visible {
-  background-color: color-mix(in srgb, var(--accent), transparent 85%);
-  border-color: color-mix(in srgb, var(--accent), transparent 30%);
+  background-color: color-mix(in srgb, var(--primary), transparent 85%);
+  border-color: color-mix(in srgb, var(--primary), transparent 30%);
   color: var(--text);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent), transparent 80%);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary), transparent 80%);
 }
 
 
@@ -382,6 +382,15 @@ h3 { font-size: 1.125rem; }
   display: grid; grid-template-columns: repeat(10, 1fr);
 }
 .stars__hit button { background: transparent; border: 0; padding: 0; cursor: pointer; }
+.stars__feedback {
+  margin-left: .5rem;
+  font-size: .85rem;
+  font-weight: 600;
+  &--ok  { color: var(--success); }
+  &--err { color: var(--error); }
+}
+.status-select--saved { outline: 2px solid var(--success); outline-offset: 2px; }
+.status-select--err   { outline: 2px solid var(--error);   outline-offset: 2px; }
 
 /* ---------- Paginación (links()) ---------- */
 .pagination { display:flex; gap:.4rem; align-items:center; margin-top:1rem; }
@@ -1119,19 +1128,6 @@ body.landing .actions {
   flex-wrap: wrap;
 }
 
-body.landing .btn.btn-primary {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--on-accent);
-}
-
-body.landing .btn.btn-outline {
-  background: transparent;
-  border-color: color-mix(in srgb, var(--primary) 50%, var(--border));
-  color: var(--text);
-  &:hover { border-color: var(--primary); }
-}
-
 body.landing .btn,
 body.landing .btn:hover { text-decoration: none; }
 
@@ -1204,6 +1200,12 @@ body.landing .landing-hero__visual {
   font-size: .95rem;
 }
 
+.auth-field .input {
+  width: 100%;
+  padding: .7rem .9rem;
+  font-size: 1rem;
+}
+
 .auth-actions {
   margin-top: 1.25rem;
   display: flex;
@@ -1222,36 +1224,15 @@ body.landing .landing-hero__visual {
   margin-bottom: 1rem;
 }
 
-/* Visual decorativa (tipo “libros”) */
+/* Visual decorativa — estantería SVG */
 .auth-visual {
   height: 420px;
   border-radius: 16px;
   border: 1px solid var(--border);
-  background:
-    radial-gradient(300px 200px at 30% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    radial-gradient(260px 180px at 70% 55%, color-mix(in srgb, var(--success) 16%, transparent), transparent 60%),
-    linear-gradient(135deg,
-      color-mix(in srgb, var(--surface-2) 55%, transparent),
-      color-mix(in srgb, var(--surface) 40%, transparent)
-    );
-  position: relative;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   overflow: hidden;
-}
-
-.auth-visual::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: .65;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--text) 10%, transparent) 0px,
-      color-mix(in srgb, var(--text) 10%, transparent) 2px,
-      transparent 2px,
-      transparent 18px
-    );
-  mask-image: radial-gradient(closest-side at 50% 50%, #000 60%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
 }
 
 /* Botones sin subrayado */
@@ -1278,19 +1259,60 @@ body.landing .landing-hero__visual {
 
 /* Books: buscador */
 .book-search__row {
-  display: flex;
-  gap: .75rem;
-  align-items: center;
+  position: relative;
 }
 
 .book-search .input {
-  flex: 1;
-  min-width: 0;           /* evita overflow raro en flex */
+  width: 100%;
+  padding: .85rem 7rem .85rem 1rem;
+  font-size: 1.1rem;
+  &:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent); }
 }
 
 .book-search .btn {
-  flex: 0 0 auto;
+  position: absolute;
+  right: .35rem;
+  top: 50%;
+  transform: translateY(-50%);
   white-space: nowrap;
+  padding: .45rem 1.1rem;
+}
+
+/* Search empty state */
+.search-empty {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+.search-empty__title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 .35rem;
+}
+.search-empty__sub {
+  font-size: .9rem;
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+.search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: center;
+}
+.search-chip {
+  padding: .35rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: .875rem;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 }
 
 /* Back link */

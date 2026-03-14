@@ -83,47 +83,42 @@
                         {{-- Badge con label en español (viene del accessor status_label del modelo) --}}
                         <p class="meta">
                             <span class="{{ $badgeClass }}">{{ $log->status_label }}</span>
-                            @if(!is_null($log->rating)) · ⭐ {{ $log->rating }}/10 @endif
+                            @if(!is_null($log->rating)) · {{ $log->rating }}★ @endif
                         </p>
 
-                        {{-- Selector de estado (labels en español, values en slugs ingleses) --}}
-                        <form method="POST" action="{{ route('reading-logs.update', $log) }}" class="mt-2">
-                            @csrf
-                            @method('PATCH')
+                        {{-- Selector de estado — autosave vía fetch --}}
+                        <div class="mt-2">
                             <label class="label">Estado</label>
-                            <div class="form-row">
-                                <select class="input" name="status" required>
-                                    <option value="wishlist" @selected($log->status === 'wishlist')>Lista de deseos</option>
-                                    <option value="reading"  @selected($log->status === 'reading')>Leyendo</option>
-                                    <option value="read"     @selected($log->status === 'read')>Leído</option>
-                                    <option value="dropped"  @selected($log->status === 'dropped')>Abandonado</option>
-                                </select>
-                                <button class="btn">Actualizar</button>
-                            </div>
-                        </form>
+                            <select class="input status-select"
+                                    data-url="{{ route('reading-logs.update', $log) }}"
+                                    data-csrf="{{ csrf_token() }}">
+                                <option value="wishlist" @selected($log->status === 'wishlist')>Lista de deseos</option>
+                                <option value="reading"  @selected($log->status === 'reading')>Leyendo</option>
+                                <option value="read"     @selected($log->status === 'read')>Leído</option>
+                                <option value="dropped"  @selected($log->status === 'dropped')>Abandonado</option>
+                            </select>
+                        </div>
 
-                        {{-- Bloque de rating (10 pasos, media estrella cada paso) --}}
-                        <form method="POST" action="{{ route('reading-logs.rating', $log) }}"" class="mt-3">
-                            @csrf
-                            @method('PATCH')
+                        {{-- Bloque de rating (escala 0.5–5.0) — autosave vía fetch --}}
+                        <div class="mt-3">
                             <label class="label">Rating</label>
-
-                            <div class="stars" data-initial="{{ (int)($log->rating ?? 0) }}">
-                                <input type="hidden" name="rating" value="{{ (int)($log->rating ?? 0) }}">
+                            <div class="stars"
+                                 data-initial="{{ $log->rating ?? 0 }}"
+                                 data-url="{{ route('reading-logs.rating', $log) }}"
+                                 data-csrf="{{ csrf_token() }}">
                                 <div class="stars__display" aria-hidden="true">★★★★★</div>
-                                <div class="stars__fill" style="width: {{ (($log->rating ?? 0) * 10) }}%;" aria-hidden="true">★★★★★</div>
+                                <div class="stars__fill" style="width: {{ ($log->rating ?? 0) * 20 }}%;" aria-hidden="true">★★★★★</div>
                                 <div class="stars__hit">
                                     @for($i = 1; $i <= 10; $i++)
-                                        <button type="button" data-v="{{ $i }}" aria-label="{{ number_format($i/2,1) }} estrellas"></button>
+                                        <button type="button" data-v="{{ $i * 0.5 }}" aria-label="{{ $i * 0.5 }} estrellas"></button>
                                     @endfor
                                 </div>
+                                <span class="stars__feedback" aria-live="polite"></span>
                             </div>
-
-                            <div class="form-actions mt-2">
-                                <button class="btn">Guardar rating</button>
-                                <button class="btn btn-outline" name="rating" value="">Quitar rating</button>
-                            </div>
-                        </form>
+                            <button type="button" class="btn btn-link stars-clear mt-1"
+                                    data-url="{{ route('reading-logs.rating', $log) }}"
+                                    data-csrf="{{ csrf_token() }}">Quitar rating</button>
+                        </div>
 
                         {{-- Reseña (muestro snippet y dejo el form plegable) --}}
                         @if (!empty($log->review))
@@ -187,44 +182,97 @@
     @endif
 </div>
 
-{{-- JS mínimo para rating y toggle de reseña (mantengo el patrón que ya vengo usando) --}}
+{{-- JS: rating autosave, estado autosave, toggle reseña --}}
 <script>
-// Rating interactivo
-document.querySelectorAll('.stars').forEach(stars => {
-  const input = stars.querySelector('input[name=rating]');
-  const fill  = stars.querySelector('.stars__fill');
-  const hit   = stars.querySelector('.stars__hit');
-  let current = parseInt(input.value || 0, 10) || 0;
+// ── Utilidad fetch PATCH ──────────────────────────────────────────────────────
+function patchJson(url, csrf, body) {
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-HTTP-Method-Override': 'PATCH',
+      'X-CSRF-TOKEN': csrf,
+    },
+    body: JSON.stringify(body),
+  }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+}
 
-  const set = v => {
-    current = v || 0;
-    input.value = current || '';
-    fill.style.width = (current * 10) + '%';
-  };
+// ── Feedback visual (✓ o error durante 1s) ───────────────────────────────────
+function showFeedback(el, ok) {
+  el.textContent = ok ? '✓' : '✗';
+  el.className   = 'stars__feedback stars__feedback--' + (ok ? 'ok' : 'err');
+  setTimeout(() => { el.textContent = ''; el.className = 'stars__feedback'; }, 1000);
+}
+
+// ── Rating: autosave al click ─────────────────────────────────────────────────
+document.querySelectorAll('.stars').forEach(stars => {
+  const fill     = stars.querySelector('.stars__fill');
+  const hit      = stars.querySelector('.stars__hit');
+  const feedback = stars.querySelector('.stars__feedback');
+  const url      = stars.dataset.url;
+  const csrf     = stars.dataset.csrf;
+  let current    = parseFloat(stars.dataset.initial) || 0;
+
+  const applyWidth = v => { fill.style.width = (v * 20) + '%'; };
 
   hit.addEventListener('mousemove', e => {
-    const v = parseInt(e.target.dataset.v || 0, 10);
-    if (v) fill.style.width = (v * 10) + '%';
+    const v = parseFloat(e.target.dataset.v || 0);
+    if (v) applyWidth(v);
   });
-  hit.addEventListener('mouseleave', () => {
-    fill.style.width = (current * 10) + '%';
-  });
+  hit.addEventListener('mouseleave', () => applyWidth(current));
   hit.addEventListener('click', e => {
-    const v = parseInt(e.target.dataset.v || 0, 10);
-    if (v) set(v);
+    const v = parseFloat(e.target.dataset.v || 0);
+    if (!v) return;
+    const prev = current;
+    current = v;
+    applyWidth(current);
+    patchJson(url, csrf, { rating: current })
+      .then(() => { stars.dataset.initial = current; showFeedback(feedback, true); })
+      .catch(() => { current = prev; applyWidth(current); showFeedback(feedback, false); });
   });
 });
 
-// Toggle reseña
-document.addEventListener('click', (e) => {
+// ── Quitar rating ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.stars-clear').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const url  = btn.dataset.url;
+    const csrf = btn.dataset.csrf;
+    const stars    = btn.closest('.mt-3').querySelector('.stars');
+    const fill     = stars ? stars.querySelector('.stars__fill') : null;
+    const feedback = stars ? stars.querySelector('.stars__feedback') : null;
+    patchJson(url, csrf, { rating: null })
+      .then(() => {
+        if (stars) stars.dataset.initial = 0;
+        if (fill)  fill.style.width = '0%';
+        if (feedback) showFeedback(feedback, true);
+      })
+      .catch(() => { if (feedback) showFeedback(feedback, false); });
+  });
+});
+
+// ── Estado: autosave al cambiar el select ─────────────────────────────────────
+document.querySelectorAll('.status-select').forEach(sel => {
+  const url  = sel.dataset.url;
+  const csrf = sel.dataset.csrf;
+  let prev   = sel.value;
+  sel.addEventListener('change', () => {
+    const next = sel.value;
+    patchJson(url, csrf, { status: next })
+      .then(() => { prev = next; sel.classList.add('status-select--saved'); setTimeout(() => sel.classList.remove('status-select--saved'), 1000); })
+      .catch(() => { sel.value = prev; sel.classList.add('status-select--err'); setTimeout(() => sel.classList.remove('status-select--err'), 1000); });
+  });
+});
+
+// ── Toggle reseña ─────────────────────────────────────────────────────────────
+document.addEventListener('click', e => {
   const btn = e.target.closest('.review-toggle');
   if (!btn) return;
-  const sel = btn.getAttribute('data-target');
-  const panel = document.querySelector(sel);
+  const panel = document.querySelector(btn.getAttribute('data-target'));
   if (!panel) return;
   const hidden = panel.hasAttribute('hidden');
-  if (hidden) { panel.removeAttribute('hidden'); btn.setAttribute('aria-expanded','true'); }
-  else { panel.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); }
+  if (hidden) { panel.removeAttribute('hidden'); btn.setAttribute('aria-expanded', 'true'); }
+  else        { panel.setAttribute('hidden', ''); btn.setAttribute('aria-expanded', 'false'); }
 });
 </script>
 @endsection

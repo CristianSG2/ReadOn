@@ -20,7 +20,7 @@
         <nav id="navMenu" class="nav__links" role="navigation">
             @auth
                 <a href="{{ route('books.index') }}" class="nav__link {{ request()->routeIs('books.*') ? 'is-active' : '' }}"
-                   @if(request()->routeIs('books.*')) aria-current="page" @endif>Books</a>
+                   @if(request()->routeIs('books.*')) aria-current="page" @endif>Libros</a>
 
                 <a href="{{ route('reading-logs.index') }}" class="nav__link {{ request()->routeIs('reading-logs.*') ? 'is-active' : '' }}"
                    @if(request()->routeIs('reading-logs.*')) aria-current="page" @endif>Mis lecturas</a>
