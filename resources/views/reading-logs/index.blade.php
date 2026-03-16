@@ -6,12 +6,11 @@
 <div class="container">
     <h1 class="mb-4">Mis lecturas</h1>
 
-    {{-- Mensajes flash (mantengo estos tal cual) --}}
     @if(session('success'))
-        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+        <script>showToast('{{ session('success') }}');</script>
     @endif
     @if(session('error'))
-        <div class="alert alert-warning mb-4">{{ session('error') }}</div>
+        <script>showToast('{{ session('error') }}', 'error');</script>
     @endif
 
     {{-- Empty state cuando no hay registros --}}
@@ -198,21 +197,13 @@ function patchJson(url, csrf, body) {
   }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
 }
 
-// ── Feedback visual (✓ o error durante 1s) ───────────────────────────────────
-function showFeedback(el, ok) {
-  el.textContent = ok ? '✓' : '✗';
-  el.className   = 'stars__feedback stars__feedback--' + (ok ? 'ok' : 'err');
-  setTimeout(() => { el.textContent = ''; el.className = 'stars__feedback'; }, 1000);
-}
-
 // ── Rating: autosave al click ─────────────────────────────────────────────────
 document.querySelectorAll('.stars').forEach(stars => {
-  const fill     = stars.querySelector('.stars__fill');
-  const hit      = stars.querySelector('.stars__hit');
-  const feedback = stars.querySelector('.stars__feedback');
-  const url      = stars.dataset.url;
-  const csrf     = stars.dataset.csrf;
-  let current    = parseFloat(stars.dataset.initial) || 0;
+  const fill = stars.querySelector('.stars__fill');
+  const hit  = stars.querySelector('.stars__hit');
+  const url  = stars.dataset.url;
+  const csrf = stars.dataset.csrf;
+  let current = parseFloat(stars.dataset.initial) || 0;
 
   const applyWidth = v => { fill.style.width = (v * 20) + '%'; };
 
@@ -228,8 +219,8 @@ document.querySelectorAll('.stars').forEach(stars => {
     current = v;
     applyWidth(current);
     patchJson(url, csrf, { rating: current })
-      .then(() => { stars.dataset.initial = current; showFeedback(feedback, true); })
-      .catch(() => { current = prev; applyWidth(current); showFeedback(feedback, false); });
+      .then(() => { stars.dataset.initial = current; showToast('Rating guardado'); })
+      .catch(() => { current = prev; applyWidth(current); showToast('Error al guardar', 'error'); });
   });
 });
 
@@ -238,16 +229,15 @@ document.querySelectorAll('.stars-clear').forEach(btn => {
   btn.addEventListener('click', () => {
     const url  = btn.dataset.url;
     const csrf = btn.dataset.csrf;
-    const stars    = btn.closest('.mt-3').querySelector('.stars');
-    const fill     = stars ? stars.querySelector('.stars__fill') : null;
-    const feedback = stars ? stars.querySelector('.stars__feedback') : null;
+    const stars = btn.closest('.mt-3').querySelector('.stars');
+    const fill  = stars ? stars.querySelector('.stars__fill') : null;
     patchJson(url, csrf, { rating: null })
       .then(() => {
         if (stars) stars.dataset.initial = 0;
         if (fill)  fill.style.width = '0%';
-        if (feedback) showFeedback(feedback, true);
+        showToast('Rating eliminado');
       })
-      .catch(() => { if (feedback) showFeedback(feedback, false); });
+      .catch(() => { showToast('Error al guardar', 'error'); });
   });
 });
 
@@ -259,8 +249,8 @@ document.querySelectorAll('.status-select').forEach(sel => {
   sel.addEventListener('change', () => {
     const next = sel.value;
     patchJson(url, csrf, { status: next })
-      .then(() => { prev = next; sel.classList.add('status-select--saved'); setTimeout(() => sel.classList.remove('status-select--saved'), 1000); })
-      .catch(() => { sel.value = prev; sel.classList.add('status-select--err'); setTimeout(() => sel.classList.remove('status-select--err'), 1000); });
+      .then(() => { prev = next; showToast('Estado actualizado'); })
+      .catch(() => { sel.value = prev; showToast('Error al guardar', 'error'); });
   });
 });
 

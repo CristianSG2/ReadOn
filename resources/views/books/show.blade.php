@@ -49,12 +49,11 @@
 @endphp
 
 <div class="container">
-    {{-- Mensajes flash --}}
     @if(session('success'))
-        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+        <script>showToast('{{ session('success') }}');</script>
     @endif
     @if(session('error'))
-        <div class="alert alert-warning mb-4">{{ session('error') }}</div>
+        <script>showToast('{{ session('error') }}', 'error');</script>
     @endif
 
     <a href="{{ route('books.index') }}" class="back-link">&larr; Volver a la búsqueda</a>
@@ -109,7 +108,7 @@
 
 
             @if($error ?? false)
-                <div class="alert alert-warning mt-4">{{ $error }}</div>
+                <script>showToast('{{ $error }}', 'error');</script>
             @endif
         </div>
     </div>

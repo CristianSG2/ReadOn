@@ -47,6 +47,29 @@
             @endguest
             <button id="theme-toggle" class="theme-toggle" aria-label="Activar tema claro" title="Cambiar tema">☀</button>
 </header>
+  <div id="toast-container" aria-live="polite"></div>
+  <script>
+  function showToast(message, type) {
+    type = type || 'success';
+    var container = document.getElementById('toast-container');
+    if (!container) return;
+    var el = document.createElement('div');
+    el.className = 'toast' + (type === 'error' ? ' toast--error' : '');
+    el.textContent = message;
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(8px)';
+    container.appendChild(el);
+    setTimeout(function () {
+      el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, 20);
+    setTimeout(function () {
+      el.style.opacity = '0';
+      setTimeout(function () { el.remove(); }, 300);
+    }, 3000);
+  }
+  </script>
   <main>
     @yield('content')
   </main>
