@@ -52,10 +52,18 @@ class ReadingLogController extends Controller
                 $payload
             );
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Libro guardado en tus lecturas.']);
+            }
+
             return redirect()
                 ->route('books.show', $data['volume_id'])
                 ->with('success', 'Libro guardado en tus lecturas.');
         } catch (\Throwable $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'No se pudo guardar el libro.'], 422);
+            }
+
             return redirect()
                 ->route('books.show', $data['volume_id'])
                 ->with('error', 'No se pudo guardar el libro. ' . $e->getMessage());
