@@ -56,12 +56,11 @@
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
 
-                        {{-- Botón de borrar (confirmación simple por ahora) --}}
+                        {{-- Botón de borrar --}}
                         <form
                             action="{{ route('reading-logs.destroy', $log) }}"
                             method="POST"
                             class="thumb-actions"
-                            onsubmit="return confirm('¿Seguro que quiero eliminar este registro?');"
                         >
                             @csrf
                             @method('DELETE')
@@ -252,6 +251,35 @@ document.querySelectorAll('.status-select').forEach(sel => {
     patchJson(url, csrf, { status: next })
       .then(() => { prev = next; showToast('Estado actualizado'); })
       .catch(() => { sel.value = prev; showToast('Error al guardar', 'error'); });
+  });
+});
+
+// ── Eliminar registro via fetch ───────────────────────────────────────────────
+document.querySelectorAll('.thumb-actions').forEach(form => {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!confirm('¿Seguro que quieres eliminar este registro?')) return;
+    const url  = form.action;
+    const csrf = form.querySelector('input[name="_token"]').value;
+    const card = form.closest('.card');
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrf,
+        'X-HTTP-Method-Override': 'DELETE',
+      },
+    })
+    .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
+    .then(res => {
+      showToast(res.data.message, res.ok ? 'success' : 'error');
+      if (res.ok && card) {
+        card.style.transition = 'opacity 0.3s ease';
+        card.style.opacity = '0';
+        setTimeout(() => card.remove(), 300);
+      }
+    })
+    .catch(() => showToast('Error al eliminar', 'error'));
   });
 });
 
