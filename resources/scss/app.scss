@@ -270,6 +270,10 @@ main {
   opacity: 0;
   transition: opacity 0.25s ease;
 }
+body.landing main {
+  opacity: 1 !important;
+  transition: none !important;
+}
 
 /* ---------- Layout ---------- */
 .container {
