@@ -267,6 +267,8 @@ body {
 /* Layout base */
 main {
   padding-top: clamp(1em, 2vh, 1.5rem);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 /* ---------- Layout ---------- */
@@ -301,6 +303,36 @@ h3 { font-size: 1.125rem; }
   transition: transform .3s ease;
 }
 .card-thumb:hover img { transform: scale(1.03); }
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position:  200% 0; }
+}
+.card-thumb.is-loading {
+  background: linear-gradient(
+    90deg,
+    var(--bg)      25%,
+    var(--surface) 50%,
+    var(--bg)      75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  img { opacity: 0; }
+}
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card,
+.stat-card {
+  animation: fadeInUp 0.35s ease-out both;
+}
+.results-grid,
+.logs-grid {
+  @for $i from 1 through 12 {
+    > :nth-child(#{$i}) { animation-delay: #{($i - 1) * 0.05}s; }
+  }
+}
 .thumb-placeholder {
   display: grid; place-items: center;
   height: 100%; color: var(--muted); font-size: .9rem;
@@ -1376,4 +1408,27 @@ body.landing .landing-hero__visual {
   font-size: .875rem;
   color: var(--muted);
   border-top: 1px solid var(--border);
+}
+
+/* ---------- Toast ---------- */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  pointer-events: none;
+}
+.toast {
+  background: var(--surface-2);
+  color: var(--text);
+  padding: .7rem 1rem .7rem 1.1rem;
+  border-radius: .7rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+  border-left: 4px solid var(--accent);
+  font-size: .9rem;
+  pointer-events: auto;
+  &.toast--error { border-left-color: var(--danger); }
 }

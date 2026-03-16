@@ -49,12 +49,11 @@
 @endphp
 
 <div class="container">
-    {{-- Mensajes flash --}}
     @if(session('success'))
-        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+        <script>showToast('{{ session('success') }}');</script>
     @endif
     @if(session('error'))
-        <div class="alert alert-warning mb-4">{{ session('error') }}</div>
+        <script>showToast('{{ session('error') }}', 'error');</script>
     @endif
 
     <a href="{{ route('books.index') }}" class="back-link">&larr; Volver a la búsqueda</a>
@@ -79,7 +78,7 @@
             {{-- Guardar en mis lecturas --}}
             <div class="mt-6">
                 @auth
-                    <form method="POST" action="{{ route('reading-logs.store') }}">
+                    <form id="save-book-form" method="POST" action="{{ route('reading-logs.store') }}">
                         @csrf
                         {{-- En este micro-paso guardo con estado "want" por defecto --}}
                         <input type="hidden" name="volume_id" value="{{ $volumeId }}">
@@ -89,8 +88,40 @@
                         <input type="hidden" name="isbn" value="{{ $isbn }}">
                         <input type="hidden" name="status" value="wishlist">
 
-                        <button class="btn">Guardar en mis lecturas</button>
+                        <button class="btn" id="save-book-btn">Guardar en mis lecturas</button>
                     </form>
+                    <script>
+                    (function () {
+                        var form = document.getElementById('save-book-form');
+                        var btn  = document.getElementById('save-book-btn');
+                        if (!form) return;
+                        form.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            var inputs = form.querySelectorAll('input[name]');
+                            var body   = {};
+                            inputs.forEach(function (el) { body[el.name] = el.value; });
+                            var csrf = (form.querySelector('input[name="_token"]') || {}).value || '';
+                            fetch(form.action, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': csrf,
+                                },
+                                body: JSON.stringify(body),
+                            })
+                            .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+                            .then(function (res) {
+                                showToast(res.data.message, res.ok ? 'success' : 'error');
+                                if (res.ok) {
+                                    btn.disabled = true;
+                                    btn.textContent = 'Guardado en tus lecturas';
+                                }
+                            })
+                            .catch(function () { showToast('Error al guardar', 'error'); });
+                        });
+                    })();
+                    </script>
                 @else
                     <a class="btn" href="{{ route('login') }}">Inicia sesión para guardar</a>
                 @endauth
@@ -109,7 +140,7 @@
 
 
             @if($error ?? false)
-                <div class="alert alert-warning mt-4">{{ $error }}</div>
+                <script>showToast('{{ $error }}', 'error');</script>
             @endif
         </div>
     </div>

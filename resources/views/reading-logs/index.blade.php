@@ -6,12 +6,11 @@
 <div class="container">
     <h1 class="mb-4">Mis lecturas</h1>
 
-    {{-- Mensajes flash (mantengo estos tal cual) --}}
     @if(session('success'))
-        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+        <script>showToast('{{ session('success') }}');</script>
     @endif
     @if(session('error'))
-        <div class="alert alert-warning mb-4">{{ session('error') }}</div>
+        <script>showToast('{{ session('error') }}', 'error');</script>
     @endif
 
     {{-- Empty state cuando no hay registros --}}
@@ -48,20 +47,20 @@
 
                 <div class="card">
                     {{-- Miniatura + overlay de borrar --}}
-                    <div class="card-thumb">
+                    <div class="card-thumb{{ $cover ? ' is-loading' : '' }}">
                         @if($cover)
                             <img src="{{ $cover }}" alt="{{ $log->title }}"
-                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
+                                 onload="this.closest('.card-thumb').classList.remove('is-loading')"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}';this.closest('.card-thumb').classList.remove('is-loading')">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
 
-                        {{-- Botón de borrar (confirmación simple por ahora) --}}
+                        {{-- Botón de borrar --}}
                         <form
                             action="{{ route('reading-logs.destroy', $log) }}"
                             method="POST"
                             class="thumb-actions"
-                            onsubmit="return confirm('¿Seguro que quiero eliminar este registro?');"
                         >
                             @csrf
                             @method('DELETE')
@@ -198,21 +197,13 @@ function patchJson(url, csrf, body) {
   }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
 }
 
-// ── Feedback visual (✓ o error durante 1s) ───────────────────────────────────
-function showFeedback(el, ok) {
-  el.textContent = ok ? '✓' : '✗';
-  el.className   = 'stars__feedback stars__feedback--' + (ok ? 'ok' : 'err');
-  setTimeout(() => { el.textContent = ''; el.className = 'stars__feedback'; }, 1000);
-}
-
 // ── Rating: autosave al click ─────────────────────────────────────────────────
 document.querySelectorAll('.stars').forEach(stars => {
-  const fill     = stars.querySelector('.stars__fill');
-  const hit      = stars.querySelector('.stars__hit');
-  const feedback = stars.querySelector('.stars__feedback');
-  const url      = stars.dataset.url;
-  const csrf     = stars.dataset.csrf;
-  let current    = parseFloat(stars.dataset.initial) || 0;
+  const fill = stars.querySelector('.stars__fill');
+  const hit  = stars.querySelector('.stars__hit');
+  const url  = stars.dataset.url;
+  const csrf = stars.dataset.csrf;
+  let current = parseFloat(stars.dataset.initial) || 0;
 
   const applyWidth = v => { fill.style.width = (v * 20) + '%'; };
 
@@ -228,8 +219,8 @@ document.querySelectorAll('.stars').forEach(stars => {
     current = v;
     applyWidth(current);
     patchJson(url, csrf, { rating: current })
-      .then(() => { stars.dataset.initial = current; showFeedback(feedback, true); })
-      .catch(() => { current = prev; applyWidth(current); showFeedback(feedback, false); });
+      .then(() => { stars.dataset.initial = current; showToast('Rating guardado'); })
+      .catch(() => { current = prev; applyWidth(current); showToast('Error al guardar', 'error'); });
   });
 });
 
@@ -238,16 +229,15 @@ document.querySelectorAll('.stars-clear').forEach(btn => {
   btn.addEventListener('click', () => {
     const url  = btn.dataset.url;
     const csrf = btn.dataset.csrf;
-    const stars    = btn.closest('.mt-3').querySelector('.stars');
-    const fill     = stars ? stars.querySelector('.stars__fill') : null;
-    const feedback = stars ? stars.querySelector('.stars__feedback') : null;
+    const stars = btn.closest('.mt-3').querySelector('.stars');
+    const fill  = stars ? stars.querySelector('.stars__fill') : null;
     patchJson(url, csrf, { rating: null })
       .then(() => {
         if (stars) stars.dataset.initial = 0;
         if (fill)  fill.style.width = '0%';
-        if (feedback) showFeedback(feedback, true);
+        showToast('Rating eliminado');
       })
-      .catch(() => { if (feedback) showFeedback(feedback, false); });
+      .catch(() => { showToast('Error al guardar', 'error'); });
   });
 });
 
@@ -259,8 +249,80 @@ document.querySelectorAll('.status-select').forEach(sel => {
   sel.addEventListener('change', () => {
     const next = sel.value;
     patchJson(url, csrf, { status: next })
-      .then(() => { prev = next; sel.classList.add('status-select--saved'); setTimeout(() => sel.classList.remove('status-select--saved'), 1000); })
-      .catch(() => { sel.value = prev; sel.classList.add('status-select--err'); setTimeout(() => sel.classList.remove('status-select--err'), 1000); });
+      .then(() => { prev = next; showToast('Estado actualizado'); })
+      .catch(() => { sel.value = prev; showToast('Error al guardar', 'error'); });
+  });
+});
+
+// ── Eliminar registro via fetch ───────────────────────────────────────────────
+document.querySelectorAll('.thumb-actions').forEach(form => {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!confirm('¿Seguro que quieres eliminar este registro?')) return;
+    const url  = form.action;
+    const csrf = form.querySelector('input[name="_token"]').value;
+    const card = form.closest('.card');
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrf,
+        'X-HTTP-Method-Override': 'DELETE',
+      },
+    })
+    .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
+    .then(res => {
+      showToast(res.data.message, res.ok ? 'success' : 'error');
+      if (res.ok && card) {
+        card.style.transition = 'opacity 0.3s ease';
+        card.style.opacity = '0';
+        setTimeout(() => card.remove(), 300);
+      }
+    })
+    .catch(() => showToast('Error al eliminar', 'error'));
+  });
+});
+
+// ── Reseña: guardado via fetch ────────────────────────────────────────────────
+document.querySelectorAll('.review-form__inner').forEach(form => {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const url    = form.action;
+    const csrf   = form.querySelector('input[name="_token"]').value;
+    const review = form.querySelector('textarea[name="review"]').value;
+    const card   = form.closest('.card');
+
+    patchJson(url, csrf, { review })
+      .then(data => {
+        showToast(data.message);
+
+        // Actualizar o crear/eliminar el snippet
+        const snippetEl  = card.querySelector('.review-snippet');
+        const toggleBtn  = card.querySelector('.review-toggle');
+        if (data.review) {
+          const text     = data.review;
+          const truncated = text.length > 140 ? text.substring(0, 140) : text;
+          const ellipsis  = text.length > 140 ? '<span class="muted">…</span>' : '';
+          const html      = '<strong>Reseña:</strong> ' + truncated + ellipsis;
+          if (snippetEl) {
+            snippetEl.innerHTML = html;
+          } else {
+            const el = document.createElement('div');
+            el.className = 'review-snippet mt-2';
+            el.innerHTML = html;
+            toggleBtn.parentNode.insertBefore(el, toggleBtn);
+          }
+        } else {
+          if (snippetEl) snippetEl.remove();
+        }
+
+        // Cerrar panel y actualizar botón toggle
+        const panel = form.closest('.review-form');
+        panel.setAttribute('hidden', '');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.textContent = data.review ? 'Editar reseña' : 'Añadir reseña';
+      })
+      .catch(() => { showToast('Error al guardar', 'error'); });
   });
 });
 

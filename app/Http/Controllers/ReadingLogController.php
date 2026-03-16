@@ -52,10 +52,18 @@ class ReadingLogController extends Controller
                 $payload
             );
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Libro guardado en tus lecturas.']);
+            }
+
             return redirect()
                 ->route('books.show', $data['volume_id'])
                 ->with('success', 'Libro guardado en tus lecturas.');
         } catch (\Throwable $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'No se pudo guardar el libro.'], 422);
+            }
+
             return redirect()
                 ->route('books.show', $data['volume_id'])
                 ->with('error', 'No se pudo guardar el libro. ' . $e->getMessage());
@@ -127,7 +135,17 @@ class ReadingLogController extends Controller
             'review' => $review !== '' ? $review : null,
         ]);
 
-        return back()->with('success', $review !== '' ? 'Reseña actualizada.' : 'Reseña eliminada.');
+        $message = $review !== '' ? 'Reseña actualizada.' : 'Reseña eliminada.';
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'review'  => $readingLog->review,
+            ]);
+        }
+
+        return back()->with('success', $message);
     }
 
     /**
@@ -140,11 +158,19 @@ class ReadingLogController extends Controller
         try {
             $readingLog->delete();
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado correctamente.']);
+            }
+
             return redirect()
                 ->route('reading-logs.index')
                 ->with('success', 'Registro eliminado correctamente.');
         } catch (\Throwable $e) {
             report($e);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'No se pudo eliminar el registro.'], 422);
+            }
 
             return redirect()
                 ->route('reading-logs.index')
