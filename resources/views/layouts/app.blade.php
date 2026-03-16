@@ -82,6 +82,50 @@
       });
     }
   })();
+
+  // ── Page transition ──
+  (function () {
+    var mainEl = document.querySelector('main');
+    if (!mainEl) return;
+
+    // Fade-in al cargar (espera a que no-transitions haya sido eliminado)
+    setTimeout(function () { mainEl.style.opacity = '1'; }, 120);
+
+    // Fade-out al navegar
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href]');
+      if (!a || a.target === '_blank') return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+      try {
+        var url = new URL(href, location.href);
+        if (url.hostname !== location.hostname) return;
+      } catch (_) { return; }
+      e.preventDefault();
+      mainEl.style.opacity = '0';
+      setTimeout(function () { location.href = href; }, 200);
+    });
+  })();
+
+  // ── Auto-dismiss alerts ──
+  (function () {
+    var alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function (el) {
+      // Entrada: estado inicial invisible
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(-12px)';
+      setTimeout(function () {
+        el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }, 50);
+      // Salida automática tras 3.5s
+      setTimeout(function () {
+        el.style.opacity = '0';
+        setTimeout(function () { el.remove(); }, 400);
+      }, 3500);
+    });
+  })();
   </script>
 
 </body>
