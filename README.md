@@ -93,23 +93,29 @@ Autenticación manual (sin Breeze):
 ## 📚 Logs de lectura
 
 - Búsqueda vía Google Books API
-- Guardado de libros en lista personal
+- Guardado de libros en lista personal sin recarga de página
 - Estados: Wishlist, Leyendo, Leído, Abandonado
 - Rating de 0.5 a 5 estrellas (escala en medias estrellas) y reseñas
-- Edición y borrado de registros propios
+- Edición y borrado de registros propios sin recarga de página
 
-### Autosave
+### Autosave e inline saves
 
-El rating y el estado se guardan automáticamente sin botón: un click en las estrellas envía el valor vía fetch PATCH, y cambiar el select de estado hace lo mismo. La reseña mantiene un botón explícito de guardado.
+Todas las acciones sobre un registro se realizan sin recarga de página:
+- **Rating y estado**: se guardan automáticamente via fetch PATCH al interactuar
+- **Reseña**: guardado y eliminación via fetch, con actualización del DOM en tiempo real
+- **Guardar libro**: desde el detalle, via fetch sin redirección
+- **Eliminar registro**: con confirmación nativa y fade-out de la card en el DOM
 
-### Portadas
+El feedback de cada acción se muestra mediante **toast notifications** (esquina inferior derecha), consistentes en toda la app y adaptadas al tema activo.
+
+### Portadas y skeleton loader
 
 Sistema de fallback en tres niveles:
 1. Thumbnail de Google Books (forzado a HTTPS para evitar mixed-content)
 2. Open Library por ISBN (`/b/isbn/{ISBN}-L.jpg`) si Google Books no devuelve portada
 3. Placeholder SVG local (`/images/no-cover.svg`) si ninguna fuente tiene imagen
 
-El ISBN se extrae de `industryIdentifiers` en la respuesta de Google Books y se persiste en `reading_logs`. El método `getCoverUrl()` del modelo aplica la prioridad en tiempo de lectura; todas las vistas añaden `onerror` como última línea de defensa.
+Mientras cargan las portadas se muestra un **skeleton loader** con animación shimmer que respeta el tema activo (Mocha/Latte). El ISBN se extrae de `industryIdentifiers` en la respuesta de Google Books y se persiste en `reading_logs`.
 
 ---
 
@@ -137,6 +143,13 @@ Paleta Catppuccin con roles de color diferenciados:
 
 El switch dark/light persiste entre sesiones vía `localStorage`. El tema se aplica antes del primer render (script inline en `<head>`) para evitar flash. Ningún color está hardcodeado fuera del bloque de tokens.
 
+### Animaciones y transiciones
+
+- **Transiciones de página**: fade-out al salir, fade-in al entrar
+- **Cards**: animación `fadeInUp` escalonada al cargar la página
+- **Skeleton loader**: shimmer animado en portadas mientras cargan, respetando el tema
+- **Toast notifications**: sistema unificado de feedback para todas las acciones
+
 ### Logo
 
 Componente Blade reutilizable (`<x-logo size="sm|md|lg" />`): icono SVG bookmark + wordmark "ReadOn" en tres tamaños, todo via tokens CSS.
@@ -156,10 +169,14 @@ Login y registro con el mismo layout de dos columnas que la homepage: formulario
 
 ## 📌 Estado del proyecto
 
-**v1.0.0** — desplegado en producción:
+**v1.1.0** — desplegado en producción:
 🌐 [readon.cristiansg.dev](https://readon.cristiansg.dev)
 
 - [x] Flujo de lectura operativo de extremo a extremo
+- [x] Inline saves: todas las acciones sin recarga de página
+- [x] Toast notifications unificadas en toda la app
+- [x] Skeleton loader en búsqueda y Mis lecturas
+- [x] Animaciones de entrada y transiciones de página
 - [x] Sistema de portadas con fallback multinivel
 - [x] Homepage rediseñada con visual SVG adaptativo
 - [x] Tokens Catppuccin con roles diferenciados por función
