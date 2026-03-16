@@ -255,6 +255,49 @@ document.querySelectorAll('.status-select').forEach(sel => {
   });
 });
 
+// ── Reseña: guardado via fetch ────────────────────────────────────────────────
+document.querySelectorAll('.review-form__inner').forEach(form => {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const url    = form.action;
+    const csrf   = form.querySelector('input[name="_token"]').value;
+    const review = form.querySelector('textarea[name="review"]').value;
+    const card   = form.closest('.card');
+
+    patchJson(url, csrf, { review })
+      .then(data => {
+        showToast(data.message);
+
+        // Actualizar o crear/eliminar el snippet
+        const snippetEl  = card.querySelector('.review-snippet');
+        const toggleBtn  = card.querySelector('.review-toggle');
+        if (data.review) {
+          const text     = data.review;
+          const truncated = text.length > 140 ? text.substring(0, 140) : text;
+          const ellipsis  = text.length > 140 ? '<span class="muted">…</span>' : '';
+          const html      = '<strong>Reseña:</strong> ' + truncated + ellipsis;
+          if (snippetEl) {
+            snippetEl.innerHTML = html;
+          } else {
+            const el = document.createElement('div');
+            el.className = 'review-snippet mt-2';
+            el.innerHTML = html;
+            toggleBtn.parentNode.insertBefore(el, toggleBtn);
+          }
+        } else {
+          if (snippetEl) snippetEl.remove();
+        }
+
+        // Cerrar panel y actualizar botón toggle
+        const panel = form.closest('.review-form');
+        panel.setAttribute('hidden', '');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.textContent = data.review ? 'Editar reseña' : 'Añadir reseña';
+      })
+      .catch(() => { showToast('Error al guardar', 'error'); });
+  });
+});
+
 // ── Toggle reseña ─────────────────────────────────────────────────────────────
 document.addEventListener('click', e => {
   const btn = e.target.closest('.review-toggle');

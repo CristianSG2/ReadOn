@@ -127,7 +127,17 @@ class ReadingLogController extends Controller
             'review' => $review !== '' ? $review : null,
         ]);
 
-        return back()->with('success', $review !== '' ? 'Reseña actualizada.' : 'Reseña eliminada.');
+        $message = $review !== '' ? 'Reseña actualizada.' : 'Reseña eliminada.';
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'review'  => $readingLog->review,
+            ]);
+        }
+
+        return back()->with('success', $message);
     }
 
     /**
