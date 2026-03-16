@@ -107,10 +107,11 @@
                 @endphp
 
                 <a href="{{ $id ? route('books.show', $id) : '#' }}" class="card block">
-                    <div class="card-thumb aspect-[3/4] bg-gray-100 overflow-hidden">
+                    <div class="card-thumb aspect-[3/4] overflow-hidden{{ $thumb ? ' is-loading' : '' }}">
                         @if($thumb)
                             <img src="{{ $thumb }}" alt="{{ $title }}"
-                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
+                                 onload="this.closest('.card-thumb').classList.remove('is-loading')"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}';this.closest('.card-thumb').classList.remove('is-loading')">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
