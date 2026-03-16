@@ -47,10 +47,11 @@
 
                 <div class="card">
                     {{-- Miniatura + overlay de borrar --}}
-                    <div class="card-thumb">
+                    <div class="card-thumb{{ $cover ? ' is-loading' : '' }}">
                         @if($cover)
                             <img src="{{ $cover }}" alt="{{ $log->title }}"
-                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}'">
+                                 onload="this.closest('.card-thumb').classList.remove('is-loading')"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/no-cover.svg') }}';this.closest('.card-thumb').classList.remove('is-loading')">
                         @else
                             <div class="thumb-placeholder">Sin portada</div>
                         @endif
