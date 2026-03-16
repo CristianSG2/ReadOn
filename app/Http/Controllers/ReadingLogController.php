@@ -158,11 +158,19 @@ class ReadingLogController extends Controller
         try {
             $readingLog->delete();
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado correctamente.']);
+            }
+
             return redirect()
                 ->route('reading-logs.index')
                 ->with('success', 'Registro eliminado correctamente.');
         } catch (\Throwable $e) {
             report($e);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'No se pudo eliminar el registro.'], 422);
+            }
 
             return redirect()
                 ->route('reading-logs.index')
