@@ -112,7 +112,11 @@
     if (!mainEl) return;
 
     // Fade-in al cargar (espera a que no-transitions haya sido eliminado)
-    setTimeout(function () { mainEl.style.opacity = '1'; }, 120);
+    if (document.body.classList.contains('landing')) {
+      mainEl.style.opacity = '1';
+    } else {
+      setTimeout(function () { mainEl.style.opacity = '1'; }, 120);
+    }
 
     // Fade-out al navegar
     document.addEventListener('click', function (e) {
