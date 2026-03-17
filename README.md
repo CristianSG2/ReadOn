@@ -92,7 +92,7 @@ Autenticación manual (sin Breeze):
 
 ## 📚 Logs de lectura
 
-- Búsqueda vía Google Books API
+- Búsqueda vía Google Books API con resultados filtrados por idioma (español primero, inglés después) y sin portada
 - Guardado de libros en lista personal sin recarga de página
 - Estados: Wishlist, Leyendo, Leído, Abandonado
 - Rating de 0.5 a 5 estrellas (escala en medias estrellas) y reseñas
@@ -169,7 +169,7 @@ Login y registro con el mismo layout de dos columnas que la homepage: formulario
 
 ## 📌 Estado del proyecto
 
-**v1.1.0** — desplegado en producción:
+**v1.1.1** — desplegado en producción:
 🌐 [readon.cristiansg.dev](https://readon.cristiansg.dev)
 
 - [x] Flujo de lectura operativo de extremo a extremo
@@ -183,6 +183,7 @@ Login y registro con el mismo layout de dos columnas que la homepage: formulario
 - [x] Logo como componente reutilizable
 - [x] SCSS limpio: sin duplicados, sin código muerto, sin utilidades inline
 - [x] 16 Feature tests (auth, reading logs, perfil) — SQLite en memoria
+- [x] Búsqueda filtrada por idioma (ES primero, EN después) y sin resultados sin portada
 
 ### Tests
 
