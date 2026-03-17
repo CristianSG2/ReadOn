@@ -25,49 +25,70 @@ class GoogleBooks
             return ['items' => [], 'totalItems' => 0, 'page' => $page, 'perPage' => $perPage, 'error' => null];
         }
 
-        $startIndex = ($page - 1) * $perPage;
-        $cacheKey = sprintf('gbooks.search.%s.%d.%d', md5($q), $page, $perPage);
+        $cacheKey = sprintf('gbooks.search.v2.%s.%d.%d', md5($q), $page, $perPage);
 
-        return Cache::remember($cacheKey, now()->addMinutes(config('googlebooks.cache_minutes')), function () use ($q, $perPage, $startIndex, $page) {
+        return Cache::remember($cacheKey, now()->addMinutes(config('googlebooks.cache_minutes')), function () use ($q, $perPage, $page) {
             try {
-                $response = Http::baseUrl(config('googlebooks.base_url'))
-                    ->timeout(config('googlebooks.timeout'))
-                    ->acceptJson()
-                    ->get('/volumes', [
-                        'q'          => $q,
-                        'maxResults' => $perPage,
-                        'startIndex' => $startIndex,
-                        'key'        => config('googlebooks.key'),
-                        // Se puede añadir: 'orderBy' => 'relevance|newest', 'printType' => 'books'
-                    ]);
+                $base = config('googlebooks.base_url');
+                $key  = config('googlebooks.key');
+                $timeout = config('googlebooks.timeout');
 
-                if ($response->failed()) {
-                    return [
-                        'items' => [],
-                        'totalItems' => 0,
-                        'page' => $page,
-                        'perPage' => $perPage,
-                        'error' => 'La API respondió con error (HTTP '.$response->status().').',
-                    ];
+                $responses = Http::pool(fn ($pool) => [
+                    $pool->as('es')
+                        ->baseUrl($base)->timeout($timeout)->acceptJson()
+                        ->get('/volumes', ['q' => $q, 'maxResults' => 24, 'langRestrict' => 'es', 'key' => $key]),
+                    $pool->as('en')
+                        ->baseUrl($base)->timeout($timeout)->acceptJson()
+                        ->get('/volumes', ['q' => $q, 'maxResults' => 24, 'langRestrict' => 'en', 'key' => $key]),
+                ]);
+
+                $itemsEs = (!$responses['es']->failed()) ? ($responses['es']->json()['items'] ?? []) : [];
+                $itemsEn = (!$responses['en']->failed()) ? ($responses['en']->json()['items'] ?? []) : [];
+
+                // Combinar: español primero
+                $combined = array_merge($itemsEs, $itemsEn);
+
+                // Filtrar sin portada
+                $combined = array_values(array_filter($combined, function ($item) {
+                    return !empty($item['volumeInfo']['imageLinks']);
+                }));
+
+                // Deduplicar por ISBN_13
+                $seen = [];
+                $deduped = [];
+                foreach ($combined as $item) {
+                    $isbn = null;
+                    foreach ($item['volumeInfo']['industryIdentifiers'] ?? [] as $identifier) {
+                        if ($identifier['type'] === 'ISBN_13') {
+                            $isbn = $identifier['identifier'];
+                            break;
+                        }
+                    }
+                    $dedupeKey = $isbn ?? $item['id'] ?? null;
+                    if ($dedupeKey === null || !isset($seen[$dedupeKey])) {
+                        if ($dedupeKey !== null) $seen[$dedupeKey] = true;
+                        $deduped[] = $item;
+                    }
                 }
 
-                $json = $response->json();
+                $total = count($deduped);
+                $startIndex = ($page - 1) * $perPage;
+                $pageItems = array_slice($deduped, $startIndex, $perPage);
 
                 return [
-                    'items'      => $json['items'] ?? [],
-                    'totalItems' => $json['totalItems'] ?? 0,
+                    'items'      => $pageItems,
+                    'totalItems' => $total,
                     'page'       => $page,
                     'perPage'    => $perPage,
                     'error'      => null,
                 ];
             } catch (\Throwable $e) {
-                // Control básico de errores de red/timeout
                 return [
-                    'items' => [],
+                    'items'      => [],
                     'totalItems' => 0,
-                    'page' => $page,
-                    'perPage' => $perPage,
-                    'error' => 'Error de red: '.$e->getMessage(),
+                    'page'       => $page,
+                    'perPage'    => $perPage,
+                    'error'      => 'Error de red: '.$e->getMessage(),
                 ];
             }
         });
